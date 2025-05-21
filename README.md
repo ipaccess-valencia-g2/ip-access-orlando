@@ -40,12 +40,3 @@ Step 3: Verify the Tables Were Created
    - locations
    - reasons
 
-Step 4: Commit to the GitHub branch
-1. cd ip-access-orlando (if not already there)
-2. git checkout backend (if not already there)
-3. git add backend
-4. git commit -m "Notes..."
-5. git push origin backend
-6. No pull request required, unless merging into the "main" branch
-
-
