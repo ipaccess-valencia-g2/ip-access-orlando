@@ -1,5 +1,6 @@
 Commit to the GitHub branch
 
+save your file locally!
 cd ip-access-orlando (if not already there)
 git checkout backend (if not already there)
 git pull origin backend
