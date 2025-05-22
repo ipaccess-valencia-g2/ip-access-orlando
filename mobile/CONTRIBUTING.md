@@ -7,6 +7,7 @@ cd mobile
 npm install
 npx expo start
 
+save local project
 git add mobile
 (git status -- if you want to check what you are uploading)
 git commit -m "Notes..."
