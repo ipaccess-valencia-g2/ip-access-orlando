@@ -4,11 +4,9 @@ save your file locally!
 cd ip-access-orlando (if not already there)
 git checkout backend (if not already there)
 git pull origin backend
+    work on your route file
+    test route locally with postman
 git status (if you want to confirm what has been changed)
-if you are working on an individual task: 
-    git checkout -b yourname/route-name (eg. reservations, authorization)
-        work on your route file
-        test route locally with postman
 git add . OR git add backend OR git add backend/routes/reservations.js
 git commit -m "Notes..."
 git push origin backend OR git push origin yourname/route-name
