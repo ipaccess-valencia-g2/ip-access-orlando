@@ -7,9 +7,9 @@ git pull origin backend
     work on your route file
     test route locally with postman
 git status (if you want to confirm what has been changed)
-git add . OR git add backend OR git add backend/routes/reservations.js
+git add backend/routes/reservations.js OR OR git add backend O
 git commit -m "Notes..."
-git push origin backend OR git push origin yourname/route-name
+git push origin backend
     Create a pull request into main and tag @LaVonne for review, if needed
 
 
