@@ -1,0 +1,1 @@
+Use this folder drop Postman tests!

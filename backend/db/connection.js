@@ -6,14 +6,14 @@ const connection = mysql.createConnection({
   port: process.env.DB_PORT || 3306,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME
+  database: process.env.DB_NAME,
 });
 
 connection.connect(err => {
   if (err) {
-    console.error('connection failed:', err.message);
+    console.error('Connection failed:', err.message);
   } else {
-    console.log('connected to AWS RDS');
+    console.log('Connected to AWS RDS');
   }
 });
 
