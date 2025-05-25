@@ -1,1 +1,1 @@
-/// --- POST /admin
+/// --- GET /admin/users/:userId

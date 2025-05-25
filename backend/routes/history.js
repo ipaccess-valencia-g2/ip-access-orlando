@@ -1,1 +1,1 @@
-/// --- GET /
+/// --- GET /history/:userId
