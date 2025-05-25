@@ -1,8 +1,10 @@
 Commit to the GitHub branch
 
-save your file locally!
 cd ip-access-orlando (if not already there)
 git checkout backend (if not already there)
+
+save your file locally!
+
 git pull origin backend
     work on your route file
     test route locally with postman
