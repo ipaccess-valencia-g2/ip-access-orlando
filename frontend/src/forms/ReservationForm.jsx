@@ -22,21 +22,34 @@ const communityCenters = [
   "Hispanic Office for Local Assistance",
 ];
 
+// Preset reasons for checking out a device
+const reasonOptions = [
+  "Job interview",
+  "Homework / School",
+  "Telehealth appointment",
+  "Job applications / Resume building",
+  "City Services / Permits",
+  "Other",
+];
+
 const ReservationForm = () => {
   // Form state
   const [location, setLocation] = useState('');
   const [date, setDate] = useState('');
   const [reason, setReason] = useState('');
+  const [customReason, setCustomReason] = useState('');
   const [message, setMessage] = useState('');
 
   // Submit handler
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const finalReason = reason === 'Other' ? customReason : reason;
+
     const reservationData = {
       location,
       date,
-      reason,
+      reason: finalReason,
     };
 
     try {
@@ -53,6 +66,7 @@ const ReservationForm = () => {
         setLocation('');
         setDate('');
         setReason('');
+        setCustomReason('');
       } else {
         setMessage('❌ Failed to submit reservation.');
       }
@@ -66,6 +80,7 @@ const ReservationForm = () => {
     <form onSubmit={handleSubmit} className="p-4 space-y-4 max-w-md">
       <h2 className="text-xl font-bold">Reservation Form</h2>
 
+      {/* Community Center Selection */}
       <div>
         <label className="block font-medium">Community Center:</label>
         <select
@@ -81,32 +96,50 @@ const ReservationForm = () => {
         </select>
       </div>
 
+      {/* Date Picker */}
       <div>
         <label className="block font-medium">Reservation Date:</label>
         <input
           type="date"
           value={date}
           onChange={(e) => setDate(e.target.value)}
-          min={new Date().toISOString().split("T")[0]} // 👈 sets today's date as the earliest
+          min={new Date().toISOString().split("T")[0]} // Today's date
           required
           className="w-full border p-2 rounded"
         />
       </div>
 
+      {/* Reason Dropdown + Conditional Input */}
       <div>
-        <label className="block font-medium">Why are you checking out this device today?</label>
-        <textarea
+        <label className="block font-medium mb-1">Why are you checking out this device today?</label>
+        <select
           value={reason}
           onChange={(e) => setReason(e.target.value)}
           required
           className="w-full border p-2 rounded"
-          rows={3}
-          placeholder="e.g. Virtual job interview, homework, telehealth..."
-        />
+        >
+          <option value="" disabled>-- Select a reason --</option>
+          {reasonOptions.map((option, index) => (
+            <option key={index} value={option}>{option}</option>
+          ))}
+        </select>
+
+        {reason === 'Other' && (
+          <input
+            type="text"
+            value={customReason}
+            onChange={(e) => setCustomReason(e.target.value)}
+            required
+            className="w-full border p-2 rounded mt-2"
+            placeholder="Please describe your reason"
+          />
+        )}
       </div>
 
+      {/* Submission Message */}
       {message && <p className="text-sm font-medium">{message}</p>}
 
+      {/* Submit Button */}
       <button type="submit" className="bg-green-600 text-white px-4 py-2 rounded">
         Submit
       </button>

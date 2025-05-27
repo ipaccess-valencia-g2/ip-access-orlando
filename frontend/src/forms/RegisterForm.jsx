@@ -1,12 +1,9 @@
-// RegisterForm.jsx
 import React, { useState } from 'react';
 
-// Utility to check address against City of Orlando
 const isOrlandoAddress = (city) => {
   return city.trim().toLowerCase() === 'orlando';
 };
 
-// Calculate age from DOB
 const calculateAge = (dob) => {
   if (!dob) return 0;
   const birthDate = new Date(dob);
@@ -21,6 +18,7 @@ const calculateAge = (dob) => {
 
 const RegisterForm = () => {
   const [formData, setFormData] = useState({
+    username: '',
     firstName: '',
     lastName: '',
     phone: '',
@@ -35,11 +33,14 @@ const RegisterForm = () => {
   });
 
   const [errors, setErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
 
   const validate = () => {
     const newErrors = {};
 
     // Required fields
+    if (!formData.username.trim()) newErrors.username = "Username is required.";
     if (!formData.firstName.trim()) newErrors.firstName = "First name is required.";
     if (!formData.lastName.trim()) newErrors.lastName = "Last name is required.";
     if (!formData.phone.trim()) newErrors.phone = "Phone number is required.";
@@ -48,6 +49,12 @@ const RegisterForm = () => {
     if (!formData.street.trim()) newErrors.street = "Street address is required.";
     if (!formData.city.trim()) newErrors.city = "City is required.";
     if (!formData.zip.trim()) newErrors.zip = "ZIP code is required.";
+
+    // Username validation
+    const usernameRegex = /^[a-zA-Z0-9]{3,20}$/;
+    if (formData.username && !usernameRegex.test(formData.username)) {
+      newErrors.username = "Username must be 3-20 alphanumeric characters.";
+    }
 
     // Age validation
     const age = calculateAge(formData.dob);
@@ -67,13 +74,13 @@ const RegisterForm = () => {
       newErrors.email = "Enter a valid email address.";
     }
 
-    // ZIP code format: exactly 5 digits
+    // ZIP code format
     const zipRegex = /^\d{5}$/;
     if (formData.zip && !zipRegex.test(formData.zip)) {
       newErrors.zip = "ZIP code must be exactly 5 digits.";
     }
 
-    // City of Orlando check
+    // City validation
     if (!isOrlandoAddress(formData.city)) {
       newErrors.city = "Only City of Orlando residents may register.";
     }
@@ -93,7 +100,7 @@ const RegisterForm = () => {
     const { name, value } = e.target;
 
     const formatPhoneNumber = (val) => {
-      const digits = val.replace(/\D/g, "").slice(0, 10); // Limit to 10 digits
+      const digits = val.replace(/\D/g, "").slice(0, 10);
       if (digits.length === 10) {
         return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6, 10)}`;
       }
@@ -121,21 +128,65 @@ const RegisterForm = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (validate()) {
-      console.log("Form submitted successfully:", formData);
-      // TODO: Submit form to backend
+    if (!validate()) return;
+    
+    setIsSubmitting(true);
+    setErrors({});
+    setSuccessMessage('');
+
+    try {
+      const fullAddress = `${formData.street}${formData.unit ? `, ${formData.unit}` : ''}, ${formData.city}, FL ${formData.zip}`;
+
+      const response = await fetch('http://localhost:3000/register', { // TODO: Update with deployed backend URL
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          username: formData.username,
+          email: formData.email,
+          password: formData.password,
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          address: fullAddress,
+          phone: formData.phone
+        })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Registration failed');
+      }
+
+      setSuccessMessage('Registration successful! You can now log in.');
+      setFormData({
+        username: '',
+        firstName: '',
+        lastName: '',
+        phone: '',
+        dob: '',
+        email: '',
+        password: '',
+        confirmPassword: '',
+        street: '',
+        unit: '',
+        city: '',
+        zip: '',
+      });
+    } catch (err) {
+      setErrors(prev => ({ ...prev, form: err.message }));
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
-  // Calculate max date for DOB (18 years ago from today)
+  // Calculate dates for DOB field
   const today = new Date();
   const maxDate = new Date();
   maxDate.setFullYear(today.getFullYear() - 18);
   const maxDateString = maxDate.toISOString().split('T')[0];
 
-  // Calculate min date for DOB (120 years ago from today)
   const minDate = new Date();
   minDate.setFullYear(today.getFullYear() - 120);
   const minDateString = minDate.toISOString().split('T')[0];
@@ -208,7 +259,7 @@ const RegisterForm = () => {
 
       {/* Unit */}
       <div>
-        <label className="block font-medium" htmlFor="unit">Unit/Apt (optional):</label>
+        <label className="block font-medium" htmlFor="unit">Unit/Apt (if applicable):</label>
         <input
           id="unit"
           name="unit"
@@ -279,7 +330,7 @@ const RegisterForm = () => {
 
       {/* Email */}
       <div>
-        <label className="block font-medium" htmlFor="email">Email Address:</label>
+        <label className="block font-medium" htmlFor="email">Email:</label>
         <input
           id="email"
           name="email"
@@ -291,6 +342,24 @@ const RegisterForm = () => {
           placeholder="you@example.com"
         />
         {errors.email && <p className="text-red-500">{errors.email}</p>}
+      </div>
+
+      {/* Username Field */}
+      <div>
+        <label className="block font-medium" htmlFor="username">Username:</label>
+        <input
+          id="username"
+          name="username"
+          value={formData.username}
+          onChange={handleChange}
+          required
+          className="w-full border p-2 rounded"
+          placeholder="Choose a username (3-20 chars)"
+          minLength="3"
+          maxLength="20"
+          pattern="[a-zA-Z0-9]+"
+        />
+        {errors.username && <p className="text-red-500">{errors.username}</p>}
       </div>
 
       {/* Password */}
@@ -325,9 +394,25 @@ const RegisterForm = () => {
         {errors.confirmPassword && <p className="text-red-500">{errors.confirmPassword}</p>}
       </div>
 
-      {/* Submit */}
-      <button type="submit" className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700">
-        Register
+      {/* Form-level messages */}
+      {errors.form && <p className="text-red-500">{errors.form}</p>}
+      {successMessage && (
+        <div className="p-3 bg-green-100 text-green-700 rounded">
+          {successMessage}
+        </div>
+      )}
+
+      {/* Submit Button */}
+      <button 
+        type="submit" 
+        disabled={isSubmitting}
+        className={`w-full p-2 rounded ${
+          isSubmitting 
+            ? 'bg-gray-400 cursor-not-allowed' 
+            : 'bg-blue-600 hover:bg-blue-700 text-white'
+        }`}
+      >
+        {isSubmitting ? 'Registering...' : 'Register'}
       </button>
     </form>
   );
