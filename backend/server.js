@@ -20,7 +20,7 @@ app.get('/', (req, res) => {
   res.send('API is running');
 });
 
-const PORT = process.env.PORT || 3306;
+const PORT = process.env.PORT || 3307;
 app.listen(PORT, () => {
   console.log(`Server is listening on port ${PORT}`);
 });
