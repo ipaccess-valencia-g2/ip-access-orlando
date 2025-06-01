@@ -1,0 +1,20 @@
+Insert 10 userIDs, manually enter 5 reservations. make 25 different deviceIDs, insert locations. Add other information as needed.
+Ryan
+
+routes/root.js
+Braeden
+
+POST /register: create new user
+Carlos
+
+POST /login: validate user and DB lookup
+Add a token that keeps the user logged in so that we know who is using the device currently. (if too difficult, we can skip this step).
+Ryan
+
+POST /reserve: save a new device registration
+Jackson
+
+POST /admin: to log a deviceID and the reason for borrowing
+Braeden
+
+
