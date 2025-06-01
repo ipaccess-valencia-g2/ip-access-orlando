@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import { Button, ButtonRadio, ButtonToggle } from '../components/common';
+import { Field, FieldLarge, FieldNumber } from '../components/common/';
+import { PickerDate, PickerDrop } from '../components/common/';
 
 const isOrlandoAddress = (city) => {
   return city.trim().toLowerCase() === 'orlando';
@@ -403,17 +406,17 @@ const RegisterForm = () => {
       )}
 
       {/* Submit Button */}
-      <button 
-        type="submit" 
+      <Button
+        type="submit"
         disabled={isSubmitting}
-        className={`w-full p-2 rounded ${
-          isSubmitting 
-            ? 'bg-gray-400 cursor-not-allowed' 
+        className={`w-full rounded ${
+          isSubmitting
+            ? 'bg-gray-400 cursor-not-allowed'
             : 'bg-blue-600 hover:bg-blue-700 text-white'
         }`}
       >
         {isSubmitting ? 'Registering...' : 'Register'}
-      </button>
+      </Button>
     </form>
   );
 };
