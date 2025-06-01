@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Button, ButtonRadio, ButtonToggle } from './components/common/Button';
 import { Field, FieldLarge, FieldNumber } from './components/common/Field';
 import { PickerDrop, PickerDate } from './components/common/Picker';
+import {BrowserRouter, Routes, Route } from 'react-router-dom';
+import RegisterForm from './forms/RegisterForm.jsx';
 
 function App() {
     // Text field
@@ -53,6 +55,12 @@ function App() {
             <h1>Components</h1>
 
             <h2>Assorted Fields</h2>
+
+            <Routes>
+                <Route path="/register" element={<RegisterForm />} />
+                {/* add <Route path="/" element={<HomePage />} /> etc. */}
+            </Routes>
+
             <Field
                 label="Regular Field"
                 value={field}

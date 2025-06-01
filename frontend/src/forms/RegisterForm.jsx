@@ -139,7 +139,7 @@ const RegisterForm = () => {
     try {
       const fullAddress = `${formData.street}${formData.unit ? `, ${formData.unit}` : ''}, ${formData.city}, FL ${formData.zip}`;
 
-      const response = await fetch('http://localhost:3000/register', { // TODO: Update with deployed backend URL
+      const response = await fetch('http://localhost:3307/register', { // TODO: Update with deployed backend URL
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
