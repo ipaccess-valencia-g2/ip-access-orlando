@@ -3,7 +3,7 @@
 
 import React from 'react';
 
-const Homepage = () => {
+const HomePage = () => {
   return (
     <div style={{ padding: '20px', maxWidth: '600px', margin: 'auto', textAlign: 'center' }}>
       <h1>ConnectOrlando</h1>
@@ -12,4 +12,4 @@ const Homepage = () => {
   );
 };
 
-export default Homepage;
+export default HomePage;
