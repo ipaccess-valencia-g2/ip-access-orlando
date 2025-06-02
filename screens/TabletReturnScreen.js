@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -11,6 +11,31 @@ import {
 export default function TabletReturnScreen({ navigation }) {
   const [deviceId, setDeviceId] = useState('');
   const [userName, setUserName] = useState('');
+  const [timeLeft, setTimeLeft] = useState('');
+
+  // countdown set for 2 hours. 
+  useEffect(() => {
+    const returnTime = new Date();
+    returnTime.setHours(returnTime.getHours() + 2);
+
+    const interval = setInterval(() => {
+      const now = new Date();
+      const diff = returnTime - now;
+
+      if (diff <= 0) {
+        setTimeLeft('Return time has expired.');
+        clearInterval(interval);
+      } else {
+        const hours = Math.floor(diff / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+        setTimeLeft(`${hours}h ${minutes}m ${seconds}s remaining`);
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   const handleReturn = () => {
     if (!deviceId) {
@@ -19,8 +44,7 @@ export default function TabletReturnScreen({ navigation }) {
     }
 
     Alert.alert('Success', `Tablet ${deviceId} has been marked as returned.`);
-
-    // Future: Add database call or update status
+    // Future Add database call or update status
     // navigation.navigate('Home');
   };
 
@@ -46,28 +70,26 @@ export default function TabletReturnScreen({ navigation }) {
 
       <TouchableOpacity style={styles.button} onPress={handleReturn}>
         <Text style={styles.buttonText}>Confirm Return</Text>
+        
+
       </TouchableOpacity>
+<Text style={styles.countdown}>{timeLeft}</Text>
+    
 
-      <View style={styles.placeholderBox}>
-  <Text style={styles.placeholderTitle}>Coming Soon:</Text>
-
-
-  <Text style={styles.placeholderText}>• Scan QR code or sticker on device</Text>
-  
-  <Text style={styles.placeholderText}>• Show countdown to expected return time</Text>
-</View>
-
-
-      <TouchableOpacity onPress={() => navigation.goBack()}>
-        <Text style={styles.link}>← Home</Text>
-      </TouchableOpacity>
+     
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 24, backgroundColor: '#fff' },
-  title: { fontSize: 24, fontWeight: 'bold', marginBottom: 24, color: '#3D2A75', textAlign: 'center' },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 24,
+    color: '#3D2A75',
+    textAlign: 'center',
+  },
   label: { fontSize: 16, marginBottom: 6, fontWeight: '600' },
   input: {
     borderWidth: 1,
@@ -89,23 +111,32 @@ const styles = StyleSheet.create({
     color: '#3D2A75',
     textAlign: 'center',
   },
-
   placeholderBox: {
-  marginTop: 32,
-  padding: 16,
-  backgroundColor: '#F3F2F5',
-  borderRadius: 8,
-},
-placeholderTitle: {
-  fontWeight: '700',
-  fontSize: 16,
-  marginBottom: 6,
+    marginTop: 32,
+    padding: 16,
+    backgroundColor: '#F3F2F5',
+    borderRadius: 8,
+  },
+  placeholderTitle: {
+    fontWeight: '700',
+    fontSize: 16,
+    marginBottom: 6,
+    color: '#3D2A75',
+  },
+  placeholderText: {
+    fontSize: 14,
+    color: '#555',
+    marginBottom: 4,
+  },
+ countdown: {
+  marginTop: 16,
+  padding: 10,
+  backgroundColor: '#EDEAF5',
+  borderRadius: 6,
+  textAlign: 'center',
   color: '#3D2A75',
-},
-placeholderText: {
+  fontWeight: '600',
   fontSize: 14,
-  color: '#555',
-  marginBottom: 4,
-},
+}
 
 });

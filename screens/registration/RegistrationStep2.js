@@ -6,17 +6,31 @@ import {
 import RegistrationProgress from '../../components/RegistrationProgress';
 
 export default function RegistrationStep2({ navigation, route }) {
-  const { name, email } = route.params;
-  const [zipCode, setZipCode] = useState('');
+  const { firstName, lastName, dob, email } = route.params;
+
+  const [address, setAddress] = useState('');
+  const [unit, setUnit] = useState('');
+  const [city, setCity] = useState('');
+  const [state, setState] = useState('');
+  const [zip, setZip] = useState('');
   const [phone, setPhone] = useState('');
 
   const handleNext = () => {
-    if (!zipCode || !phone) return alert('Please enter all fields');
+    if (!address || !city || !state || !zip || !phone) {
+      alert('Please fill in all required fields.');
+      return;
+    }
 
-    navigation.navigate('RegistrationStep3', {
-      name,
+    navigation.navigate('Registration Step 3', {
+      firstName,
+      lastName,
+      dob,
       email,
-      zipCode,
+      address,
+      unit,
+      city,
+      state,
+      zip,
       phone,
     });
   };
@@ -25,16 +39,40 @@ export default function RegistrationStep2({ navigation, route }) {
     <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={{ flex: 1 }}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.container}>
-            <RegistrationProgress currentStep={2} />
+          <RegistrationProgress currentStep={2} />
 
           <Text style={styles.title}>Step 2</Text>
-          <Text style={styles.subtitle}>Find a Neighbordhood Center Near You and Enter Your Zip Code</Text>
+          <Text style={styles.subtitle}>Tell us about where you live</Text>
 
           <TextInput
             style={styles.input}
+            placeholder="Street Address"
+            value={address}
+            onChangeText={setAddress}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Unit / Apt (optional)"
+            value={unit}
+            onChangeText={setUnit}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="City"
+            value={city}
+            onChangeText={setCity}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="State"
+            value={state}
+            onChangeText={setState}
+          />
+          <TextInput
+            style={styles.input}
             placeholder="ZIP Code"
-            value={zipCode}
-            onChangeText={setZipCode}
+            value={zip}
+            onChangeText={setZip}
             keyboardType="numeric"
           />
           <TextInput
@@ -59,20 +97,11 @@ export default function RegistrationStep2({ navigation, route }) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: 'center', padding: 24, backgroundColor: '#fff' 
-
-  },
-  title: { fontSize: 24, fontWeight: '600', color: '#3D2A75',//pirple
-     marginBottom: 6, textAlign: 'center' },
-  subtitle: { fontSize: 16, color: '#666', //gray
-    marginBottom: 30, textAlign: 'center' },
-  input: { borderWidth: 1, borderColor: '#ccc', //light gray
-    padding: 12, borderRadius: 8, marginBottom: 16 },
-  button: { backgroundColor: '#3D2A75', //purple
-    padding: 16, borderRadius: 8, marginTop: 12 },
-  buttonText: { color: '#fff', //white
-    textAlign: 'center', fontWeight: '600'   },
-  backText: { marginTop: 16, textAlign: 'center', color: '#3D2A75' //purple
-
-  },
+  container: { flex: 1, justifyContent: 'center', padding: 24, backgroundColor: '#fff' },
+  title: { fontSize: 24, fontWeight: '600', color: '#3D2A75', marginBottom: 6, textAlign: 'center' },
+  subtitle: { fontSize: 16, color: '#666', marginBottom: 30, textAlign: 'center' },
+  input: { borderWidth: 1, borderColor: '#ccc', padding: 12, borderRadius: 8, marginBottom: 16 },
+  button: { backgroundColor: '#3D2A75', padding: 16, borderRadius: 8, marginTop: 12 },
+  buttonText: { color: '#fff', textAlign: 'center', fontWeight: '600' },
+  backText: { marginTop: 16, textAlign: 'center', color: '#3D2A75' },
 });

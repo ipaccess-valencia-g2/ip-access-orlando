@@ -1,137 +1,252 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity } from 'react-native';
 
 export default function ProfileScreen() {
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      
-      <View style={styles.profilePic} />
+      {/* Profile Header */}
+      <View style={styles.header}>
+        <View style={styles.avatar} />
+        <Text style={styles.name}>Name</Text>
+      </View>
 
-      
-      <Text style={styles.name}> McKenna Pasquale</Text>
+   <View style={styles.section}>
+  <Text style={styles.sectionTitle}>My Reservations:</Text>
 
-      
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>My Favorite / Current / Most Used Reservations:</Text>
-        <View style={styles.reservationCard}>
-          <Text>Date(s)</Text>
-          <Text>Device</Text>
-          <TouchableOpacity style={styles.optionsBtn}>
-            <Text style={styles.optionsText}>•••</Text>
-          </TouchableOpacity>
+  {/* Reservation 1 */}
+  <View style={styles.myReservationCard}>
+    <Text style={styles.resLabel}>Device:</Text>
+    <Text style={styles.resValue}>Amazon Fire</Text>
+
+    <Text style={styles.resLabel}>Pickup Date:</Text>
+    <Text style={styles.resValue}>June 2, 2025</Text>
+
+    <Text style={styles.resLabel}>Time:</Text>
+    <Text style={styles.resValue}>10:00 AM</Text>
+  </View>
+
+  {/* Reservation 2 */}
+  <View style={styles.myReservationCard}>
+    <Text style={styles.resLabel}>Device:</Text>
+    <Text style={styles.resValue}>Chrome Tablet</Text>
+
+    <Text style={styles.resLabel}>Pickup Date:</Text>
+    <Text style={styles.resValue}>June 10, 2025</Text>
+
+    <Text style={styles.resLabel}>Time:</Text>
+    <Text style={styles.resValue}>2:30 PM</Text>
+  </View>
+
+
+      {/* My Stats */}
+      <Text style={styles.sectionTitle}>My Stats:</Text>
+      <View style={styles.statsContainer}>
+        <View style={styles.statItem}>
+          <Text style={styles.statLabel}>Devices Borrowed</Text>
+          <View style={styles.statBarBackground}>
+            <View style={[styles.statBarFill, { width: '60%' }]} />
+          </View>
         </View>
-        <View style={styles.reservationCard}>
-          <Text>Date(s)</Text>
-          <Text>Device</Text>
-          <TouchableOpacity style={styles.optionsBtn}>
-            <Text style={styles.optionsText}>•••</Text>
-          </TouchableOpacity>
+
+        <View style={styles.statItem}>
+          <Text style={styles.statLabel}>On-Time Returns</Text>
+          <View style={styles.statBarBackground}>
+            <View style={[styles.statBarFill, { width: '100%' }]} />
+          </View>
+        </View>
+
+        <View style={styles.statItem}>
+          <Text style={styles.statLabel}>Late Returns</Text>
+          <View style={styles.statBarBackground}>
+            <View style={[styles.statBarFill, { width: '25%' }]} />
+          </View>
         </View>
       </View>
 
-      
+      {/* Past Reservations */}
+      <Text style={styles.sectionTitle}>Past Reservations:</Text>
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>My Stats:</Text>
-        <View style={styles.statBarContainer}>
-          <Text>Devices Borrowed</Text>
-          <View style={styles.statBar}>
-            <View style={[styles.statFill, { width: '10%' }]} />
-          </View>
-        </View>
-        <View style={styles.statBarContainer}>
-          <Text>On-Time Returns</Text>
-          <View style={styles.statBar}>
-            <View style={[styles.statFill, { width: '100%' }]} />
-          </View>
-        </View>
-        <View style={styles.statBarContainer}>
-          <Text>Late Returns</Text>
-          <View style={styles.statBar}>
-            <View style={[styles.statFill, { width: '30%' }]} />
-          </View>
-        </View>
-        <Text>Warning Message Here</Text>
-      </View>
+  
 
-     
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Past Reservations:</Text>
-        <View style={styles.pastReservationCard}>
-          <Text>Date(s)</Text>
-          <Text>Device</Text>
-          <Text>Checkout Duration</Text>
-        </View>
-        <View style={styles.pastReservationCard}>
-         <Text>Date(s)</Text>
-          <Text>Device</Text>
-          <Text>Checkout Duration</Text>
-        
-        </View>
-        
-      </View>
+
+<View style={styles.reservationGrid}>
+
+  {/* Reservation 1 */}
+  <View style={styles.pastReservationCard}>
+    <Text style={styles.resLabel}>Date:</Text>
+    <Text style={styles.resValue}>May 29, 2025</Text>
+
+    <Text style={styles.resLabel}>Device:</Text>
+    <Text style={styles.resValue}>iPad Pro</Text>
+
+    <Text style={styles.resLabel}>Checkout Duration:</Text>
+    <Text style={styles.resValue}>36 hours</Text>
+  </View>
+
+  {/* Reservation 2 */}
+  <View style={styles.pastReservationCard}>
+    <Text style={styles.resLabel}>Date:</Text>
+    <Text style={styles.resValue}>May 21, 2025</Text>
+
+    <Text style={styles.resLabel}>Device:</Text>
+    <Text style={styles.resValue}>Samsung Galaxy Tab</Text>
+
+    <Text style={styles.resLabel}>Checkout Duration:</Text>
+    <Text style={styles.resValue}>4 Days and 6 Hours</Text>
+  </View>
+
+
+{/*Reservation 3 */}
+    <View style={styles.pastReservationCard}>
+    <Text style={styles.resLabel}>Date:</Text>
+    <Text style={styles.resValue}>May 31, 2025</Text>
+
+    <Text style={styles.resLabel}>Device:</Text>
+    <Text style={styles.resValue}>iPad Mini6</Text>
+
+    <Text style={styles.resLabel}>Checkout Duration:</Text>
+    <Text style={styles.resValue}>24 hours</Text>
+  </View>
+
+  {/*Reservation 4 */}
+    <View style={styles.pastReservationCard}>
+    <Text style={styles.resLabel}>Date:</Text>
+    <Text style={styles.resValue}>May 18, 2025</Text>
+
+    <Text style={styles.resLabel}>Device:</Text>
+    <Text style={styles.resValue}>Chrome Tablet</Text>
+
+    <Text style={styles.resLabel}>Checkout Duration:</Text>
+    <Text style={styles.resValue}>6 hours</Text>
+  </View>
+
+  </View>
+  </View>
+  </View>
+
+
+
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
+    padding: 24,
     backgroundColor: '#fff',
   },
-  profilePic: {
+  header: {
+    alignItems: 'center',
+    marginBottom: 24,
+  },
+  avatar: {
     width: 120,
     height: 120,
     borderRadius: 60,
-    backgroundColor: '#cfd8dc',
-    alignSelf: 'center',
-    marginBottom: 16,
+    backgroundColor: '#d0d4d7',
+    marginBottom: 12,
   },
   name: {
     fontSize: 20,
     fontWeight: '600',
-    textAlign: 'center',
-    marginBottom: 20,
-  },
-  section: {
-    marginBottom: 30,
   },
   sectionTitle: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: '600',
     marginBottom: 12,
   },
+  reservationList: {
+    marginBottom: 24,
+  },
   reservationCard: {
-    backgroundColor: '#e0e0e0',
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#e0e5ea',
     padding: 12,
     borderRadius: 8,
-    marginBottom: 10,
-    position: 'relative',
-  },
-  optionsBtn: {
-    position: 'absolute',
-    right: 10,
-    top: 10,
-  },
-  optionsText: {
-    fontSize: 18,
-  },
-  statBarContainer: {
     marginBottom: 12,
   },
-  statBar: {
+  deviceIcon: {
+    width: 40,
+    height: 40,
+    backgroundColor: '#c4c4c4',
+    borderRadius: 6,
+    marginRight: 12,
+  },
+  reservationDetails: {
+    flex: 1,
+  },
+  deviceTitle: {
+    fontWeight: '600',
+  },
+  deviceInfo: {
+    fontSize: 12,
+    color: '#555',
+  },
+  moreBtn: {
+    padding: 8,
+  },
+  moreText: {
+    fontSize: 18,
+  },
+  statsContainer: {
+    marginBottom: 24,
+  },
+  statItem: {
+    marginBottom: 12,
+  },
+  statLabel: {
+    fontSize: 14,
+    marginBottom: 4,
+  },
+  statBarBackground: {
     height: 10,
     backgroundColor: '#ccc',
     borderRadius: 5,
     overflow: 'hidden',
   },
-  statFill: {
-    height: '100%',
-    backgroundColor: '#3D2A75',
+  statBarFill: {
+  height: '100%',
+  backgroundColor: '#3D2A75', 
+},
+
+  pastReservationList: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 10,
   },
-  pastReservationCard: {
-    backgroundColor: '#f5f5f5',
-    padding: 12,
-    borderRadius: 8,
-    marginBottom: 10,
-  },
+ 
+
+  resLabel: {
+  fontWeight: '600',
+  marginTop: 8,
+},
+resValue: {
+  marginBottom: 4,
+  color: '#333',
+},
+
+myReservationCard: {
+  backgroundColor: '#F0F0F0',
+  padding: 14,
+  borderRadius: 8,
+  marginBottom: 12,
+},
+
+
+reservationGrid: {
+  flexDirection: 'row',
+  flexWrap: 'wrap',
+  justifyContent: 'space-between',
+},
+
+pastReservationCard: {
+  backgroundColor: '#F0F0F0',
+  width: '48%', // Two cards per row
+  padding: 14,
+  borderRadius: 8,
+  marginBottom: 12,
+},
+
+
 });

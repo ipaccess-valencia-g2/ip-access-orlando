@@ -1,6 +1,7 @@
 
 //need to be able to show devices / times available vs faded out if unavailable
 
+
 import React, { useState } from 'react';
 import {
   View,
@@ -18,7 +19,7 @@ export default function CheckAvailabilityCheckoutScreen({ navigation }) {
   const [zipCode, setZipCode] = useState('');
   const [neighborhood, setNeighborhood] = useState(null);
   const [deviceType, setDeviceType] = useState(null);
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState(new Date()); // todays date by default
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [selectedTime, setSelectedTime] = useState(null);
 
@@ -27,13 +28,12 @@ export default function CheckAvailabilityCheckoutScreen({ navigation }) {
   const times = ['9:00am', '10:00am', '11:00am', '1:00pm', '2:00pm', '3:00pm', '4:00pm'];
 
   const handleZipSearch = () => {
-    // fix me later
     if (zipCode === '32801') {
       setNeighborhood('Downtown Tech Center');
     } else if (zipCode === '32822') {
       setNeighborhood('East Orlando Hub');
     } else {
-      setNeighborhood('Neighborhood Center Name '); //add to pull neighborhood center name from database based on zip?? 
+      setNeighborhood('Neighborhood Center Name');
     }
     setShowTablets(true);
   };
@@ -44,7 +44,7 @@ export default function CheckAvailabilityCheckoutScreen({ navigation }) {
       return;
     }
 
-    navigation.navigate('ReservationConfirmation', {
+    navigation.navigate('Reservation Confirmation', {
       zipCode,
       neighborhood,
       deviceType,
@@ -104,7 +104,7 @@ export default function CheckAvailabilityCheckoutScreen({ navigation }) {
             </View>
           </View>
 
-          {/* Date Picker */}
+          {/* Date Selection */}
           <Text style={styles.label}>Select Pickup Date:</Text>
           <TouchableOpacity
             style={styles.dateButton}
@@ -121,6 +121,7 @@ export default function CheckAvailabilityCheckoutScreen({ navigation }) {
                 setShowDatePicker(false);
                 if (date) setSelectedDate(date);
               }}
+              minimumDate={new Date()} // prevent past dates
             />
           )}
 
@@ -166,7 +167,7 @@ const styles = StyleSheet.create({
   heading: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#3D2A75', //purple
+    color: '#3D2A75',
     marginBottom: 20,
     textAlign: 'center',
   },

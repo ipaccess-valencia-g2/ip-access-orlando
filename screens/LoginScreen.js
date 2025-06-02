@@ -23,8 +23,8 @@ export default function LoginScreen({ navigation }) {
     <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={{ flex: 1 }}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.container}>
-          <Text style={styles.title}>ConenctOrlando</Text>
-          <Text style={styles.subtitle}>Loginn</Text>
+          <Text style={styles.title}>ConnectOrlando</Text>
+          <Text style={styles.subtitle}>Login</Text>
 
           <TextInput
             style={styles.input}

@@ -2,9 +2,6 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-//figure out which screens are doubled, and which is pulling
-
-
 
 
 import WelcomeScreen from './screens/WelcomeScreen';
@@ -25,19 +22,18 @@ import ReservationConfirmationScreen from './screens/ReservationConfirmationScre
 //
 import TabletReturnScreen from './screens/TabletReturnScreen';
 
-
-
-
-//not created yet
+//
 import AdminDashboardScreen from './screens/AdminDashboardScreen';
 import SettingsScreen from './screens/SettingsScreen';
 
 
-//import TabletCheckoutScreen from './screens/TabletCheckoutScreen';
 
 
-//<Stack.Screen name="Register" component={RegisterScreen} />  
-// import RegisterScreen from './screens/RegisterScreen';
+
+
+
+
+
 
 
 const Stack = createNativeStackNavigator();
@@ -50,19 +46,17 @@ export default function App() {
   <Stack.Screen name="Home" component={HomeScreen} />
   <Stack.Screen name="Login" component={LoginScreen} />
   <Stack.Screen name="Register" component={RegistrationStep1} />
-  <Stack.Screen name="RegistrationStep2" component={RegistrationStep2} />
-  <Stack.Screen name="RegistrationStep3" component={RegistrationStep3} />
+  <Stack.Screen name="Registration Step 2" component={RegistrationStep2} />
+  <Stack.Screen name="Registration Step 3" component={RegistrationStep3} />
   <Stack.Screen name="Profile" component={ProfileScreen} />
-  <Stack.Screen name="CheckAvailability" component={CheckAvailabilityCheckoutScreen} />
-  <Stack.Screen name="ReservationConfirmation" component={ReservationConfirmationScreen} />
-  
-  <Stack.Screen name="TabletReturn" component={TabletReturnScreen} />
-  <Stack.Screen name="AdminDashboard" component={AdminDashboardScreen} />
+  <Stack.Screen name="Check Availability" component={CheckAvailabilityCheckoutScreen} />
+  <Stack.Screen name="Reservation Confirmation" component={ReservationConfirmationScreen} />
+  <Stack.Screen name="Reserve Tablet" component={CheckAvailabilityCheckoutScreen}/>
+  <Stack.Screen name="Tablet Return" component={TabletReturnScreen} />
+  <Stack.Screen name="Admin Dashboard" component={AdminDashboardScreen} />
   <Stack.Screen name="Settings" component={SettingsScreen} />
 </Stack.Navigator>
 
     </NavigationContainer>
   );
 }
-
-

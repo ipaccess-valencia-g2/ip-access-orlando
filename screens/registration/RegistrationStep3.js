@@ -24,7 +24,7 @@ export default function RegistrationStep3({ navigation, route }) {
     // call backend ? ->With this I think: console.log('User Registered:', { name, email, zipCode, phone, password });
     
 
-    Alert.alert('Success', 'Welcome to ConnectOrlando!');
+    Alert.alert('Welcome to ConnectOrlando!', 'Reserve your tablet today');
     navigation.navigate('Home'); 
   };
 
