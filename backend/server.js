@@ -10,8 +10,8 @@ app.use(express.json());
 
 app.use('/register', require('./routes/register'));
 //app.use(require('./routes/login'));
-//app.use(require('./routes/reserve'));
-//app.use(require('./routes/admin'));
+app.use('/reserve', require('./routes/reserve'));
+app.use('/admin', require('./routes/admin'));
 //app.use(require('./routes/history'));
 //app.use(require('./routes/locations'));
 //app.use(require('./routes/reasons'));
