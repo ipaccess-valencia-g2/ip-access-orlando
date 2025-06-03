@@ -1,7 +1,7 @@
 // AdminPage.jsx
 // Admin-facing page for logging devices and viewing status.
 import React from 'react';
-import AdminCheckInView from '../components/AdminCheckInView';
+import AdminCheckInView from '../forms/AdminCheckInView';
 
 const AdminPage = () => {
   return (
