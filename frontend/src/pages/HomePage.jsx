@@ -2,6 +2,7 @@
 // Landing page for users visiting the site — includes navigation options.
 
 import React from 'react';
+import './styles/HomePage.css';
 
 const HomePage = () => {
   return (

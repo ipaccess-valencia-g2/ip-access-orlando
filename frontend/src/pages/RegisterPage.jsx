@@ -3,6 +3,7 @@
 
 import React from 'react';
 import RegisterForm from '../forms/RegisterForm';
+import './styles/RegisterPage.css';
 
 const RegisterPage = () => {
   return (

@@ -3,6 +3,7 @@
 
 import React from 'react';
 import ReservationForm from '../forms/ReservationForm';
+import './styles/ReservationPage.css';
 
 const ReservationPage = () => {
   return (

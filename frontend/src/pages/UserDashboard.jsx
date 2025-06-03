@@ -2,6 +2,7 @@
 // Central hub for logged-in users to view their reservations and details.
 
 import React from 'react';
+import './styles/UserDashboard.css';
 
 const UserDashboard = () => {
   return (

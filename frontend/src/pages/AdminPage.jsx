@@ -2,6 +2,7 @@
 // Admin-facing page for logging devices and viewing status.
 
 import React from 'react';
+import './styles/AdminPage.css';
 
 const AdminPage = () => {
   return (

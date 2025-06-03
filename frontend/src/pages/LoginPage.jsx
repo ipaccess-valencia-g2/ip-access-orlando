@@ -3,6 +3,7 @@
 
 import React from 'react';
 import LoginForm from '../forms/LoginForm';
+import './styles/LoginPage.css';
 
 const LoginPage = () => {
   return (

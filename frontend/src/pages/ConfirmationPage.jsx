@@ -2,6 +2,7 @@
 // Displays a summary after a user successfully submits a reservation.
 
 import React from 'react';
+import './styles/ConfirmationPage.css';
 
 const ConfirmationPage = () => {
   return (
