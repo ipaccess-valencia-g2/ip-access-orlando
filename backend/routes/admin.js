@@ -8,8 +8,8 @@ router.get('/', (req, res) => {
     res.send('Admin Dashboard');
 });
 
-// GET /users/
-router.get('/users/', async (req, res) =>
+// GET /users
+router.get('/users', async (req, res) =>
 {
     try
     {
