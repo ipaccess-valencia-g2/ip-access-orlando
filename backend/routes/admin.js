@@ -8,8 +8,8 @@ router.get('/', (req, res) => {
     res.send('Admin Dashboard');
 });
 
-// GET /admin/users/
-router.get('/admin/users/', async (req, res) =>
+// GET /users/
+router.get('/users/', async (req, res) =>
 {
     try
     {
@@ -25,8 +25,8 @@ router.get('/admin/users/', async (req, res) =>
     }
 });
 
-// GET /admin/users/:userID
-router.get('/admin/users/:userID', async (req, res) =>
+// GET /users/:userID
+router.get('/users/:userID', async (req, res) =>
 {
     try
     {
@@ -43,8 +43,8 @@ router.get('/admin/users/:userID', async (req, res) =>
     }
 });
 
-// PUT /admin/users/:userID/:column/:value
-router.put('/admin/users/:userID/:column/:value', async (req, res) =>
+// PUT /users/:userID/:column/:value
+router.put('/users/:userID/:column/:value', async (req, res) =>
 {
     try
     {
