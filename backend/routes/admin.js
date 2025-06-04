@@ -1,3 +1,13 @@
+// Admin Routes Information
+// (requires logged-in user with isStaff=true)
+// POST /admin                         - admin login (optional)     !
+// GET  /admin/users                   - list all users             ✓
+// GET  /admin/users/:userId           - view a single user         ✓
+// PUT  /admin/users/:userId/:column/:value - update a user field   ✓
+// GET  /admin/reservations            - list all reservations      !
+// DELETE /admin/reservations/:id      - delete a reservation       ?
+// POST /admin/log-device              - record a manual device checkout
+
 const express = require('express');
 const router = express.Router();
 const db = require('../db/connection');
@@ -28,10 +38,13 @@ router.get('/users', async (req, res) =>
 // GET /users/:userID
 router.get('/users/:userID', async (req, res) =>
 {
-    try
+   try
     {
         // Get user by userID
-        const [userInfo] = await db.promise().query(`SELECT * FROM users WHERE userID = ${req.params.userID}`);
+        const [userInfo] = await db.execute(
+            'SELECT * FROM users WHERE userID = ?',
+            [req.params.userID]
+        );
 
         // Output the user info
         res.json({userInfo});
@@ -55,16 +68,26 @@ router.put('/users/:userID/:column/:value', async (req, res) =>
             const hashedPassword = await bcrypt.hash(req.params.value, 10);
 
             // Update user password by userID
-            await db.promise().query(`UPDATE users SET password = '${hashedPassword}' WHERE userID = ${req.params.userID}`);
+            await db.execute(
+                'UPDATE users SET password = ? WHERE userID = ?',
+                [hashedPassword, req.params.userID]
+            );
         }
         else
         {
             // Update user info by userID
-            await db.promise().query(`UPDATE users SET ${req.params.column} = ${req.params.value} WHERE userID = ${req.params.userID}`);
+           // Update user info by userID (ensure column is validated beforehand)
+            await db.execute(
+                `UPDATE users SET ${req.params.column} = ? WHERE userID = ?`,
+                [req.params.value, req.params.userID]
+            );
         }
 
         // Save new user info for display
-        const [newUser] = await db.promise().query(`SELECT * FROM users WHERE userID = ${req.params.userID}`);
+       const [newUser] = await db.execute(
+            'SELECT * FROM users WHERE userID = ?',
+            [req.params.userID]
+        );
 
         // Display new user info
         res.json({ message: 'User updated: ', newUser });

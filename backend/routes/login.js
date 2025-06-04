@@ -10,14 +10,16 @@ router.post('/login/:username/:password', async (req,res) =>
     try
     {
         // Check that username is in the database
-        const userMatch = await db.promise().query(`SELECT username,password FROM users WHERE username = '${req.params.username}'`);
-        if (userMatch[0][0] === undefined)
-        {
+        const [userMatch] = await db.execute(
+            'SELECT username, password FROM users WHERE username = ?',
+            [req.params.username]
+        );
+        if (userMatch.length === 0) {
             throw new Error('Username is incorrect');
         }
 
         // Check that password is correct
-        const isMatch = await bcrypt.compare(req.params.password, userMatch[0][0].password);
+         const isMatch = await bcrypt.compare(req.params.password, userMatch[0].password);
 
         if (isMatch)
         {
