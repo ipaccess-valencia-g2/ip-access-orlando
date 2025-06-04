@@ -1,4 +1,38 @@
-# ConnectOrlando API 
+# ConnectOrlando API Index
+
+## Authentication (register.js/login.js)
+POST / register   ✓
+POST /login       ✓
+
+## Reserve
+POST   /reserve                - create a reservation              ✓       
+PUT    /reserve/:reservationId - update an existing reservation    !  
+DELETE /reserve/:reservationId - cancel a reservation              !    
+
+## History 
+GET    /history/:userId        - list past reservations for a user !
+
+## Locations
+GET /locations  !
+
+## Reasons
+GET /reasons    ✓
+
+## Address Verification
+POST /verify-address                - check if an address is inside Orlando  ?
+
+## Admin Routes Information 
+### (requires logged-in user with isStaff=true)
+POST /admin                         - admin login (optional)            !
+GET  /admin/users                   - list all users                    ✓
+GET  /admin/users/:userId           - view a single user                ✓
+PUT  /admin/users/:userId/:column/:value - update a user field          ✓
+GET  /admin/reservations            - list all reservations             !
+DELETE /admin/reservations/:id      - delete a reservation              ?
+POST /admin/log-device              - record a manual device checkout   !
+
+# API CONTRACT
+
 
 ## GET /reasons
 Returns a list of reasons for device use.
@@ -90,6 +124,27 @@ OR
   "reservationId": 1
 }
 ```
+
+## PUT /reserve/:reservationId
+
+### Request Body:
+
+{
+  "startTime": "2024-06-12T10:00:00",
+  "endTime": "2024-06-12T12:00:00",
+  "reason": "Job Interview",
+  "otherReason": ""
+}
+
+### Response:
+{
+  "message": "Reservation updated"
+}
+
+### DELETE /reserve/:reservationId
+
+Response:
+
 ## GET /history/:userID
 ```json
 //Used for the “View Past Reservations” section in the user dashboard
@@ -129,9 +184,31 @@ OR
 
 ```json
 ```
+## POST /verify-address
+
+### Request Body:
+
+{
+  "address": "123 Best Rd, Winter Garden FL 34787"
+}
+
+### Response:
+
+{
+  "inOrlando": true
+}
 
 ## Admin Routes Information
-All admin routes should:
+### (requires logged-in user with isStaff=true)
+POST /admin                         - admin login (optional)
+GET  /admin/users                   - list all users
+GET  /admin/users/:userId           - view a single user
+PUT  /admin/users/:userId/:column/:value - update a user field
+GET  /admin/reservations            - list all reservations
+DELETE /admin/reservations/:id      - delete a reservation
+POST /admin/log-device              - record a manual device checkout
+
+### All admin routes should:
 Require the user to be logged in
 Validate that the isStaff flag is true for the current session or token
 

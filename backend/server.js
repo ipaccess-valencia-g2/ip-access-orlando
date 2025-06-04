@@ -9,9 +9,15 @@ app.use(cors());
 app.use(express.json());
 
 app.use('/register', require('./routes/register'));
+<<<<<<< HEAD
 //app.use(require('./routes/login'));
 app.use('/reserve', require('./routes/reserve'));
 app.use('/admin', require('./routes/admin'));
+=======
+app.use(require('./routes/login'));
+//app.use(require('./routes/reserve'));
+app.use(require('./routes/admin'));
+>>>>>>> backend
 //app.use(require('./routes/history'));
 //app.use(require('./routes/locations'));
 //app.use(require('./routes/reasons'));

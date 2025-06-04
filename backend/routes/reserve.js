@@ -1,4 +1,11 @@
+<<<<<<< HEAD
 /// --- POST /reserve
+=======
+/// POST   /reserve                - create a reservation            ✓
+/// PUT    /reserve/:reservationId - update an existing reservation  !
+//  GET
+/// DELETE /reserve/:reservationId - cancel a reservation            !
+>>>>>>> backend
 
 const express = require('express');
 const db = require('../db/connection');
