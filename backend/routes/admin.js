@@ -35,8 +35,6 @@ router.get('/users', async (req, res) =>
     }
 });
 
-<<<<<<< HEAD
-=======
 // GET /users/:userID
 router.get('/users/:userID', async (req, res) =>
 {
@@ -103,7 +101,6 @@ router.put('/users/:userID/:column/:value', async (req, res) =>
 
 //DELETE /reservations/:id
 
->>>>>>> backend
 router.delete('/reservations/:id', async (req, res) => {
     const { id } = req.params;
 
@@ -121,8 +118,4 @@ router.delete('/reservations/:id', async (req, res) => {
     }
 });
 
-<<<<<<< HEAD
 module.exports = router;
-=======
-module.exports = router;
->>>>>>> backend
