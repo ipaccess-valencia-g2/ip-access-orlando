@@ -1,1 +1,1 @@
-/// --- GET /history/:userId
+/// GET    /history/:userId        - list past reservations for a user

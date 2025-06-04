@@ -1,0 +1,36 @@
+{
+	"info": {
+		"_postman_id": "e5a76adf-02ab-48b3-9904-740b2bc8805d",
+		"name": "New Collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "44333433",
+		"_collection_link": "https://carlos-8642356.postman.co/workspace/7b7ec610-f89b-42de-8a36-4a562ff9d747/collection/44333433-e5a76adf-02ab-48b3-9904-740b2bc8805d?action=share&source=collection_link&creator=44333433"
+	},
+	"item": [
+		{
+			"name": "http://localhost:3000/reservations?userID=1",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/reservations?userID=1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"reservations"
+					],
+					"query": [
+						{
+							"key": "userID",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
