@@ -1,12 +1,12 @@
 // Admin Routes Information
 // (requires logged-in user with isStaff=true)
-// POST /admin                         - admin login (optional)     !
-// GET  /admin/users                   - list all users             ✓
-// GET  /admin/users/:userId           - view a single user         ✓
-// PUT  /admin/users/:userId/:column/:value - update a user field   ✓
-// GET  /admin/reservations            - list all reservations      !
-// DELETE /admin/reservations/:id      - delete a reservation       ?
-// POST /admin/log-device              - record a manual device checkout
+// POST /admin                         - admin login (optional)            !
+// GET  /admin/users                   - list all users                    ✓
+// GET  /admin/users/:userId           - view a single user                ✓
+// PUT  /admin/users/:userId/:column/:value - update a user field          ✓
+// GET  /admin/reservations            - list all reservations             !
+// DELETE /admin/reservations/:id      - delete a reservation              ?
+// POST /admin/log-device              - record a manual device checkout   !
 
 const express = require('express');
 const router = express.Router();

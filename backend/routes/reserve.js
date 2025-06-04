@@ -1,6 +1,7 @@
-/// POST   /reserve                - create a reservation
-/// PUT    /reserve/:reservationId - update an existing reservation
-/// DELETE /reserve/:reservationId - cancel a reservation
+/// POST   /reserve                - create a reservation            ✓
+/// PUT    /reserve/:reservationId - update an existing reservation  !
+//  GET
+/// DELETE /reserve/:reservationId - cancel a reservation            !
 
 const express = require('express');
 const db = require('../db/connection');
