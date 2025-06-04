@@ -5,6 +5,7 @@
 // GET  /admin/users/:userId           - view a single user                ✓
 // PUT  /admin/users/:userId/:column/:value - update a user field          ✓
 // GET  /admin/reservations            - list all reservations             !
+// GET  /admin/reservations/:reservationID - list all reservations         !
 // DELETE /admin/reservations/:id      - delete a reservation              ?
 // POST /admin/log-device              - record a manual device checkout   !
 
@@ -24,7 +25,7 @@ router.get('/users', async (req, res) =>
     try
     {
         // Get all users
-        const [rows] = await db.promise().query('SELECT * FROM users');
+        const [rows] = await db.query('SELECT * FROM users');
 
         res.json({rows});
     }
@@ -97,10 +98,47 @@ router.put('/users/:userID/:column/:value', async (req, res) =>
         console.error('Error updating user:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
-})
+});
+
+// GET /reservations
+router.get('/reservations', async (req, res) =>
+{
+    try
+    {
+        // Get all users
+        const [rows] = await db.query('SELECT * FROM reservations');
+
+        res.json({rows});
+    }
+    catch (error)
+    {
+        console.error('Error fetching reservations:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
+// GET /reservations/:reservationID
+router.get('/reservations/:reservationID', async (req, res) =>
+{
+    try
+    {
+        // Get reservation by reservationID
+        const [reservationInfo] = await db.query(
+            'SELECT * FROM reservations WHERE reservationID = ?',
+            [req.params.reservationID]
+        );
+
+        // Output the reservation info
+        res.json({reservationInfo});
+    }
+    catch (error)
+    {
+        console.error('Error fetching reservation:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
 
 //DELETE /reservations/:id
-
 router.delete('/reservations/:id', async (req, res) => {
     const { id } = req.params;
 
