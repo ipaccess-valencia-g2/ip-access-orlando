@@ -65,12 +65,6 @@ const RegisterForm = () => {
       newErrors.dob = "You must be 18 or older to register.";
     }
 
-    // Phone format
-    const phoneRegex = /^\([0-9]{3}\) [0-9]{3}-[0-9]{4}$/;
-    if (formData.phone && !phoneRegex.test(formData.phone)) {
-      newErrors.phone = "Enter a valid 10-digit phone number (123) 456-7890.";
-    }
-
     // Email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (formData.email && !emailRegex.test(formData.email)) {
@@ -102,24 +96,12 @@ const RegisterForm = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    const formatPhoneNumber = (val) => {
-      const digits = val.replace(/\D/g, "").slice(0, 10);
-      if (digits.length === 10) {
-        return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6, 10)}`;
-      }
-      return val;
-    };
-
     const formatZip = (val) => {
       const digits = val.replace(/\D/g, "");
       return digits.slice(0, 5);
     };
 
     let updatedValue = value;
-
-    if (name === "phone") {
-      updatedValue = formatPhoneNumber(value);
-    }
 
     if (name === "zip") {
       updatedValue = formatZip(value);
@@ -152,7 +134,8 @@ const RegisterForm = () => {
           firstName: formData.firstName,
           lastName: formData.lastName,
           address: fullAddress,
-          phone: formData.phone
+          phone: formData.phone,
+          dob: formData.dob
         })
       });
 

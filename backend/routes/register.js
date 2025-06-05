@@ -4,27 +4,25 @@ const db = require('../db/connection');
 const router = express.Router();
 
 router.post('/', async (req, res) => {
-  const { username, password, email, firstName, lastName, address, phone } = req.body;
+  const { username, password, email, firstName, lastName, address, phone, dob } = req.body;
 
   // Check for required fields
-  if (!username || !password || !email || !firstName || !lastName || !address || !phone) {
+  if (!username || !password || !email || !firstName || !lastName || !address || !phone || !dob) {
     return res.status(400).json({ error: 'All fields are required.' });
   }
 
   try {
-    // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Insert the user into the database
-    const [rows, fields] = await db.execute(
-      `INSERT INTO users (username, password, email, firstName, lastName, address, phone, isStaff)
-       VALUES (?, ?, ?, ?, ?, ?, ?, 0)`,
-      [username, hashedPassword, email, firstName, lastName, address, phone]
+    const [result] = await db.execute(
+      `INSERT INTO users (username, password, email, firstName, lastName, address, phone, dob, isStaff)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0)`,
+      [username, hashedPassword, email, firstName, lastName, address, phone, dob]
     );
 
     res.status(201).json({ message: 'User registered successfully!' });
   } catch (err) {
-    console.error('Registration error:', err);  // This line helps you debug!
+    console.error('Registration error:', err); 
     res.status(500).json({ error: 'Something went wrong.' });
   }
 });
