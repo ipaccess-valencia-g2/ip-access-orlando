@@ -65,14 +65,11 @@ const LoginForm = () => {
 
         try {
             // Send POST request to backend login endpoint
-            const response = await fetch('http://localhost:3000/login', { // TODO: Update URL
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    identifier: formData.usernameOrEmail,  // Backend should accept either username or email
-                    password: formData.password,
-                }),
-            });
+            const response = await fetch(
+                `http://localhost:3307/login/${encodeURIComponent(formData.usernameOrEmail)}/${encodeURIComponent(formData.password)}`,
+                { method: 'POST' }
+            );
+
 
             const data = await response.json();
 

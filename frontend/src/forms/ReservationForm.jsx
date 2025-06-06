@@ -1,5 +1,5 @@
 // ReservationForm.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect} from 'react';
 import '../pages/styles/ReservationPage.css';
 
 // List of community centers (full list)
@@ -35,11 +35,27 @@ const reasonOptions = [
 
 const ReservationForm = () => {
   // Form state
+  const [centers, setCenters] = useState([]);
   const [location, setLocation] = useState('');
   const [date, setDate] = useState('');
   const [reason, setReason] = useState('');
   const [customReason, setCustomReason] = useState('');
   const [message, setMessage] = useState('');
+
+  // Load community centers from the backend
+  useEffect(() => {
+    const loadCenters = async () => {
+      try {
+        const res = await fetch('http://localhost:3307/locations');
+        const data = await res.json();
+        setCenters(data.locations || []);
+      } catch (err) {
+        console.error('Failed to fetch locations:', err);
+      }
+    };
+    loadCenters();
+  }, []);
+
 
   // Submit handler
   const handleSubmit = async (e) => {
@@ -91,8 +107,10 @@ const ReservationForm = () => {
           className=""
         >
           <option disabled value="">-- Select a Center --</option>
-          {communityCenters.map((center, idx) => (
-            <option key={idx} value={center}>{center}</option>
+          {centers.map((center) => (
+            <option key={center.locationID} value={center.name}>
+              {center.name}
+            </option>
           ))}
         </select>
       </div>
