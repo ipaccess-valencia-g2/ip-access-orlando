@@ -10,17 +10,17 @@ app.use(express.json());
 
 app.use('/register', require('./routes/register'));
 app.use(require('./routes/login'));
-//app.use(require('./routes/reserve'));
+app.use('/reserve', require('./routes/reserve'));
 app.use(require('./routes/admin'));
 //app.use(require('./routes/history'));
 //app.use(require('./routes/locations'));
 //app.use(require('./routes/reasons'));
 
 app.get('/', (req, res) => {
-  res.send('API is running');
+    res.send('API is running');
 });
 
 const PORT = process.env.PORT || 3307;
 app.listen(PORT, () => {
-  console.log(`Server is listening on port ${PORT}`);
+    console.log(`Server is listening on port ${PORT}`);
 });
