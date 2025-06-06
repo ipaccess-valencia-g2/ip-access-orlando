@@ -1,7 +1,15 @@
+// screens/RegistrationStep1.js
 import React, { useState } from 'react';
 import {
-  View, Text, TextInput, TouchableOpacity, StyleSheet,
-  KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  Platform,
+  KeyboardAvoidingView,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import RegistrationProgress from '../../components/RegistrationProgress';
@@ -9,38 +17,35 @@ import RegistrationProgress from '../../components/RegistrationProgress';
 export default function RegistrationStep1({ navigation }) {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
+  const [dob, setDob] = useState(new Date());
   const [email, setEmail] = useState('');
-  const [dob, setDob] = useState(null);
-  const [showPicker, setShowPicker] = useState(false);
+  const [showDatePicker, setShowDatePicker] = useState(false);
 
   const handleNext = () => {
-    if (!firstName || !lastName || !email || !dob) {
-      alert('Please fill in all fields');
+    if (!firstName || !lastName || !dob || !email) {
+      alert('Please fill in all required fields.');
       return;
     }
 
     navigation.navigate('Registration Step 2', {
       firstName,
       lastName,
+      dob: dob.toISOString().split('T')[0], // Format as YYYY-MM-DD
       email,
-      dob: `${dob.getMonth() + 1}/${dob.getDate()}/${dob.getFullYear()}`
-
     });
   };
 
-  const handleDateChange = (event, selectedDate) => {
-    setShowPicker(false);
-    if (selectedDate) setDob(selectedDate);
-  };
-
   return (
-    <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={{ flex: 1 }}>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={{ flex: 1 }}
+    >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.container}>
           <RegistrationProgress currentStep={1} />
 
-          <Text style={styles.title}>Step 1</Text>
-          <Text style={styles.subtitle}>Enter your name, date of birth, and email</Text>
+          <Text style={styles.title}>Create Your Account</Text>
+          <Text style={styles.subtitle}>Let’s start with your basic information.</Text>
 
           <TextInput
             style={styles.input}
@@ -55,70 +60,95 @@ export default function RegistrationStep1({ navigation }) {
             onChangeText={setLastName}
           />
 
-          <TouchableOpacity onPress={() => setShowPicker(true)} style={styles.input}>
-            <Text style={{ color: dob ? '#000' : '#999' }}>
-              {dob ? `${dob.getMonth() + 1}/${dob.getDate()}/${dob.getFullYear()}` : 'Select Date of Birth'}
+       <TouchableOpacity onPress={() => setShowDatePicker(true)} style={styles.dateField}>
+  <Text style={styles.dateLabel}>Date of Birth</Text>
+  <Text style={styles.dateValue}>{dob.toDateString()}</Text>
+</TouchableOpacity>
 
-            </Text>
-          </TouchableOpacity>
 
-          {showPicker && (
-            <DateTimePicker
-              mode="date"
-              display="default"
-              value={dob || new Date(2000, 0, 1)}
-              onChange={handleDateChange}
-              maximumDate={new Date()}
-            />
-          )}
+          {showDatePicker && (
+  <DateTimePicker
+    value={dob}
+    mode="date"
+    display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+    onChange={(event, selectedDate) => {
+      setShowDatePicker(false); // dismiss immediately
+      if (event.type === 'set' && selectedDate) {
+        setDob(selectedDate);
+      }
+    }}
+    maximumDate={new Date()}
+  />
+)}
+
 
           <TextInput
             style={styles.input}
-            placeholder="Email Address"
+            placeholder="Email"
             value={email}
             onChangeText={setEmail}
             keyboardType="email-address"
+            autoCapitalize="none"
           />
 
           <TouchableOpacity style={styles.button} onPress={handleNext}>
             <Text style={styles.buttonText}>Next</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-            <Text style={styles.linkText}>Already have an account? Login here</Text>
-          </TouchableOpacity>
+          <Text style={styles.linkText} onPress={() => navigation.navigate('Login')}>
+            Already have an account? Log in
+          </Text>
         </View>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
   );
 }
 
+
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: 'center', padding: 24, backgroundColor: '#fff' },
-  title: { fontSize: 24, fontWeight: '600', color: '#3D2A75', marginBottom: 6, textAlign: 'center' },
-  subtitle: { fontSize: 16, color: '#666', marginBottom: 30, textAlign: 'center' },
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    padding: 24,
+    backgroundColor: '#F3F2EF', // Neutral Linen
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: '600',
+    color: '#003153', // Midnight Navy
+    marginBottom: 6,
+    textAlign: 'center',
+  },
+  subtitle: {
+    fontSize: 16,
+    color: '#0B3D20', // Evergreen
+    marginBottom: 30,
+    textAlign: 'center',
+  },
   input: {
     borderWidth: 1,
     borderColor: '#ccc',
     padding: 12,
     borderRadius: 8,
-    marginBottom: 16
+    marginBottom: 16,
+    backgroundColor: '#F3F2EF', // Match linen background
+    color: '#0B3D20', // Evergreen text
   },
   button: {
-    backgroundColor: '#3D2A75',
+    backgroundColor: '#003153', // Midnight Navy
     padding: 16,
     borderRadius: 8,
-    marginTop: 12
+    marginTop: 12,
   },
   buttonText: {
     color: '#fff',
     textAlign: 'center',
-    fontWeight: '600'
+    fontWeight: '600',
   },
   linkText: {
-    color: '#DBB86F',
+    color: '#338669', // Rich Green
     textAlign: 'center',
     fontWeight: '500',
-    marginTop: 16
-  }
+    marginTop: 16,
+  },
 });

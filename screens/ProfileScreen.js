@@ -149,11 +149,13 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 20,
     fontWeight: '600',
+    color: '#003153', // Midnight Navy
   },
   sectionTitle: {
     fontSize: 16,
     fontWeight: '600',
     marginBottom: 12,
+    color: '#0B3D20', // Evergreen 
   },
   reservationList: {
     marginBottom: 24,
@@ -178,6 +180,7 @@ const styles = StyleSheet.create({
   },
   deviceTitle: {
     fontWeight: '600',
+    color: '#003153',
   },
   deviceInfo: {
     fontSize: 12,
@@ -188,6 +191,7 @@ const styles = StyleSheet.create({
   },
   moreText: {
     fontSize: 18,
+    color: '#003153',
   },
   statsContainer: {
     marginBottom: 24,
@@ -198,6 +202,7 @@ const styles = StyleSheet.create({
   statLabel: {
     fontSize: 14,
     marginBottom: 4,
+    color: '#0B3D20', // Evergreen
   },
   statBarBackground: {
     height: 10,
@@ -206,47 +211,39 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   statBarFill: {
-  height: '100%',
-  backgroundColor: '#3D2A75', 
-},
-
+    height: '100%',
+    backgroundColor: '#003153', // Midnight Navy
+  },
   pastReservationList: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 10,
   },
- 
-
   resLabel: {
-  fontWeight: '600',
-  marginTop: 8,
-},
-resValue: {
-  marginBottom: 4,
-  color: '#333',
-},
-
-myReservationCard: {
-  backgroundColor: '#F0F0F0',
-  padding: 14,
-  borderRadius: 8,
-  marginBottom: 12,
-},
-
-
-reservationGrid: {
-  flexDirection: 'row',
-  flexWrap: 'wrap',
-  justifyContent: 'space-between',
-},
-
-pastReservationCard: {
-  backgroundColor: '#F0F0F0',
-  width: '48%', // Two cards per row
-  padding: 14,
-  borderRadius: 8,
-  marginBottom: 12,
-},
-
-
+    fontWeight: '600',
+    marginTop: 8,
+    color: '#0B3D20', // Evergreen
+  },
+  resValue: {
+    marginBottom: 4,
+    color: '#333',
+  },
+  myReservationCard: {
+    backgroundColor: '#F0F0F0',
+    padding: 14,
+    borderRadius: 8,
+    marginBottom: 12,
+  },
+  reservationGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+  },
+  pastReservationCard: {
+    backgroundColor: '#F0F0F0',
+    width: '48%',
+    padding: 14,
+    borderRadius: 8,
+    marginBottom: 12,
+  },
 });

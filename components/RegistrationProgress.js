@@ -3,12 +3,11 @@ import { View, StyleSheet } from 'react-native';
 
 export default function RegistrationProgress({ currentStep }) {
   return (
-   <View style={styles.progressContainer}>
-  <View style={[styles.step, currentStep >= 1 ? styles.stepActive : styles.stepInactive]} />
-  <View style={[styles.step, styles.stepSpacing, currentStep >= 2 ? styles.stepActive : styles.stepInactive]} />
-  <View style={[styles.step, styles.stepSpacing, currentStep >= 3 ? styles.stepActive : styles.stepInactive]} />
-</View>
-
+    <View style={styles.progressContainer}>
+      <View style={[styles.step, currentStep >= 1 ? styles.stepActive : styles.stepInactive]} />
+      <View style={[styles.step, styles.stepSpacing, currentStep >= 2 ? styles.stepActive : styles.stepInactive]} />
+      <View style={[styles.step, styles.stepSpacing, currentStep >= 3 ? styles.stepActive : styles.stepInactive]} />
+    </View>
   );
 }
 
@@ -29,9 +28,9 @@ const styles = StyleSheet.create({
     marginRight: 8,
   },
   stepActive: {
-    backgroundColor: '#3D2A75', // purple
+    backgroundColor: '#003153', // Midnight Navy
   },
   stepInactive: {
-    backgroundColor: '#E0E0E0', //light gray 
+    backgroundColor: '#E0E0E0', // Light Gray
   },
 });

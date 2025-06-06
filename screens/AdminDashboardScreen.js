@@ -44,10 +44,12 @@ export default function AdminDashboardScreen() {
   );
 }
 
+
+
 const styles = StyleSheet.create({
   container: {
     padding: 20,
-    backgroundColor: '#fff',
+    backgroundColor: '#F3F2EF', // Neutral Linen
   },
   metricsRow: {
     flexDirection: 'row',
@@ -62,20 +64,27 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginBottom: 16,
     alignItems: 'center',
+    borderLeftWidth: 4,
+    borderLeftColor: '#338669', // Green accent border
   },
   metricLabel: {
     fontWeight: '600',
     textAlign: 'center',
     marginBottom: 8,
+    color: '#338669', // Green label
+    fontFamily: 'Lato-Bold',
   },
   metricValue: {
     fontSize: 36,
     fontWeight: '900',
     marginBottom: 4,
+    color: '#338669', // Green value
+    fontFamily: 'CrimsonText-Bold',
   },
   viewText: {
-    color: '#3D2A75',
+    color: '#003153', 
     fontWeight: '500',
+    fontFamily: 'Lato-Regular',
   },
   columns: {
     flexDirection: 'row',
@@ -85,15 +94,21 @@ const styles = StyleSheet.create({
   column: {
     flex: 1,
     backgroundColor: '#fff',
+    padding: 12,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: '#ddd',
   },
   columnTitle: {
     fontSize: 16,
     fontWeight: '600',
     marginBottom: 12,
+    color: '#003153', 
+    fontFamily: 'Lato-Bold',
   },
   activityItem: {
     height: 20,
-    backgroundColor: '#E0E0E0',
+    backgroundColor: '#D6E6F2', // Soft Blue bar
     borderRadius: 6,
     marginBottom: 10,
   },

@@ -5,10 +5,14 @@ import {
   TouchableOpacity,
   StyleSheet,
   ScrollView,
-  Dimensions
+  Dimensions, 
+  Image
 } from 'react-native';
 
 const screenWidth = Dimensions.get('window').width;
+const logo = require('../assets/TabletLogoOfficial.png');
+
+
 
 export default function HomeScreen({ navigation }) {
   const [isAdmin, setIsAdmin] = useState(false); // toggle admin
@@ -47,15 +51,19 @@ export default function HomeScreen({ navigation }) {
         <Text style={styles.toggleText}>
           {isAdmin ? 'Disable Admin Mode' : 'Enable Admin Mode'}
         </Text>
+        
       </TouchableOpacity>
+      <Image source={logo} style={styles.logo} resizeMode="contain" />
+
     </ScrollView>
+
+    
   );
 }
-
 const styles = StyleSheet.create({
   container: {
     padding: 20,
-    backgroundColor: '#fff',
+    backgroundColor: '#F3F2EF', // Neutral Linen
   },
   gridWrapper: {
     flexDirection: 'row',
@@ -63,7 +71,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   navButton: {
-    backgroundColor: '#3D2A75',
+    backgroundColor: '#003153', // Midnight Navy
     padding: 16,
     borderRadius: 8,
     marginBottom: 15,
@@ -73,19 +81,28 @@ const styles = StyleSheet.create({
   buttonText: {
     color: '#fff',
     fontWeight: '600',
+    fontFamily: 'Lato-Bold',
   },
   toggleAdminBtn: {
     marginTop: 20,
     padding: 12,
     borderRadius: 6,
-    backgroundColor: '#E0E0E0',
+    backgroundColor: '#E0E0E0', // Light Gray
     alignItems: 'center',
   },
   adminActive: {
-    backgroundColor: '#DBB86F', // Gold
+    backgroundColor: '#338669', // Rich Green
   },
   toggleText: {
     fontWeight: '600',
-    color: '#333',
+    color: '#003153', // Midnight Navy
+    fontFamily: 'Lato-Regular',
   },
+  logo: {
+  width: '80%',
+  height: 300,
+  alignSelf: 'center',
+  marginTop: 24,
+},
+
 });

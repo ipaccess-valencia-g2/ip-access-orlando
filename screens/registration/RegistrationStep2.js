@@ -1,7 +1,14 @@
 import React, { useState } from 'react';
 import {
-  View, Text, TextInput, TouchableOpacity, StyleSheet,
-  KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  KeyboardAvoidingView,
+  Platform,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from 'react-native';
 import RegistrationProgress from '../../components/RegistrationProgress';
 
@@ -36,7 +43,10 @@ export default function RegistrationStep2({ navigation, route }) {
   };
 
   return (
-    <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={{ flex: 1 }}>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={{ flex: 1 }}
+    >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.container}>
           <RegistrationProgress currentStep={2} />
@@ -97,11 +107,48 @@ export default function RegistrationStep2({ navigation, route }) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: 'center', padding: 24, backgroundColor: '#fff' },
-  title: { fontSize: 24, fontWeight: '600', color: '#3D2A75', marginBottom: 6, textAlign: 'center' },
-  subtitle: { fontSize: 16, color: '#666', marginBottom: 30, textAlign: 'center' },
-  input: { borderWidth: 1, borderColor: '#ccc', padding: 12, borderRadius: 8, marginBottom: 16 },
-  button: { backgroundColor: '#3D2A75', padding: 16, borderRadius: 8, marginTop: 12 },
-  buttonText: { color: '#fff', textAlign: 'center', fontWeight: '600' },
-  backText: { marginTop: 16, textAlign: 'center', color: '#3D2A75' },
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    padding: 24,
+    backgroundColor: '#F3F2EF', // Neutral Linen
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: '600',
+    color: '#003153', // Midnight Navy
+    marginBottom: 6,
+    textAlign: 'center',
+  },
+  subtitle: {
+    fontSize: 16,
+    color: '#0B3D20', // Evergreen
+    marginBottom: 30,
+    textAlign: 'center',
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    padding: 12,
+    borderRadius: 8,
+    marginBottom: 16,
+    backgroundColor: '#F3F2EF',
+    color: '#0B3D20',
+  },
+  button: {
+    backgroundColor: '#003153', // Midnight Navy
+    padding: 16,
+    borderRadius: 8,
+    marginTop: 12,
+  },
+  buttonText: {
+    color: '#fff',
+    textAlign: 'center',
+    fontWeight: '600',
+  },
+  backText: {
+    marginTop: 16,
+    textAlign: 'center',
+    color: '#338669', // Rich Green
+  },
 });

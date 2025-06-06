@@ -66,18 +66,48 @@ export default function RegistrationStep3({ navigation, route }) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: 'center', padding: 24, backgroundColor: '#fff' 
-
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    padding: 24,
+    backgroundColor: '#F3F2EF', // Neutral Linen
   },
-  title: { fontSize: 24, fontWeight: '600', color: '#3D2A75', //purple
-    marginBottom: 6, textAlign: 'center' },
-  subtitle: { fontSize: 16, color: '#666', //gray
-     marginBottom: 30, textAlign: 'center' },
-  input: { borderWidth: 1, borderColor: '#ccc', //light gray
-     padding: 12, borderRadius: 8, marginBottom: 16 },button: { backgroundColor: '#3D2A75', //purple
-    padding: 16, borderRadius: 8, marginTop: 12 },
-  buttonText: { color: '#fff', //white
-    textAlign: 'center', fontWeight: '600' }, backText: { marginTop: 16, textAlign: 'center', color: '#3D2A75' //purple
-
+  title: {
+    fontSize: 24,
+    fontWeight: '600',
+    color: '#003153', // Midnight Navy
+    marginBottom: 6,
+    textAlign: 'center',
+  },
+  subtitle: {
+    fontSize: 16,
+    color: '#0B3D20', // Evergreen
+    marginBottom: 30,
+    textAlign: 'center',
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: '#ccc', // Light gray
+    padding: 12,
+    borderRadius: 8,
+    marginBottom: 16,
+    backgroundColor: '#F3F2EF',
+    color: '#0B3D20',
+  },
+  button: {
+    backgroundColor: '#003153', // Midnight Navy
+    padding: 16,
+    borderRadius: 8,
+    marginTop: 12,
+  },
+  buttonText: {
+    color: '#fff', // White
+    textAlign: 'center',
+    fontWeight: '600',
+  },
+  backText: {
+    marginTop: 16,
+    textAlign: 'center',
+    color: '#338669', // Rich Green
   },
 });

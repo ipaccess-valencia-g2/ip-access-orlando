@@ -162,14 +162,15 @@ export default function CheckAvailabilityCheckoutScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     padding: 24,
-    backgroundColor: '#fff',
+    backgroundColor: '#F3F2EF', // Neutral Linen
   },
   heading: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#3D2A75',
+    color: '#003153', // Midnight Navy
     marginBottom: 20,
     textAlign: 'center',
+    fontFamily: 'CrimsonText-Bold',
   },
   input: {
     borderWidth: 1,
@@ -177,9 +178,11 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     padding: 12,
     marginBottom: 12,
+    backgroundColor: '#F3F2EF',
+    fontFamily: 'Lato-Regular',
   },
   searchButton: {
-    backgroundColor: '#3D2A75',
+    backgroundColor: '#003153', // Midnight Navy
     padding: 12,
     borderRadius: 6,
     alignItems: 'center',
@@ -188,6 +191,7 @@ const styles = StyleSheet.create({
   searchText: {
     color: '#fff',
     fontWeight: '600',
+    fontFamily: 'Lato-Bold',
   },
   section: {
     marginBottom: 20,
@@ -196,10 +200,13 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
     marginBottom: 6,
+    color: '#0B3D20', // Evergreen
+    fontFamily: 'Lato-Bold',
   },
   value: {
     fontSize: 16,
-    color: '#333',
+    color: '#003153',
+    fontFamily: 'Lato-Regular',
   },
   tabletGrid: {
     flexDirection: 'row',
@@ -210,21 +217,24 @@ const styles = StyleSheet.create({
   tabletOption: {
     padding: 10,
     borderWidth: 1,
-    borderColor: '#3D2A75',
+    borderColor: '#003153', // Midnight Navy
     borderRadius: 6,
     margin: 4,
     minWidth: 120,
     alignItems: 'center',
+    backgroundColor: '#F3F2EF',
   },
   tabletText: {
-    color: '#3D2A75',
+    color: '#003153',
+    fontFamily: 'Lato-Regular',
   },
   selectedTablet: {
-    backgroundColor: '#3D2A75',
+    backgroundColor: '#003153',
   },
   selectedTabletText: {
     color: '#fff',
     fontWeight: '600',
+    fontFamily: 'Lato-Bold',
   },
   dateButton: {
     borderWidth: 1,
@@ -232,6 +242,7 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     padding: 12,
     marginBottom: 16,
+    backgroundColor: '#F3F2EF',
   },
   timeGrid: {
     flexDirection: 'row',
@@ -242,25 +253,28 @@ const styles = StyleSheet.create({
   timeOption: {
     padding: 10,
     borderWidth: 1,
-    borderColor: '#3D2A75',
+    borderColor: '#003153',
     borderRadius: 6,
     margin: 4,
     minWidth: 80,
     alignItems: 'center',
+    backgroundColor: '#F3F2EF',
   },
   selectedTime: {
-    backgroundColor: '#3D2A75',
+    backgroundColor: '#003153',
   },
   timeText: {
-    color: '#3D2A75',
+    color: '#003153',
+    fontFamily: 'Lato-Regular',
   },
   selectedTimeText: {
     color: '#fff',
     fontWeight: '600',
+    fontFamily: 'Lato-Bold',
   },
   confirmButton: {
     marginTop: 24,
-    backgroundColor: '#3D2A75',
+    backgroundColor: '#003153',
     padding: 16,
     borderRadius: 8,
     alignItems: 'center',
@@ -269,5 +283,6 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontWeight: '600',
     fontSize: 16,
+    fontFamily: 'Lato-Bold',
   },
 });

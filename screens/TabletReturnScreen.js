@@ -82,61 +82,74 @@ export default function TabletReturnScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 24, backgroundColor: '#fff' },
+  container: {
+    flex: 1,
+    padding: 24,
+    backgroundColor: '#F3F2EF', // Neutral Linen
+  },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 24,
-    color: '#3D2A75',
+    color: '#003153', // Midnight Navy
     textAlign: 'center',
   },
-  label: { fontSize: 16, marginBottom: 6, fontWeight: '600' },
+  label: {
+    fontSize: 16,
+    marginBottom: 6,
+    fontWeight: '600',
+    color: '#0B3D20', // Evergreen (optional for labels)
+  },
   input: {
     borderWidth: 1,
     borderColor: '#ccc',
     borderRadius: 6,
     padding: 12,
     marginBottom: 16,
+    backgroundColor: '#fff',
   },
   button: {
-    backgroundColor: '#3D2A75',
+    backgroundColor: '#003153', // Midnight Navy
     padding: 16,
     borderRadius: 8,
     marginTop: 12,
     alignItems: 'center',
   },
-  buttonText: { color: '#fff', fontWeight: '600', fontSize: 16 },
+  buttonText: {
+    color: '#fff',
+    fontWeight: '600',
+    fontSize: 16,
+  },
   link: {
     marginTop: 20,
-    color: '#3D2A75',
+    color: '#003153', // Midnight Navy
     textAlign: 'center',
   },
   placeholderBox: {
     marginTop: 32,
     padding: 16,
-    backgroundColor: '#F3F2F5',
+    backgroundColor: '#D6E6F2', // Ice Blue
     borderRadius: 8,
   },
   placeholderTitle: {
     fontWeight: '700',
     fontSize: 16,
     marginBottom: 6,
-    color: '#3D2A75',
+    color: '#003153',
   },
   placeholderText: {
     fontSize: 14,
     color: '#555',
     marginBottom: 4,
   },
- countdown: {
-  marginTop: 16,
-  padding: 10,
-  backgroundColor: '#EDEAF5',
-  borderRadius: 6,
-  textAlign: 'center',
-  color: '#3D2A75',
-  fontWeight: '600',
-  fontSize: 14,
-}
-
+  countdown: {
+    marginTop: 16,
+    padding: 10,
+    backgroundColor: '#D6E6F2', // Ice Blue
+    borderRadius: 6,
+    textAlign: 'center',
+    color: '#003153',
+    fontWeight: '600',
+    fontSize: 14,
+  },
 });

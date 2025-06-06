@@ -38,23 +38,26 @@ export default function ReservationConfirmationScreen({ route, navigation }) {
   );
 }
 
+
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 24,
-    backgroundColor: '#fff',
+    backgroundColor: '#F3F2EF', // Neutral Linen
     justifyContent: 'center',
     alignItems: 'center',
   },
   title: {
     fontSize: 22,
     fontWeight: '700',
-    color: '#3D2A75', //purple
+    color: '#003153', // Midnight Navy
     marginBottom: 24,
     textAlign: 'center',
+    fontFamily: 'CrimsonText-Bold',
   },
   card: {
-    backgroundColor: '#F3F2F5', //lavender
+    backgroundColor: '#D6E6F2', // Ice Blue
     borderRadius: 12,
     padding: 20,
     width: '100%',
@@ -63,16 +66,18 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#555',
+    color: '#0B3D20', // Evergreen
     marginTop: 12,
+    fontFamily: 'Lato-Bold',
   },
   value: {
     fontSize: 16,
     fontWeight: '500',
-    color: '#333',
+    color: '#003153', // Midnight Navy
+    fontFamily: 'Lato-Regular',
   },
   button: {
-    backgroundColor: '#3D2A75',
+    backgroundColor: '#003153', // Midnight Navy
     padding: 14,
     borderRadius: 8,
     width: '100%',
@@ -81,13 +86,15 @@ const styles = StyleSheet.create({
   buttonText: {
     color: '#fff',
     fontWeight: '600',
+    fontSize: 16,
+    fontFamily: 'Lato-Bold',
   },
-
   qrNote: {
-  marginTop: 20,
-  fontStyle: 'italic',
-  color: '#888',
-  textAlign: 'center',
-},
-
+    marginTop: 20,
+    fontStyle: 'italic',
+    color: '#888',
+    textAlign: 'center',
+    fontFamily: 'Lato-Regular',
+  },
 });
+

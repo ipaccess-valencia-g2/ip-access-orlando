@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import {
   View, Text, TextInput, TouchableOpacity, StyleSheet,
-  KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard
+  KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard, Image
 } from 'react-native';
 
 export default function LoginScreen({ navigation }) {
@@ -23,6 +23,8 @@ export default function LoginScreen({ navigation }) {
     <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={{ flex: 1 }}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.container}>
+          <Image source={require('../assets/TabletLogoOfficial.png')} style={styles.logo} />
+
           <Text style={styles.title}>ConnectOrlando</Text>
           <Text style={styles.subtitle}>Login</Text>
 
@@ -59,19 +61,38 @@ export default function LoginScreen({ navigation }) {
   );
 }
 
+
+
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: 'center', padding: 24, backgroundColor: '#fff' },
-  title: { fontSize: 28, fontWeight: '700', textAlign: 'center', color: '#3D2A75', marginBottom: 6 },
-  subtitle: { fontSize: 16, color: '#666', textAlign: 'center', marginBottom: 30 },
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    padding: 24,
+    backgroundColor: '#F3F2EF', // Neutral Linen
+  },
+  title: {
+    fontSize: 28,
+    fontWeight: '700',
+    textAlign: 'center',
+    color: '#003153', // Midnight Navy
+    marginBottom: 6,
+  },
+  subtitle: {
+    fontSize: 16,
+    color: '#003153', // Midnight Navy
+    textAlign: 'center',
+    marginBottom: 30,
+  },
   input: {
     borderWidth: 1,
-    borderColor: '#ccc',
+    borderColor: '#ccc', // Light gray
     padding: 12,
     borderRadius: 8,
     marginBottom: 16,
+    backgroundColor: '#F3F2EF',
   },
   button: {
-    backgroundColor: '#3D2A75',
+    backgroundColor: '#003153', // Midnight Navy
     padding: 16,
     borderRadius: 8,
     marginBottom: 16,
@@ -83,18 +104,21 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   linkText: {
-    color: '#DBB86F',
+    color: '#338669', // Rich Green
     textAlign: 'center',
     fontWeight: '500',
   },
-
   forgotText: {
-  color: '#3D2A75',
-  textAlign: 'right',
+    color: '#003153', // Midnight Navy
+    textAlign: 'right',
+    marginBottom: 16,
+    fontWeight: '500',
+  },
+   logo: {
+  width: 200,
+  height: 300,
   marginBottom: 16,
-  fontWeight: '500',
+  resizeMode: 'contain',
+  alignSelf: 'center',
 },
-
 });
-
-
