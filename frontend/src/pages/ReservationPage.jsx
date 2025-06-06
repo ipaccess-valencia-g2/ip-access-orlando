@@ -7,7 +7,7 @@ import './styles/ReservationPage.css';
 
 const ReservationPage = () => {
   return (
-    <div className="register-page-container" style={{ maxWidth: '500px', margin: 'auto', padding: '20px' }}>
+    <div className="reserve-container" >
       <h1>Reserve a Device</h1>
       <ReservationForm />
     </div>

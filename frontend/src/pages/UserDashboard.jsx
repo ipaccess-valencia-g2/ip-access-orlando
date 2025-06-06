@@ -6,28 +6,59 @@ import './styles/UserDashboard.css';
 
 const UserDashboard = () => {
   return (
-    <div className="register-page-container" style={{ maxWidth: '500px', margin: 'auto', padding: '20px' }}>
-      <h1>Good morning John Doe!</h1>
-      <p>Welcome to your dashboard. Here you can view your reservations and manage your account.</p>
-      <h2>My Reservations</h2>
-        <ul>
-            <li>Reservation 1: Device A - Date: 2025-10-01</li>
-            <li>Reservation 2: Device B - Date: 2025-10-05</li>
-            <li>Reservation 3: Device C - Date: 2025-10-10</li>
+    <div className="dashboard-container">
+      <div className="header">
+        <div className="profile-picture" />
+        <div className="user-info">
+          <h2><strong>LaVonne Patoir</strong></h2>
+        </div>
+        <div className="settings-icon">⚙️</div>
+      </div>
+
+      <section className="reservations">
+        <h3>My Reservations:</h3>
+        <ul className="reservation-list">
+          {[1, 2, 3].map((_, i) => (
+            <li key={i} className="reservation-item">
+              <div className="dot" />
+              <div className="reservation-details">Reservation #{i + 1}</div>
+              <div className="menu-dots">•••</div>
+            </li>
+          ))}
         </ul>
-      <h2>Account Details</h2>
-      <p>Email:</p>
-      <p>Phone Number:</p>
-      <p>Address:</p>
-      <h2>Actions</h2>
-      <ul>
-        <li><button>Edit Profile</button></li>
-        <li><button>Change Password</button></li>
-        <li><button>Logout</button></li>
-        <li><button>Delete Account</button></li>
-      </ul>
-      <p>If you have any questions or need assistance, please contact support.</p>
-      <p>Thank you for using our service!</p>
+      </section>
+
+      <section className="stats">
+        <h3>My Stats:</h3>
+        <div className="stats-container">
+          <div className="bar-chart">
+            <div className="bar-label">XXX</div>
+            <div className="bar" />
+          </div>
+          <div className="pie-chart">
+            {/* Placeholder circle to simulate pie chart */}
+            <div className="pie-placeholder" />
+          </div>
+        </div>
+      </section>
+
+      <section className="past-reservations">
+        <h3>Past Reservations:</h3>
+        <div className="past-reservations-container">
+          {[1, 2].map((_, i) => (
+            <div key={i} className="past-reservation-card">
+              <div className="card-header">
+                <span>📅 Date</span>
+                <span className="time-ago">14 hours</span>
+              </div>
+              <div className="card-body">
+                <strong>Device Type</strong>
+                <p>Details</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
     </div>
   );
 };

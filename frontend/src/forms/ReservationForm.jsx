@@ -1,5 +1,6 @@
 // ReservationForm.jsx
 import React, { useState } from 'react';
+import '../pages/styles/ReservationPage.css';
 
 // List of community centers (full list)
 const communityCenters = [
@@ -77,17 +78,17 @@ const ReservationForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="p-4 space-y-4 max-w-md">
+    <form onSubmit={handleSubmit} className="reserve-form">
       <h2 className="text-xl font-bold">Reservation Form</h2>
 
       {/* Community Center Selection */}
-      <div>
-        <label className="block font-medium">Community Center:</label>
+      <div class="regfl">
+        <label >Community Center:</label>
         <select
           value={location}
           onChange={(e) => setLocation(e.target.value)}
           required
-          className="w-full border p-2 rounded"
+          className=""
         >
           <option disabled value="">-- Select a Center --</option>
           {communityCenters.map((center, idx) => (
@@ -97,26 +98,26 @@ const ReservationForm = () => {
       </div>
 
       {/* Date Picker */}
-      <div>
-        <label className="block font-medium">Reservation Date:</label>
+      <div class="regfl">
+        <label >Reservation Date:</label>
         <input
           type="date"
           value={date}
           onChange={(e) => setDate(e.target.value)}
           min={new Date().toISOString().split("T")[0]} // Today's date
           required
-          className="w-full border p-2 rounded"
+          className=""
         />
       </div>
 
       {/* Reason Dropdown + Conditional Input */}
-      <div>
-        <label className="block font-medium mb-1">Why are you checking out this device today?</label>
+      <div class="regfl">
+        <label >Why are you checking out this device today?</label>
         <select
           value={reason}
           onChange={(e) => setReason(e.target.value)}
           required
-          className="w-full border p-2 rounded"
+          className=""
         >
           <option value="" disabled>-- Select a reason --</option>
           {reasonOptions.map((option, index) => (
@@ -130,7 +131,7 @@ const ReservationForm = () => {
             value={customReason}
             onChange={(e) => setCustomReason(e.target.value)}
             required
-            className="w-full border p-2 rounded mt-2"
+            className=" mt-2"
             placeholder="Please describe your reason"
           />
         )}

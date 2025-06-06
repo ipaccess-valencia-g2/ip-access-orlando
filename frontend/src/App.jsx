@@ -4,25 +4,25 @@ import { HomePage, RegisterPage, ReservationPage, LoginPage, AdminPage, Confirma
 function App() {
   return (
     <Router>
-      <nav>
-        <Link to="/">Home</Link>{' | '}
-        <Link to="/register">Register</Link>{' | '}
-        <Link to="/reservation">Reserve</Link>{' | '}
-        <Link to="/login">Login</Link>{' | '}
-        <Link to="/admin">Admin</Link>{' | '}
-        <Link to="/confirmation">Confirmation</Link>{' | '}
-        <Link to="/dashboard">User Dashboard</Link>
+      <nav className="main-nav">
+        <Link to="/">Home</Link><span className="separator">|</span>
+        <Link to="/register">Register</Link><span className="separator">|</span>
+        <Link to="/login">Login</Link><span className="separator">|</span>
+        <Link to="/dashboard">User Dashboard</Link><span className="separator">|</span>
+        <Link to="/reservation">Reserve</Link><span className="separator">|</span>
+        <Link to="/confirmation">Confirmation</Link><span className="separator">|</span>
+        <Link to="/admin">Admin</Link>
       </nav>
 
 
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/register" element={<RegisterPage />} />
-        <Route path="/reservation" element={<ReservationPage />} />
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/admin" element={<AdminPage />} />
-        <Route path="/confirmation" element={<ConfirmationPage />} />
         <Route path="/dashboard" element={<UserDashboard />} />
+        <Route path="/reservation" element={<ReservationPage />} />
+        <Route path="/confirmation" element={<ConfirmationPage />} />
+        <Route path="/admin" element={<AdminPage />} />
       </Routes>
     </Router>
   );

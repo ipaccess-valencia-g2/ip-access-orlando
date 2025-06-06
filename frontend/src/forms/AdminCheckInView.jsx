@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
-
+import '../pages/styles/AdminPage.css';
 const AdminCheckInView = () => {
   const [checkedOutDevices, setCheckedOutDevices] = useState([]);
 
   useEffect(() => {
     const mockData = [
-      { id: 1, user: 'Jane Doe', device: 'Tablet A', condition: 'Good' },
-      { id: 2, user: 'John Smith', device: 'Tablet B', condition: 'Good' },
+      { id: 1, user: 'Jane Doe', device: 'iPad', condition: 'Good' },
+      { id: 2, user: 'John Doe', device: 'Inseego MiFi X PRO 5G', condition: 'Good' },
+      { id: 2, user: 'D’Angelo Torres', device: 'Dell Latitude 3550', condition: 'Good' },
     ];
     setCheckedOutDevices(mockData);
   }, []);
@@ -21,7 +22,7 @@ const AdminCheckInView = () => {
       {checkedOutDevices.length === 0 ? (
         <p>No devices currently checked out.</p>
       ) : (
-        <table className="w-full border-collapse border border-gray-300">
+        <table className="device-table">
           <thead className="bg-gray-100">
             <tr>
               <th className="border p-2">User</th>

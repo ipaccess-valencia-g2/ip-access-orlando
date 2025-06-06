@@ -1,0 +1,79 @@
+.register-container {
+    justify-content: center;
+    align-items: center;
+    background-color: #ffffff;
+    text-align: center;
+}
+
+.register-form {
+    display: flex;
+    flex-direction: column;
+    align-items: normal;
+    width: 100%;
+}
+
+.register-form h2 {
+    margin-bottom: 20px;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+    background: none !important;
+}
+
+.register-form input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: none;
+    border-radius: 6px;
+    background-color: #f2f2f2;
+    font-size: 14px;
+    font-family: 'Inter', sans-serif;
+}
+
+.regfl {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0px;
+}
+
+label {
+    width: 50%;
+    font-weight: 600;
+    margin-right: 10px;
+    color: #333;
+    text-align: left;
+}
+
+.register-form button {
+    background-color: #013152 !important;
+    color: white !important;
+    font-weight: 600 !important;
+    border-radius: 5px !important;
+    font-family: 'Inter', sans-serif !important;
+    font-size: 24px !important;
+}
+
+.register-form button:hover {
+    background-color: #444444;
+}
+
+.login-link {
+    margin-top: 20px;
+    font-size: 14px;
+    font-family: 'Inter', sans-serif;
+}
+
+.login-link a {
+    font-weight: bold;
+    text-decoration: none;
+    color: #000;
+    font-family: 'Inter', sans-serif;
+}
+
+input {
+   color: black !important;
+}
+
+.state-d {
+    color: gray !important;
+}

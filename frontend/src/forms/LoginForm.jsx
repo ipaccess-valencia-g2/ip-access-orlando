@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import '../pages/styles/LoginPage.css';
 
 const LoginForm = () => {
 
@@ -15,6 +16,8 @@ const LoginForm = () => {
 
     // State to display a success message
     const [successMessage, setSuccessMessage] = useState('');
+
+    const [showPassword, setShowPassword] = useState(false);
 
     // Validation function to check form input
     const validate = () => {
@@ -97,19 +100,19 @@ const LoginForm = () => {
 
     // JSX to render the login form
     return (
-        <form onSubmit={handleSubmit} className="p-4 space-y-4 max-w-md">
-            <h2 className="text-xl font-bold">Login</h2>
+        <form onSubmit={handleSubmit} className="p-4 space-y-4 max-w-md login-card">
+            <h2 className="login-title">Login to Continue</h2>
 
             {/* Username or Email Field */}
             <div>
-                <label className="block font-medium" htmlFor="usernameOrEmail">Username or Email: </label>
+                {/* <label className="block font-medium" htmlFor="usernameOrEmail">Username or Email: </label>*/}
                 <input
                     id="usernameOrEmail"
                     name="usernameOrEmail"
                     value={formData.usernameOrEmail}
                     onChange={handleChange}
                     required
-                    className="w-full border p-2 rounded"
+                    className="form-control custom-input mb-3"
                     placeholder="Enter your username or email"
                 />
                 {/* Error message for username/email */}
@@ -117,18 +120,24 @@ const LoginForm = () => {
             </div>
 
             {/* Password Field */}
-            <div>
-                <label className="block font-medium" htmlFor="password">Password: </label>
+            <div className="position-relative">
+                {/* <label className="block font-medium" htmlFor="password">Password: </label> */}
                 <input
                     id="password"
                     name="password"
-                    type="password"
+                    type={showPassword ? 'text' : 'password'}
                     value={formData.password}
                     onChange={handleChange}
                     required
-                    className="w-full border p-2 rounded"
+                    className="form-control custom-input mb-3"
                     placeholder="Enter your password"
                 />
+                <span
+                    className="toggle-password"
+                    onClick={() => setShowPassword((prev) => !prev)}
+                >
+                    {showPassword ? '🙈' : '👁️'}
+                </span>
                 {/* Error message for password */}
                 {errors.password && <p className="text-red-500">{errors.password}</p>}
             </div>
@@ -147,14 +156,15 @@ const LoginForm = () => {
             <button
                 type="submit"
                 disabled={isSubmitting}
-                className={`w-full p-2 rounded ${
-                    isSubmitting
-                        ? 'bg-gray-400 cursor-not-allowed'
-                        : 'bg-blue-600 hover:bg-blue-700 text-white'
-                }`}
+                className={`btn custom-login-btn w-100 mb-3 ${isSubmitting
+                    ? 'bg-gray-400 cursor-not-allowed'
+                    : 'bg-blue-600 hover:bg-blue-700 text-white'
+                    }`}
             >
                 {isSubmitting ? 'Logging in...' : 'Login'}
             </button>
+
+
         </form>
     );
 };

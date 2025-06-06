@@ -7,9 +7,12 @@ import './styles/RegisterPage.css';
 
 const RegisterPage = () => {
   return (
-    <div className="register-page-container" style={{ maxWidth: '500px', margin: 'auto', padding: '20px' }}>
+    <div className="register-container" >
       <h1>Create an Account</h1>
       <RegisterForm />
+      <p className="login-link">
+          Already Have Account? <a href="/login">Login</a>
+        </p>
     </div>
   );
 };

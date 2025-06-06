@@ -1,0 +1,98 @@
+.admin-container {
+    justify-content: center;
+    align-items: center;
+    background-color: #ffffff;
+    text-align: center;
+}
+
+.admin-container h2 {
+    margin-bottom: 20px;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+    background: none !important;
+}
+
+.device-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.device-table thead {
+  background: linear-gradient(to right, #f8f9fa, #e9ecef);
+}
+
+.device-table th,
+.device-table td {
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.device-table th {
+  font-weight: 600;
+  color: #333;
+}
+
+.device-table tbody tr:hover {
+  background-color: #f1f1f1;
+  transition: background 0.3s;
+}
+
+.device-table select {
+  padding: 6px 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  background-color: #fff;
+}
+
+.device-table button {
+  padding: 8px 14px;
+  background-color: #28a745;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.device-table button:hover:enabled {
+  background-color: #218838;
+}
+
+.device-table button:disabled {
+  background-color: #e0e0e0;
+  color: #aaa;
+  cursor: not-allowed;
+}
+
+select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: none;
+    border-radius: 6px;
+    background-color: #f2f2f2;
+    font-size: 14px;
+    font-family: 'Inter', sans-serif;
+}
+
+button {
+    background-color: #013152 !important;
+    color: white !important;
+    font-weight: 600 !important;
+    border-radius: 5px !important;
+    font-family: 'Inter', sans-serif !important;
+    font-size: 18px !important;
+}
+
+input {
+   color: black !important;
+}

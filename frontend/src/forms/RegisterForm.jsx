@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Button, ButtonRadio, ButtonToggle } from '../components/common';
 import { Field, FieldLarge, FieldNumber } from '../components/common/';
 import { PickerDate, PickerDrop } from '../components/common/';
+import '../pages/styles/RegisterPage.css';
 
 const isOrlandoAddress = (city) => {
   return city.trim().toLowerCase() === 'orlando';
@@ -116,7 +117,7 @@ const RegisterForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
-    
+
     setIsSubmitting(true);
     setErrors({});
     setSuccessMessage('');
@@ -178,12 +179,12 @@ const RegisterForm = () => {
   const minDateString = minDate.toISOString().split('T')[0];
 
   return (
-    <form onSubmit={handleSubmit} className="p-4 space-y-4 max-w-md">
+    <form onSubmit={handleSubmit} className="register-form">
       <h2 className="text-xl font-bold">Register</h2>
 
       {/* First Name */}
-      <div>
-        <label className="block font-medium" htmlFor="firstName">First Name:</label>
+      <div class="regfl">
+        <label  htmlFor="firstName">First Name:</label>
         <input
           id="firstName"
           name="firstName"
@@ -197,8 +198,8 @@ const RegisterForm = () => {
       </div>
 
       {/* Last Name */}
-      <div>
-        <label className="block font-medium" htmlFor="lastName">Last Name:</label>
+      <div class="regfl">
+        <label  htmlFor="lastName">Last Name:</label>
         <input
           id="lastName"
           name="lastName"
@@ -212,8 +213,8 @@ const RegisterForm = () => {
       </div>
 
       {/* DOB */}
-      <div>
-        <label className="block font-medium" htmlFor="dob">Date of Birth:</label>
+      <div class="regfl">
+        <label  htmlFor="dob">Date of Birth:</label>
         <input
           id="dob"
           name="dob"
@@ -229,8 +230,8 @@ const RegisterForm = () => {
       </div>
 
       {/* Street Address */}
-      <div>
-        <label className="block font-medium" htmlFor="street">Street Address:</label>
+      <div class="regfl">
+        <label  htmlFor="street">Street Address:</label>
         <input
           id="street"
           name="street"
@@ -244,8 +245,8 @@ const RegisterForm = () => {
       </div>
 
       {/* Unit */}
-      <div>
-        <label className="block font-medium" htmlFor="unit">Unit/Apt (if applicable):</label>
+      <div class="regfl">
+        <label  htmlFor="unit">Unit/Apt (if applicable):</label>
         <input
           id="unit"
           name="unit"
@@ -257,8 +258,8 @@ const RegisterForm = () => {
       </div>
 
       {/* City */}
-      <div>
-        <label className="block font-medium" htmlFor="city">City:</label>
+      <div class="regfl">
+        <label  htmlFor="city">City:</label>
         <input
           id="city"
           name="city"
@@ -272,20 +273,20 @@ const RegisterForm = () => {
       </div>
 
       {/* State */}
-      <div>
-        <label className="block font-medium" htmlFor="state">State:</label>
+      <div class="regfl">
+        <label  htmlFor="state">State:</label>
         <input
           id="state"
           name="state"
           value="Florida (FL)"
           disabled
-          className="w-full border p-2 rounded bg-gray-200"
+          className="state-d"
         />
       </div>
 
       {/* ZIP Code */}
-      <div>
-        <label className="block font-medium" htmlFor="zip">ZIP Code:</label>
+      <div class="regfl">
+        <label  htmlFor="zip">ZIP Code:</label>
         <input
           id="zip"
           name="zip"
@@ -299,8 +300,8 @@ const RegisterForm = () => {
       </div>
 
       {/* Phone */}
-      <div>
-        <label className="block font-medium" htmlFor="phone">Phone:</label>
+      <div class="regfl">
+        <label  htmlFor="phone">Phone:</label>
         <input
           id="phone"
           name="phone"
@@ -308,15 +309,15 @@ const RegisterForm = () => {
           onChange={handleChange}
           required
           className="w-full border p-2 rounded"
-          placeholder="(123) 456-7890"
+          placeholder="1234567890"
           maxLength="14"
         />
         {errors.phone && <p className="text-red-500">{errors.phone}</p>}
       </div>
 
       {/* Email */}
-      <div>
-        <label className="block font-medium" htmlFor="email">Email:</label>
+      <div class="regfl">
+        <label  htmlFor="email">Email:</label>
         <input
           id="email"
           name="email"
@@ -331,8 +332,8 @@ const RegisterForm = () => {
       </div>
 
       {/* Username Field */}
-      <div>
-        <label className="block font-medium" htmlFor="username">Username:</label>
+      <div class="regfl">
+        <label  htmlFor="username">Username:</label>
         <input
           id="username"
           name="username"
@@ -340,7 +341,7 @@ const RegisterForm = () => {
           onChange={handleChange}
           required
           className="w-full border p-2 rounded"
-          placeholder="Choose a username (3-20 chars)"
+          placeholder="Choose a username"
           minLength="3"
           maxLength="20"
           pattern="[a-zA-Z0-9]+"
@@ -349,8 +350,8 @@ const RegisterForm = () => {
       </div>
 
       {/* Password */}
-      <div>
-        <label className="block font-medium" htmlFor="password">Password:</label>
+      <div class="regfl">
+        <label  htmlFor="password">Password:</label>
         <input
           id="password"
           name="password"
@@ -365,8 +366,8 @@ const RegisterForm = () => {
       </div>
 
       {/* Confirm Password */}
-      <div>
-        <label className="block font-medium" htmlFor="confirmPassword">Confirm Password:</label>
+      <div class="regfl">
+        <label  htmlFor="confirmPassword">Confirm Password:</label>
         <input
           id="confirmPassword"
           name="confirmPassword"
