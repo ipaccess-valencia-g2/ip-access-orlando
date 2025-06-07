@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@rollup/rollup-win32-x64-msvc": "^4.42.0",
+    "axios": "^1.9.0",
     "bootstrap": "^5.3.6",
     "react": "^19.1.0",
     "react-bootstrap": "^2.10.10",

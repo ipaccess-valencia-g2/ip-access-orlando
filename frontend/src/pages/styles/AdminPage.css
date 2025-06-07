@@ -95,4 +95,12 @@ button {
 
 input {
    color: black !important;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: none;
+    border-radius: 6px;
+    background-color: #f2f2f2;
+    font-size: 14px;
+    font-family: 'Inter', sans-serif;
 }
