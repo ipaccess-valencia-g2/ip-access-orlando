@@ -1,0 +1,114 @@
+{
+	"info": {
+		"_postman_id": "8292cfea-8675-4159-a27d-26e52e602848",
+		"name": "reserve route TESTS",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "45504681",
+		"_collection_link": "https://rustly-3883849.postman.co/workspace/rustly's-Workspace~b1b5b8b3-9233-48c4-839f-c34e56967f11/collection/45504681-8292cfea-8675-4159-a27d-26e52e602848?action=share&source=collection_link&creator=45504681"
+	},
+	"item": [
+		{
+			"name": "/reserve TEST",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"startTime\": \"2024-06-10T14:00:00\",\r\n  \"endTime\": \"2024-06-10T16:00:00\",\r\n  \"locationId\": 1,\r\n  \"reason\": \"Other\",\r\n  \"otherReason\": \"I want to watch Minecraft Let's Plays\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3307/reserve",
+					"host": [
+						"localhost"
+					],
+					"port": "3307",
+					"path": [
+						"reserve"
+					]
+				},
+				"description": "This is a GET request and it is used to \"get\" data from an endpoint. There is no request body for a GET request, but you can use query parameters to help specify the resource you want data on (e.g., in this request, we have `id=1`).\n\nA successful GET response will have a `200 OK` status, and should include some kind of response body - for example, HTML web content or JSON data."
+			},
+			"response": []
+		},
+		{
+			"name": "/reserve/:reservationId TEST",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:3307/reserve/8",
+					"host": [
+						"localhost"
+					],
+					"port": "3307",
+					"path": [
+						"reserve",
+						"8"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/reserve/:reservationId TEST",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"startTime\": \"2024-06-12T10:00:00\",\r\n    \"endTime\": \"2024-06-12T12:00:00\",\r\n    \"reason\": \"Job Interview\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3307/reserve/7",
+					"host": [
+						"localhost"
+					],
+					"port": "3307",
+					"path": [
+						"reserve",
+						"7"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
