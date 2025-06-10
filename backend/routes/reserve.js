@@ -1,7 +1,7 @@
-/// POST   /reserve                - create a reservation            ✓
-/// PUT    /reserve/:reservationId - update an existing reservation  !
-//  GET
-/// DELETE /reserve/:reservationId - cancel a reservation            !
+/// POST   /reserve                - create a reservation              ✓
+/// PUT    /reserve/:reservationId - update an existing reservation    !
+//  GET    /reserve?userID=        - fetch all reservations for a user ?
+/// DELETE /reserve/:reservationId - cancel a reservation              !
 
 const express = require('express');
 const db = require('../db/connection');
@@ -107,6 +107,29 @@ router.delete('/:reservationId', async (req, res) => {
 
         console.error('Reservation delete error:', error);
         return res.status(500).json({ error: 'Internal server error.' });
+    }
+});
+
+module.exports = router;
+
+// GET /reserve?userID=
+// fetch all reservations for a user
+router.get('/', async (req, res) => {
+    const userID = req.query.userID;
+
+    if (!userID) {
+        return res.status(400).json({ error: 'Missing userID parameter.' });
+    }
+
+    try {
+        const [rows] = await db.execute(
+            'SELECT * FROM reservations WHERE userID = ?',
+            [userID]
+        );
+        res.status(200).json(rows);
+    } catch (err) {
+        console.error('Error fetching reservations:', err);
+        res.status(500).json({ error: 'Internal server error' });
     }
 });
 
