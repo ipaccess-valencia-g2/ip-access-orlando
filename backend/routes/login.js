@@ -23,7 +23,7 @@ router.post('/login/:username/:password', async (req,res) =>
     {
         // Check that username is in the database
         const [userMatch] = await db.execute(
-            'SELECT * FROM users WHERE username = ?',
+            'SELECT username, password FROM users WHERE username = ?',
             [req.params.username]
         );
         if (userMatch.length === 0) {
