@@ -1,6 +1,6 @@
 // Admin Routes Information
 // (requires logged-in user with isStaff=true)
-// POST /admin                         - admin login (optional)            !
+// POST /admin                         - admin login (optional)            ✓
 // GET  /admin/users                   - list all users                    ✓
 // GET  /admin/users/:userId           - view a single user                ✓
 // PUT  /admin/users/:userId/:column/:value - update a user field          ✓
@@ -8,8 +8,6 @@
 // GET  /admin/reservations/:reservationID - list all reservations         !
 // DELETE /admin/reservations/:id      - delete a reservation              ?
 // POST /admin/log-device              - record a manual device checkout   !
-// GET /admin/devices/available        - return list of available devices  !
-// GET /admin/devices/unavailable      - return list of unavailable devices!
 
 const express = require('express');
 const router = express.Router();
@@ -59,6 +57,15 @@ router.post('/admin', async (req, res) => {
         console.error('Admin login error:', error);
         res.status(500).json({ error: 'Internal server error.' });
     }
-})
+});
+
+// GET /admin
+router.get('/admin', (req, res) => {
+  res.send('Admin Dashboard');
+});
+
+// Reuse all user routes under the /admin prefix
+const userRoutes = require('./users');
+router.use('/admin', userRoutes);
 
 module.exports = router;
