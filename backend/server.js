@@ -12,9 +12,12 @@ app.use('/register', require('./routes/register'));
 app.use(require('./routes/login'));
 app.use('/reserve', require('./routes/reserve'));
 app.use(require('./routes/admin'));
-//app.use(require('./routes/history'));
-//app.use(require('./routes/locations'));
-//app.use(require('./routes/reasons'));
+app.use(require('./routes/history'));
+app.use(require('./routes/locations'));
+app.use(require('./routes/reasons'));
+app.use(require('./routes/user'));
+app.use(require('./routes/verify-address'));
+
 
 app.get('/', (req, res) => {
     res.send('API is running');
