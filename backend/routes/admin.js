@@ -8,6 +8,8 @@
 // GET  /admin/reservations/:reservationID - list all reservations         !
 // DELETE /admin/reservations/:id      - delete a reservation              ?
 // POST /admin/log-device              - record a manual device checkout   !
+// GET /admin/devices/available        - return list of available devices  !
+// GET /admin/devices/unavailable      - return list of unavailable devices!
 
 const express = require('express');
 const router = express.Router();
@@ -154,6 +156,40 @@ router.delete('/reservations/:id', async (req, res) => {
 
         console.error('Reservation delete error:', error);
         res.status(500).json({ error: 'Internal server error.' });
+    }
+});
+
+// GET /admin/devices/available
+router.get('/devices/available', async (req, res) =>
+{
+    try
+    {
+        // Get available devices
+        const [rows] = await db.query('SELECT * FROM devices WHERE isAvailable = 1');
+
+        res.json({rows});
+    }
+    catch (error)
+    {
+        console.error('Error fetching devices:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
+// GET /admin/devices/unavailable
+router.get('/devices/unavailable', async (req, res) =>
+{
+    try
+    {
+        // Get unavailable devices
+        const [rows] = await db.query('SELECT * FROM devices WHERE isAvailable = 0');
+
+        res.json({rows});
+    }
+    catch (error)
+    {
+        console.error('Error fetching devices:', error);
+        res.status(500).json({ message: 'Internal server error' });
     }
 });
 
