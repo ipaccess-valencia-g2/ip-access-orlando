@@ -10,6 +10,7 @@ import DeleteAccount from "../components/DeleteAccount.jsx";
 import Logout from "../components/logout.jsx";
 
 const UserDashboard = () => {
+
     // Dynamic states for user info and reservations (will be fetched)
     const [user, setUser] = useState({});
     const [reservations, setReservations] = useState([]);
@@ -21,39 +22,37 @@ const UserDashboard = () => {
     const [showLogoutPanel, setShowLogoutPanel] = useState(false);
     const [showDeletePanel, setShowDeletePanel] = useState(false);
 
-    /*
+
     const fetchUserData = async () => {
         try {
-            const userIdToTest = "hunter277";
+            const userId = "hunter277"; // TODO:Replace with dynamic user ID logic
 
             // Fetch user info
-            const userResponse = await fetch(`http://localhost:3307/admin/users/${userIdToTest}`);
-            if (!userResponse.ok) throw new Error('Failed to fetch user info');
-            const userData = await userResponse.json();
+            const userRes = await fetch(`http://localhost:3307/users/${userId}`);
+            if (!userRes.ok) throw new Error('Failed to fetch user');
+            const userData = await userRes.json();
 
-            // userData.userInfo is an array, get first element
-            const userInfo = userData.userInfo && userData.userInfo.length > 0 ? userData.userInfo[0] : null;
-
-            if (!userInfo) {
-                setUser(null);
-                setReservations([]);
-                return;
-            }
-
-            // Fetch reservations for this user
-
+            const userInfo = userData.userInfo?.[0];
+            if (!userInfo) throw new Error('User not found');
             setUser(userInfo);
 
-        } catch (error) {
-            console.error('Error fetching user data:', error);
+            // Fetch reservations for this user
+            const resRes = await fetch(`http://localhost:3307/reservations/user/${userId}`);
+            if (!resRes.ok) throw new Error('Failed to fetch reservations');
+            const resData = await resRes.json();
+
+            setReservations(resData.rows || []);
+
+        } catch (err) {
+            console.error('Dashboard fetch error:', err);
             setUser(null);
+            setReservations([]);
         }
     };
 
     useEffect(() => {
         fetchUserData();
     }, []);
-    */
 
     // Show/hide handlers for each panel
     const handleEditProfile = () => setShowEditPanel(true);

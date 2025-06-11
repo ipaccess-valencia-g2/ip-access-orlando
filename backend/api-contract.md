@@ -7,7 +7,9 @@ POST /login       ✓
 ## Reserve
 POST   /reserve                - create a reservation              ✓       
 PUT    /reserve/:reservationId - update an existing reservation    !  
-DELETE /reserve/:reservationId - cancel a reservation              !    
+DELETE /reserve/:reservationId - cancel a reservation              ! 
+GET /devices/available
+GET /devices/unavailable 
 
 ## History 
 GET    /history/:userId        - list past reservations for a user !
@@ -20,6 +22,14 @@ GET /reasons    ✓
 
 ## Address Verification
 POST /verify-address                - check if an address is inside Orlando  ?
+
+## User Routes
+GET  /users                         - list all users
+GET  /users/:userID                 - view a single user
+PUT  /users/:userID/:column/:value  - update a user field
+GET  /reservations/:userID          - list all reservations
+GET  /reservations/:reservationID   - view one reservation
+DELETE /reservations/:id            - delete a reservation
 
 ## Admin Routes Information 
 ### (requires logged-in user with isStaff=true)
