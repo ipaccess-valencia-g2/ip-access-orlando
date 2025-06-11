@@ -13,9 +13,10 @@ const express = require('express');
 const router = express.Router();
 const db = require('../db/connection');
 const bcrypt = require('bcrypt');
+const verify = require('../middleware/verify');
 
 // GET /admin
-router.get('/', (req, res) => {
+router.get('/admin', verify.Verify, verify.VerifyRole, (req, res) => {
     res.send('Admin Dashboard');
 });
 

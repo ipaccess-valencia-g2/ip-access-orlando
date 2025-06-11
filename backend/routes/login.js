@@ -4,6 +4,7 @@ const db = require('../db/connection');
 const bcrypt = require("bcrypt");
 const jwt = require('jsonwebtoken');
 const verify = require('../middleware/verify');
+const {Verify} = require("../middleware/verify");
 
 const generateAccessJWT = function (userID)
 {
@@ -30,7 +31,7 @@ router.post('/login/:username/:password', async (req,res) =>
         }
 
         // Check that password is correct
-         const isMatch = await bcrypt.compare(req.params.password, userMatch[0].password);
+        const isMatch = await bcrypt.compare(req.params.password, userMatch[0].password);
 
         if (isMatch)
         {
@@ -63,7 +64,7 @@ router.post('/login/:username/:password', async (req,res) =>
     }
 });
 
-router.get('/login/:username', verify, (req, res) =>
+router.get('/login/:username', verify.Verify, (req, res) =>
 {
     res.status(200).json(
         {
