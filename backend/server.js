@@ -8,6 +8,12 @@ const db = require('./db/connection');
 app.use(cors());
 app.use(express.json());
 
+app.use((req, res, next) => {
+  console.log(`${req.method} ${req.url} -- Body:`, req.body);
+  next();
+});
+
+
 app.use('/register', require('./routes/register'));
 app.use('/lgoin', require('./routes/login'));
 app.use('/reserve', require('./routes/reserve'));
@@ -39,3 +45,7 @@ app.get('/dbtest', async (req, res) => {
 app.listen(PORT, '0.0.0.0', () => {
     console.log(`Server is listening on port ${PORT}`);
 });
+
+
+
+

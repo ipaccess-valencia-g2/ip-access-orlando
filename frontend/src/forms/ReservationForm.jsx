@@ -26,7 +26,7 @@ const ReservationForm = () => {
   useEffect(() => {
     const loadCenters = async () => {
       try {
-        const res = await fetch('http://localhost:3307/locations');
+        const res = await fetch('http://18.223.161.174:3307/locations');
         const data = await res.json();
         setCenters(data.locations || []);
       } catch (err) {
