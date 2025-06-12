@@ -15,7 +15,7 @@ app.use((req, res, next) => {
 
 
 app.use('/register', require('./routes/register'));
-app.use('/lgoin', require('./routes/login'));
+app.use('/login', require('./routes/login'));
 app.use('/reserve', require('./routes/reserve'));
 app.use('/admin', require('./routes/admin'));
 //app.use('/history', require('./routes/history'));
