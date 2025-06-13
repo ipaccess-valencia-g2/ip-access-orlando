@@ -66,7 +66,7 @@ const LoginForm = () => {
         try {
             // Send POST request to backend login endpoint
             const response = await fetch(
-                `http://localhost:3307/login/${encodeURIComponent(formData.usernameOrEmail)}/${encodeURIComponent(formData.password)}`,
+                `http://18.223.161.174:3307/login/${encodeURIComponent(formData.usernameOrEmail)}/${encodeURIComponent(formData.password)}`,
                 { method: 'POST' }
             );
 
