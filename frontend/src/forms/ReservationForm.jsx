@@ -1,29 +1,7 @@
 // ReservationForm.jsx
-import React, { useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import '../pages/styles/ReservationPage.css';
 
-// List of community centers (full list)
-const communityCenters = [
-  "Callahan Neighborhood Center",
-  "Hankins Park Neighborhood Center",
-  "Northwest Neighborhood Center",
-  "Rosemont Neighborhood Center",
-  "Smith Neighborhood Center",
-  "Citrus Square Neighborhood Center",
-  "Engelwood Neighborhood Center",
-  "Jackson Neighborhood Center",
-  "L Claudia Allen Senior Center",
-  "Grand Avenue Neighborhood Center",
-  "Ivey Lane Neighborhood Center",
-  "Langford Park Neighborhood Center",
-  "Rock Lake Neighborhood Center",
-  "Wadeview Neighborhood Center",
-  "Dover Shores Neighborhood Center",
-  "RISE Employment Training Facility",
-  "Hispanic Office for Local Assistance",
-];
-
-// Preset reasons for checking out a device
 const reasonOptions = [
   "Job interview",
   "Homework / School",
@@ -33,20 +11,22 @@ const reasonOptions = [
   "Other",
 ];
 
+const deviceTypes = ["Laptop", "Tablet", "Hotspot"];
+
 const ReservationForm = () => {
-  // Form state
   const [centers, setCenters] = useState([]);
   const [location, setLocation] = useState('');
-  const [date, setDate] = useState('');
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
   const [reason, setReason] = useState('');
   const [customReason, setCustomReason] = useState('');
+  const [deviceType, setDeviceType] = useState('');
   const [message, setMessage] = useState('');
 
-  // Load community centers from the backend
   useEffect(() => {
     const loadCenters = async () => {
       try {
-        const res = await fetch('http://localhost:3307/locations');
+        const res = await fetch('http://18.223.161.174:3307/locations');
         const data = await res.json();
         setCenters(data.locations || []);
       } catch (err) {
@@ -56,34 +36,33 @@ const ReservationForm = () => {
     loadCenters();
   }, []);
 
-
-  // Submit handler
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const finalReason = reason === 'Other' ? customReason : reason;
 
     const reservationData = {
       location,
-      date,
+      startDate,
+      endDate,
       reason: finalReason,
+      deviceType,
     };
 
     try {
       const res = await fetch('/reserve', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(reservationData),
       });
 
       if (res.ok) {
         setMessage('✅ Reservation submitted successfully!');
         setLocation('');
-        setDate('');
+        setStartDate('');
+        setEndDate('');
         setReason('');
         setCustomReason('');
+        setDeviceType('');
       } else {
         setMessage('❌ Failed to submit reservation.');
       }
@@ -98,67 +77,82 @@ const ReservationForm = () => {
       <h2 className="text-xl font-bold">Reservation Form</h2>
 
       {/* Community Center Selection */}
-      <div class="regfl">
-        <label >Community Center:</label>
-        <select
-          value={location}
-          onChange={(e) => setLocation(e.target.value)}
-          required
-          className=""
-        >
+      <div className="regfl">
+        <label>Community Center:</label>
+        <select value={location} onChange={(e) => setLocation(e.target.value)} required>
           <option disabled value="">-- Select a Center --</option>
           {centers.map((center) => (
-            <option key={center.locationID} value={center.name}>
-              {center.name}
-            </option>
+            <option key={center.locationID} value={center.name}>{center.name}</option>
           ))}
         </select>
       </div>
 
-      {/* Date Picker */}
-      <div class="regfl">
-        <label >Reservation Date:</label>
+      {/* Start Date */}
+      <div className="regfl">
+        <label>Start Date:</label>
         <input
           type="date"
-          value={date}
-          onChange={(e) => setDate(e.target.value)}
-          min={new Date().toISOString().split("T")[0]} // Today's date
+          value={startDate}
+          onChange={(e) => setStartDate(e.target.value)}
+          min={new Date().toISOString().split("T")[0]}
           required
-          className=""
         />
       </div>
 
-      {/* Reason Dropdown + Conditional Input */}
-      <div class="regfl">
-        <label >Why are you checking out this device today?</label>
-        <select
-          value={reason}
-          onChange={(e) => setReason(e.target.value)}
+      {/* End Date */}
+      <div className="regfl">
+        <label>End Date:</label>
+        <input
+          type="date"
+          value={endDate}
+          onChange={(e) => setEndDate(e.target.value)}
+          min={startDate || new Date().toISOString().split("T")[0]}
+          max={
+            startDate
+              ? new Date(new Date(startDate).getTime() + 14 * 86400000)
+                  .toISOString()
+                  .split("T")[0]
+              : ''
+          }
           required
-          className=""
-        >
+          disabled={!startDate} // Optional: disable until startDate is picked
+        />
+      </div>
+
+      {/* Device Type Dropdown */}
+      <div className="regfl">
+        <label>Device Type:</label>
+        <select value={deviceType} onChange={(e) => setDeviceType(e.target.value)} required>
+          <option value="" disabled>-- Select a Device Type --</option>
+          {deviceTypes.map((type) => (
+            <option key={type} value={type}>{type}</option>
+          ))}
+        </select>
+      </div>
+
+      {/* Reason Dropdown + Optional Text Input */}
+      <div className="regfl">
+        <label>Why are you checking out this device today?</label>
+        <select value={reason} onChange={(e) => setReason(e.target.value)} required>
           <option value="" disabled>-- Select a reason --</option>
           {reasonOptions.map((option, index) => (
             <option key={index} value={option}>{option}</option>
           ))}
         </select>
-
         {reason === 'Other' && (
           <input
             type="text"
             value={customReason}
             onChange={(e) => setCustomReason(e.target.value)}
             required
-            className=" mt-2"
+            className="mt-2"
             placeholder="Please describe your reason"
           />
         )}
       </div>
 
-      {/* Submission Message */}
       {message && <p className="text-sm font-medium">{message}</p>}
 
-      {/* Submit Button */}
       <button type="submit" className="bg-green-600 text-white px-4 py-2 rounded">
         Submit
       </button>

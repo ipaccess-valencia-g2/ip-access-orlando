@@ -1,53 +1,58 @@
 import React, { useState } from 'react';
-import './componentStyles/ChangePassword.css';
+import './formStyles/ChangePassword.css';
 
-const ChangePassword = ({ onClose, onSave }) => {
-    // Local state for password fields
+const ChangePassword = ({ userID, onClose, onSave }) => {
     const [formData, setFormData] = useState({
         currentPassword: '',
         newPassword: '',
         confirmPassword: '',
     });
 
-    // State to toggle password visibility
     const [showPassword, setShowPassword] = useState(false);
+    const [isProcessing, setIsProcessing] = useState(false);
 
-    // Handle input changes
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
     };
 
-    // Submit password change request to backend
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // Basic validation for matching new passwords
+        if (!formData.currentPassword || !formData.newPassword || !formData.confirmPassword) {
+            alert('Please fill in all password fields.');
+            return;
+        }
+
         if (formData.newPassword !== formData.confirmPassword) {
             alert("New password and confirmation don't match!");
             return;
         }
 
-        try {
-            const response = await fetch('/api/user/change-password', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    currentPassword: formData.currentPassword,
-                    newPassword: formData.newPassword,
-                }),
-            });
+        setIsProcessing(true);
 
-            if (!response.ok) throw new Error('Failed to change password');
+        try {
+            const response = await fetch(
+                `http://18.223.161.174:3307/users/${userID}/password/${encodeURIComponent(formData.newPassword)}`,
+                {
+                    method: 'PUT',
+                }
+            );
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Failed to change password');
+            }
 
             const result = await response.json();
 
-            // Notify parent about successful password change
             onSave(result);
             onClose();
+
         } catch (error) {
             console.error('Change password error:', error);
-            alert('Error changing password. Please try again.');
+            alert(error.message || 'Error changing password. Please try again.');
+            setIsProcessing(false);
         }
     };
 
@@ -55,7 +60,6 @@ const ChangePassword = ({ onClose, onSave }) => {
         <div className="panel-container">
             <h2>Change Password</h2>
             <form onSubmit={handleSubmit}>
-                {/* Current password input */}
                 <label>Current Password:</label>
                 <input
                     type={showPassword ? "text" : "password"}
@@ -63,9 +67,9 @@ const ChangePassword = ({ onClose, onSave }) => {
                     value={formData.currentPassword}
                     onChange={handleChange}
                     required
+                    disabled={isProcessing}
                 />
 
-                {/* New password input */}
                 <label>New Password:</label>
                 <input
                     type={showPassword ? "text" : "password"}
@@ -73,9 +77,9 @@ const ChangePassword = ({ onClose, onSave }) => {
                     value={formData.newPassword}
                     onChange={handleChange}
                     required
+                    disabled={isProcessing}
                 />
 
-                {/* Confirm new password input */}
                 <label>Confirm New Password:</label>
                 <input
                     type={showPassword ? "text" : "password"}
@@ -83,9 +87,9 @@ const ChangePassword = ({ onClose, onSave }) => {
                     value={formData.confirmPassword}
                     onChange={handleChange}
                     required
+                    disabled={isProcessing}
                 />
 
-                {/* Toggle password visibility */}
                 <div className="show-password-toggle">
                     <label htmlFor="showPassword">Show Password</label>
                     <input
@@ -93,13 +97,17 @@ const ChangePassword = ({ onClose, onSave }) => {
                         id="showPassword"
                         checked={showPassword}
                         onChange={() => setShowPassword(prev => !prev)}
+                        disabled={isProcessing}
                     />
                 </div>
 
-                {/* Modal action buttons */}
                 <div className="modal-actions">
-                    <button type="submit">Save</button>
-                    <button type="button" onClick={onClose}>Cancel</button>
+                    <button type="submit" disabled={isProcessing}>
+                        {isProcessing ? 'Saving...' : 'Save'}
+                    </button>
+                    <button type="button" onClick={onClose} disabled={isProcessing}>
+                        Cancel
+                    </button>
                 </div>
             </form>
         </div>

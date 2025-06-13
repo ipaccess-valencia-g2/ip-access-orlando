@@ -4,10 +4,10 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/global.css';
 import './styles/UserDashboard.css';
-import ProfileEdit from "../components/ProfileEdit.jsx";
-import ChangePasswordPanel from "../components/ChangePassword.jsx";
-import DeleteAccount from "../components/DeleteAccount.jsx";
-import Logout from "../components/logout.jsx";
+import ProfileEdit from "../forms/ProfileEdit.jsx";
+import ChangePasswordPanel from "../forms/ChangePassword.jsx";
+import DeleteAccount from "../forms/DeleteAccount.jsx";
+import Logout from "../forms/logout.jsx";
 
 const UserDashboard = () => {
 
@@ -18,26 +18,24 @@ const UserDashboard = () => {
     // Panel visibility states
     const [showEditPanel, setShowEditPanel] = useState(false);
     const [showPasswordPanel, setShowPasswordPanel] = useState(false);
-    const [showLoginPanel, setShowLoginPanel] = useState(false);
     const [showLogoutPanel, setShowLogoutPanel] = useState(false);
     const [showDeletePanel, setShowDeletePanel] = useState(false);
 
-
+/*
     const fetchUserData = async () => {
         try {
-            const userId = "hunter277"; // TODO:Replace with dynamic user ID logic
+            const userID = 2; // TODO:Replace with dynamic user ID logic
 
             // Fetch user info
-            const userRes = await fetch(`http://localhost:3307/users/${userId}`);
+            const userRes = await fetch(`http://18.223.161.174:3307/users/${userID}`);
             if (!userRes.ok) throw new Error('Failed to fetch user');
             const userData = await userRes.json();
 
-            const userInfo = userData.userInfo?.[0];
-            if (!userInfo) throw new Error('User not found');
-            setUser(userInfo);
+            if (!userData.userInfo || userData.userInfo.length === 0) throw new Error('User not found');
+            setUser(userData.userInfo[0]);
 
             // Fetch reservations for this user
-            const resRes = await fetch(`http://localhost:3307/reservations/user/${userId}`);
+            const resRes = await fetch(`http://18.223.161.174:3307/reserve?userID=${userID}`);
             if (!resRes.ok) throw new Error('Failed to fetch reservations');
             const resData = await resRes.json();
 
@@ -53,13 +51,12 @@ const UserDashboard = () => {
     useEffect(() => {
         fetchUserData();
     }, []);
-
+*/
     // Show/hide handlers for each panel
     const handleEditProfile = () => setShowEditPanel(true);
     const handleChangePasswordClick = () => setShowPasswordPanel(true);
     const handleLogoutClick = () => setShowLogoutPanel(true);
     const handleDeleteAccountClick = () => setShowDeletePanel(true);
-
 
     return (
         // Main container for dashboard content
@@ -67,29 +64,36 @@ const UserDashboard = () => {
 
             {/* Header greeting the user*/}
             <header className="dashboard-header">
-                <h1>Good morning {user.firstName || 'User'}!</h1>
-                <p>Welcome to your dashboard. Here you can view your reservations and manage your account.</p>
+                <div className="user-info-header">
+                    <div className="avatar-placeholder"/>
+                    <div>
+                        <h1>Good morning {user.firstName || 'User'}!</h1>
+                        <p>Welcome to your dashboard. Here you can view your reservations and manage your account.</p>
+                    </div>
+                </div>
             </header>
+
 
             {/* Section listing the user's reservations */}
             <section className="dashboard-section">
                 <h2>My Reservations</h2>
                 {reservations.length > 0 ? (
                     <ul>
-                        {reservations.map((res, index) => (
-                            <li key={index}>
-                                Reservation {index + 1}: {res.device} - Date: {res.date}
+                        {reservations.map((res, i) => (
+                            <li key={i}>
+                                Location: {res.location}, Reason: {res.reason}, Date: {res.reservation_date}
                             </li>
                         ))}
                     </ul>
                 ) : (
-                    <p>You have no reservations.</p>
+                    <p>No reservations found.</p>
                 )}
             </section>
 
             {/* Section displaying user's account details */}
             <section className="dashboard-section">
                 <h2>Account Details</h2>
+                <p><strong>Username:</strong> {user.username || 'Not provided'}</p>
                 <p><strong>Email:</strong> {user.email || 'Not provided'}</p>
                 <p><strong>Phone Number:</strong> {user.phone || 'Not provided'}</p>
                 <p><strong>Address:</strong> {user.address || 'Not provided'}</p>
@@ -100,7 +104,7 @@ const UserDashboard = () => {
                 <h2>Actions</h2>
 
                 {/* Hide action buttons when a panel is open */}
-                {!showEditPanel && !showPasswordPanel && !showLoginPanel && !showLogoutPanel && !showDeletePanel && (
+                {!showEditPanel && !showPasswordPanel && !showLogoutPanel && !showDeletePanel && (
                     <div className="dashboard-actions-buttons">
                         <button onClick={handleEditProfile}>Edit Profile</button>
                         <button onClick={handleChangePasswordClick}>Change Password</button>
