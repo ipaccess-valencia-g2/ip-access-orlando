@@ -4,7 +4,7 @@ const express = require('express');
 const axios = require('axios');
 const router = express.Router();
 
-router.post('/verify-address', async (req, res) => {
+router.post('/', async (req, res) => {
   const { address } = req.body;
 
   if (!address) {
