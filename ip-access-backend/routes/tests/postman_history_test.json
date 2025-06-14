@@ -1,0 +1,34 @@
+{
+	"info": {
+		"_postman_id": "0ae39ce4-7684-49aa-aee6-5455bb953f15",
+		"name": "History",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "44333433",
+		"_collection_link": "https://carlos-8642356.postman.co/workspace/7b7ec610-f89b-42de-8a36-4a562ff9d747/collection/44333433-0ae39ce4-7684-49aa-aee6-5455bb953f15?action=share&source=collection_link&creator=44333433"
+	},
+	"item": [
+		{
+			"name": "http://localhost:3000/history/1",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/history/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"history",
+						"1"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
