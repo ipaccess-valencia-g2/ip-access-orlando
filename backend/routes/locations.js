@@ -5,16 +5,16 @@ const router = express.Router();
 const db = require('../db/connection');
 
 // GET /locations
-router.get('/locations', async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const [rows] = await db.execute(
-      'SELECT locationID, locationName FROM locations ORDER BY locationName'
+      'SELECT locationID, name FROM locations ORDER BY name'
     );
 
     // mapping database to objects
     const locations = rows.map(row => ({
       locationId: row.locationID,
-      name: row.locationName
+      name: row.name
     }));
 
     res.json({ locations });

@@ -12,7 +12,7 @@ const db = require('../db/connection');
 const bcrypt = require('bcrypt');
 
 // GET /users
-router.get('/users', async (req, res) => {
+router.get('/user', async (req, res) => {
   try {
     const [rows] = await db.query('SELECT * FROM users');
     res.json({ rows });
