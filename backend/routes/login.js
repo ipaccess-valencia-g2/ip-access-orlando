@@ -42,8 +42,8 @@ router.post('/login/:username/:password', async (req,res) =>
                 {
                     maxAge: 2 * 60 * 1000,
                     httpOnly: true,
-                    secure: true,
-                    sameSite: "None",
+                    //secure: true,
+                    //sameSite: "None",
                 };
             const token = generateAccessJWT(userMatch[0].userID);
             res.cookie("SessionID", token, options);
