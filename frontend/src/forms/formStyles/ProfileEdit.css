@@ -1,0 +1,42 @@
+h2 {
+    margin-top: 0;
+    font-size: 1.5rem;
+}
+
+label {
+    display: block;
+    margin-top: 12px;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 4px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+    box-sizing: border-box;
+}
+
+.action-btn {
+    margin-top: 24px;
+    display: flex;
+    justify-content: right;
+    gap: 12px;
+}
+
+.action-btn button {
+    flex: 1;
+    padding: 10px 16px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    background-color: #007bff;
+    color: white;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.action-btn button:hover {
+    background-color: #0056b3;
+}
