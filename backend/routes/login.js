@@ -10,28 +10,30 @@ const generateAccessJWT = function (userID)
 {
     let payload =
         {
-            id: userID,
+            id: userID
         };
     return jwt.sign(payload, process.env.SECRET_ACCESS_TOKEN, { expiresIn: '2m' });
 };
 
 // --- POST /login/:username/:password
 // use to encrypt passwords? const isMatch = await bcrypt.compare(inputPassword, storedHashedPassword);
-router.post('/login/:username/:password', async (req,res) =>
+router.post('/login/', async (req,res) =>
 {
+    const { username, password } = req.body;
+
     try
     {
         // Check that username is in the database
         const [userMatch] = await db.execute(
-            'SELECT username, password FROM users WHERE username = ?',
-            [req.params.username]
+            'SELECT userID, username, password FROM users WHERE username = ?',
+            [username]
         );
         if (userMatch.length === 0) {
             throw new Error('Username is incorrect');
         }
 
         // Check that password is correct
-        const isMatch = await bcrypt.compare(req.params.password, userMatch[0].password);
+        const isMatch = await bcrypt.compare(password, userMatch[0].password);
 
         if (isMatch)
         {
