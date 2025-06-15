@@ -31,10 +31,10 @@ const DeleteAccount = ({ userID, onClose, onConfirm }) => {
         <div className="panel-container">
             <h2>Delete Account</h2>
             <p>Are you sure you want to delete your account? This action cannot be undone.</p>
-            <div className="modal-actions">
+            <div className="action-btn">
                 <button
                     type="button"
-                    className="danger"
+                    className="delete-btn"
                     onClick={handleDelete}
                     disabled={isProcessing}
                 >

@@ -32,11 +32,11 @@ input {
     border: none;
     border-radius: 6px;
     cursor: pointer;
-    background-color: #007bff;
-    color: white;
+    background-color: #003153;
+    color: #FFF8DC;
     transition: background-color 0.2s ease-in-out;
 }
 
 .action-btn button:hover {
-    background-color: #0056b3;
+    background-color: #12588a;
 }

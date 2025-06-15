@@ -7,7 +7,7 @@ const Logout = ({ onClose, onConfirm }) => {
     const handleLogout = () => {
         setIsSubmitting(true);
 
-        // Clear client-side session data here. Login itself does not hold any authenticated user state globally yet.
+        // TODO: Clear client-side session data here. Login itself does not hold any authenticated user state globally yet.
 
         onConfirm?.();
 
@@ -17,18 +17,24 @@ const Logout = ({ onClose, onConfirm }) => {
 
     return (
         <div className="panel-container">
-            <h2>Confirm Logout</h2>
+            <h2 id="logout-title">Confirm Logout</h2>
             <p>Are you sure you want to log out?</p>
 
-            <div className="modal-actions">
+            <div className="action-btn">
                 <button
                     onClick={handleLogout}
-                    className={`confirm-btn ${isSubmitting ? 'disabled' : ''}`}
+                    className="confirm-btn"
                     disabled={isSubmitting}
+                    aria-disabled={isSubmitting}
                 >
                     {isSubmitting ? 'Logging out...' : 'Yes, Log Out'}
                 </button>
-                <button onClick={onClose} className="cancel-btn" disabled={isSubmitting}>
+                <button
+                    onClick={onClose}
+                    className="cancel-btn"
+                    disabled={isSubmitting}
+                    aria-disabled={isSubmitting}
+                >
                     Cancel
                 </button>
             </div>
