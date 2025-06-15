@@ -116,7 +116,7 @@ const UserDashboard = () => {
                 <div>
                     {showEditPanel && (
                         <div style={{ marginTop: '12px' }}>
-                            <ProfileEdit user={user} onClose={() => setShowEditPanel(false)} />
+                            <ProfileEdit user={user} onClose={() => setShowEditPanel(false)} onSave={fetchUserData} />
                         </div>
                     )}
 
