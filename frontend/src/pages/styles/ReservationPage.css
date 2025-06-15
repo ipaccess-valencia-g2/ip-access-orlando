@@ -1,0 +1,66 @@
+.reserve-container {
+    justify-content: center;
+    align-items: center;
+    background-color: #ffffff;
+    text-align: center;
+}
+
+.reserve-form {
+    display: flex;
+    flex-direction: column;
+    align-items: normal;
+    width: 100%;
+}
+
+.reserve-form h2 {
+    margin-bottom: 20px;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+    background: none !important;
+}
+
+.reserve-form input , .reserve-form select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: none;
+    border-radius: 6px;
+    background-color: #f2f2f2;
+    font-size: 14px;
+    font-family: 'Inter', sans-serif;
+}
+
+.regfl {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0px;
+}
+
+label {
+    width: 60%;
+    font-weight: 600;
+    margin-right: 10px;
+    color: #333;
+    text-align: left;
+}
+
+.reserve-form button {
+    background-color: #013152 !important;
+    color: white !important;
+    font-weight: 600 !important;
+    border-radius: 5px !important;
+    font-family: 'Inter', sans-serif !important;
+    font-size: 24px !important;
+}
+
+.reserve-form button:hover {
+    background-color: #444444;
+}
+
+select {
+  color: black !important;
+}
+
+input {
+   color: black !important;
+}
