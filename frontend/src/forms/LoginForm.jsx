@@ -67,10 +67,15 @@ const LoginForm = () => {
             // Send POST request to backend login endpoint
             const response = await fetch(
                 `http://localhost:3307/login/`,
-                { method: 'POST',
+                { 
+                    method: 'POST',
                     headers: {'Content-type': 'application/json'},
-                    body: JSON.stringify({ username: encodeURIComponent(formData.usernameOrEmail),
-                                                password: encodeURIComponent(formData.password) })}
+                    credentials: 'include',
+                    body: JSON.stringify({ 
+                        username: encodeURIComponent(formData.usernameOrEmail),
+                        password: encodeURIComponent(formData.password) 
+                    })
+                }
             );
 
 

@@ -4,14 +4,34 @@ const express = require('express');
 const cors = require('cors');
 const app = express();
 const db = require('./db/connection');
+const cookieParser = require('cookie-parser');
 
-app.use(cors());
+app.use(cookieParser());
+
+const allowedOrigins = [
+  'http://localhost:5173',
+   'http://localhost:3307',
+  //LIVE URL
+];
+
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true
+}));
 app.use(express.json());
 
 app.use((req, res, next) => {
   console.log(`${req.method} ${req.url} -- Body:`, req.body);
   next();
 });
+
+
 
 
 app.use('/register', require('./routes/register'));

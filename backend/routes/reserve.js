@@ -6,8 +6,9 @@
 const express = require('express');
 const db = require('../db/connection');
 const router = express.Router();
+const { Verify } = require('../middleware/verify');
 
-router.post('/', async (req, res) => {
+router.post('/', Verify, async (req, res) => {
     const { startTime, endTime, locationId, reason, otherReason } = req.body; // omitted deviceId and userId to sync with the API contracts. Addition is needed later.
 
     try {
@@ -41,7 +42,7 @@ router.post('/', async (req, res) => {
 
         const [result] = await db.execute(
             'INSERT INTO reservations (startTime, endTime, locationID, reason, userID, deviceID) VALUES (?, ?, ?, ?, ?, ?)',
-            [startTime, endTime, locationId, otherReason || reason, 1, 1]
+            [startTime, endTime, locationId, otherReason || reason, userID, deviceID]
         );
 
         res.status(201).json({ message: 'Reservation created', reservationId: result.insertId });
@@ -110,12 +111,12 @@ router.delete('/:reservationId', async (req, res) => {
     }
 });
 
-module.exports = router;
-
 // GET /reserve?userID=
 // fetch all reservations for a user
-router.get('/', async (req, res) => {
+router.get('/user', Verify, async (req, res) => {
     const userID = req.query.userID;
+
+    res.status(200).json({ message: `Welcome! You are logged in as user ${req.user.id}` });
 
     if (!userID) {
         return res.status(400).json({ error: 'Missing userID parameter.' });

@@ -10,6 +10,7 @@ const express = require('express');
 const router = express.Router();
 const db = require('../db/connection');
 const bcrypt = require('bcrypt');
+const {Verify} = require("../middleware/verify");
 
 // GET /users
 router.get('/user', async (req, res) => {

@@ -51,6 +51,7 @@ const ReservationForm = () => {
     try {
       const res = await fetch('/reserve', {
         method: 'POST',
+        credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(reservationData),
       });

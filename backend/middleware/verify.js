@@ -7,14 +7,8 @@ const Verify = async function (req, res, next)
 {
     try
     {
-        const authHeader = req.headers["cookie"];
-
-        if (!authHeader)
-        {
-            return res.sendStatus(401);
-        }
-
-        const cookie = authHeader.split("=")[1];
+        const cookie = req.cookies.SessionID;
+        if (!cookie) return res.sendStatus(401);
         jwt.verify(cookie, process.env.SECRET_ACCESS_TOKEN, async (err, decoded) =>
         {
             if (err)
