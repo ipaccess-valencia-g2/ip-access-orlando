@@ -2,7 +2,7 @@
 /// PUT    /reserve/:reservationId - update an existing reservation    !
 //  GET    /reserve?userID=        - fetch all reservations for a user ?
 /// DELETE /reserve/:reservationId - cancel a reservation              !
-/// GET	   /reserve/search		   - Fetches a list of device IDs that fit a criteria
+/// POST   /reserve/search		   - Fetches a list of device IDs that fit a criteria
 
 const express = require('express');
 const db = require('../db/connection');
@@ -134,10 +134,10 @@ router.get('/', async (req, res) => {
     }
 });
 
-router.get('/devices/search', async (req, res) => {
-    const { type, locationID, startTime, endTime } = req.query;
+router.post('/search', async (req, res) => {
+    const { type, locationID, startTime, endTime } = req.body;
 
-    if (!type || !location || !startdate || !enddate) {
+    if (!type || !locationID || !startTime || !endTime) {
         return res.status(400).json({ error: 'Missing one or more required query parameters: type, location, startdate, enddate.' });
     }
 
