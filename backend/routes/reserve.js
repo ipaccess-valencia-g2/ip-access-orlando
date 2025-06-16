@@ -163,6 +163,7 @@ router.post('/search', async (req, res) => {
 		console.log(`Found ${rows.length} devices.`);
 
         const deviceIDs = rows.map(row => row.deviceID);
+		console.log('Sending response:', deviceIDs);
         res.status(200).json(deviceIDs);
     } catch (err) {
         console.error('Error fetching available devices:', err);
