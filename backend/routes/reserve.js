@@ -142,23 +142,25 @@ router.post('/search', async (req, res) => {
     }
 
     try {
+		console.log('Running search with:', { type, locationID, startTime, endTime });
         const [rows] = await db.execute(
             `
-            SELECT d.DeviceID
-            FROM devices d
-            WHERE d.isAvailable = 1
-              AND d.type = ?
-              AND d.locationID = ?
-              AND d.DeviceID NOT IN (
-                  SELECT r.deviceID
-                  FROM reservations r
-                  WHERE NOT (
-                      r.endTime <= ? OR r.startTime >= ?
-                  )
-              )
-            `,
+      SELECT d.DeviceID
+      FROM devices d
+      WHERE d.isAvailable = 1
+        AND d.type = ?
+        AND d.locationID = ?
+        AND d.DeviceID NOT IN (
+          SELECT r.deviceID
+          FROM reservations r
+          WHERE r.startTime < ?
+            AND r.endTime > ?
+        )
+      `,
             [type, locationID, startTime, endTime]
         );
+		
+		console.log(`Found ${rows.length} devices.`);
 
         const deviceIDs = rows.map(row => row.deviceID);
         res.status(200).json(deviceIDs);
