@@ -145,12 +145,12 @@ router.post('/search', async (req, res) => {
 		console.log('Running search with:', { type, locationID, startTime, endTime });
         const [rows] = await db.execute(
             `
-      SELECT d.DeviceID
+      SELECT d.deviceID
       FROM devices d
       WHERE d.isAvailable = 1
         AND d.type = ?
         AND d.locationID = ?
-        AND d.DeviceID NOT IN (
+        AND d.deviceID NOT IN (
           SELECT r.deviceID
           FROM reservations r
           WHERE r.startTime < ?
