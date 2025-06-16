@@ -2,6 +2,7 @@
 /// PUT    /reserve/:reservationId - update an existing reservation    !
 //  GET    /reserve?userID=        - fetch all reservations for a user ?
 /// DELETE /reserve/:reservationId - cancel a reservation              !
+/// POST   /reserve/search		   - Fetches a list of device IDs that fit a criteria
 
 const express = require('express');
 const db = require('../db/connection');
@@ -133,5 +134,43 @@ router.get('/user', Verify, async (req, res) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 });
+
+router.post('/search', async (req, res) => {
+    const { type, locationID, startTime, endTime } = req.body;
+
+    if (!type || !locationID || !startTime || !endTime) {
+        return res.status(400).json({ error: 'Missing one or more required query parameters: type, location, startdate, enddate.' });
+    }
+
+    try {
+		console.log('Running search with:', { type, locationID, startTime, endTime });
+        const [rows] = await db.execute(
+            `
+      SELECT d.deviceID
+      FROM devices d
+      WHERE d.isAvailable = 1
+        AND d.type = ?
+        AND d.locationID = ?
+        AND d.deviceID NOT IN (
+          SELECT r.deviceID
+          FROM reservations r
+          WHERE r.startTime < ?
+            AND r.endTime > ?
+        )
+      `,
+            [type, locationID, endTime, startTime]
+        );
+		
+		console.log(`Found ${rows.length} devices.`);
+
+        const deviceIDs = rows.map(row => row.deviceID);
+		console.log('Sending response:', deviceIDs);
+        res.status(200).json(deviceIDs);
+    } catch (err) {
+        console.error('Error fetching available devices:', err);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
 
 module.exports = router;
