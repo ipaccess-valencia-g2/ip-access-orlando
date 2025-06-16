@@ -157,7 +157,7 @@ router.post('/search', async (req, res) => {
             AND r.endTime > ?
         )
       `,
-            [type, locationID, startTime, endTime]
+            [type, locationID, endTime, startTime]
         );
 		
 		console.log(`Found ${rows.length} devices.`);
