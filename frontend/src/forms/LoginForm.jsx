@@ -70,7 +70,8 @@ const LoginForm = () => {
                 { 
                     method: 'POST',
                     headers: {'Content-type': 'application/json'},
-                    credentials: 'include',
+                    //credentials is what typically causes the CORS error with the live URL
+                    //credentials: 'include',
                     body: JSON.stringify({ 
                         username: encodeURIComponent(formData.usernameOrEmail),
                         password: encodeURIComponent(formData.password) 
