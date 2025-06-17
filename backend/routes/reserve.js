@@ -10,7 +10,7 @@ const router = express.Router();
 const { Verify } = require('../middleware/verify');
 
 router.post('/', Verify, async (req, res) => {
-    const { startTime, endTime, locationId, reason, otherReason } = req.body; // omitted deviceId and userId to sync with the API contracts. Addition is needed later.
+    const { deviceID, locationID, userID, startTime, endTime, reason } = req.body; // omitted deviceId and userId to sync with the API contracts. Addition is needed later.
 
     try {
 
@@ -19,7 +19,7 @@ router.post('/', Verify, async (req, res) => {
             return res.status(400).json({ error: 'Invalid start or end time.' });
         }
 
-        if (locationId) {
+        if (locationID) {
 
             const [locCount] = await db.query('SELECT * FROM locations WHERE locationID = ?', [locationId]);
 
@@ -32,18 +32,9 @@ router.post('/', Verify, async (req, res) => {
             return res.status(400).json({ error: 'Invalid location ID.' });
         }
 
-        const [reasons] = await db.query('SELECT 1 FROM reasons WHERE label = ?', [reason]) // im not sure the reasonID column is even relevant since were using text instead of the ID.
-
-        if ((reasons.length === 0 && !otherReason) || reason.localeCompare('Other') === 0 && !otherReason) {
-
-            return res.status(400).json({ error: 'Invalid reason.' });
-        }
-
-        //presumably a check needs to exist whether the location has an existing device available for the time requested. there also needs to be a check agaisnt duplicate reservations.
-
         const [result] = await db.execute(
             'INSERT INTO reservations (startTime, endTime, locationID, reason, userID, deviceID) VALUES (?, ?, ?, ?, ?, ?)',
-            [startTime, endTime, locationId, otherReason || reason, userID, deviceID]
+            [startTime, endTime, locationID, reason, userID, deviceID]
         );
 
         res.status(201).json({ message: 'Reservation created', reservationId: result.insertId });
@@ -58,7 +49,7 @@ router.post('/', Verify, async (req, res) => {
 router.put('/:reservationId', async (req, res) => {
 
     const { reservationId } = req.params;
-    const { startTime, endTime, reason, otherReason } = req.body; // are we planning to let the user change device or rather is the device id going to be decided backend then echoed back to the user?
+    const { startTime, endTime, reason } = req.body; // are we planning to let the user change device or rather is the device id going to be decided backend then echoed back to the user?
 
     try {
 
@@ -72,14 +63,7 @@ router.put('/:reservationId', async (req, res) => {
             return res.status(400).json({ error: 'Reason is required.' });
         }
 
-        const [reasons] = await db.query('SELECT 1 FROM reasons WHERE label = ?', [reason]) // im not sure the reasonID column is even relevant since were using text instead of the ID.
-
-        if ((reasons.length === 0 && !otherReason) || reason.localeCompare('Other') === 0 && !otherReason) {
-
-            return res.status(400).json({ error: 'Invalid reason.' });
-        }
-
-        await db.execute('UPDATE reservations SET startTime = ?, endTime = ?, reason = ? WHERE reservationID = ?', [startTime, endTime, otherReason || reason, reservationId]);
+        await db.execute('UPDATE reservations SET startTime = ?, endTime = ?, reason = ? WHERE reservationID = ?', [startTime, endTime, reason, reservationId]);
 
         res.status(200).json({ message: 'Reservation updated' });
     }
