@@ -66,12 +66,12 @@ const LoginForm = () => {
         try {
             // Send POST request to backend login endpoint
             const response = await fetch(
-                `http://18.223.161.174:3307/login/`,
+                `http://localhost:3307/login/`,
                 { 
                     method: 'POST',
                     headers: {'Content-type': 'application/json'},
-                    //credentials is what typically causes the CORS error with the live URL
-                    //credentials: 'include',
+                    //comment out credentials if testing live URL
+                    credentials: 'include',
                     body: JSON.stringify({ 
                         username: encodeURIComponent(formData.usernameOrEmail),
                         password: encodeURIComponent(formData.password) 
@@ -81,6 +81,9 @@ const LoginForm = () => {
 
 
             const data = await response.json();
+
+            //console message proving which user is logged in
+            console.log("Logged in userID ", data.userID);
 
             // If response not OK, throw an error
             if (!response.ok) {

@@ -49,7 +49,9 @@ router.post('/login/', async (req,res) =>
 
         res.status(200).json({
             status: 'success',
-            message: 'You have successfully logged in.'
+            message: 'You have successfully logged in.',
+            userID: userMatch[0].userID
+            //pulls the userID for console messages later
         });
     }
     else

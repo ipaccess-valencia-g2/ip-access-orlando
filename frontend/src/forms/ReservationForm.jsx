@@ -22,6 +22,9 @@ const ReservationForm = () => {
   const [customReason, setCustomReason] = useState('');
   const [deviceType, setDeviceType] = useState('');
   const [message, setMessage] = useState('');
+  const [userID, setUserID] = useState(null);
+  const [firstName, setFirstName] = useState('');
+
 
   useEffect(() => {
     const loadCenters = async () => {
@@ -36,6 +39,27 @@ const ReservationForm = () => {
     loadCenters();
   }, []);
 
+   useEffect(() => {
+  const fetchUser = async () => {
+    try {
+      const res = await fetch('http://localhost:3307/user/me', {
+      credentials: 'include',
+      });
+
+      if (!res.ok) throw new Error('Session expired or not logged in.');
+
+      const data = await res.json();
+      console.log("User is logged in! userID:", data.userID); // ✅
+      setUserID(data.userID); // Optional: store it for use later
+      setFirstName(data.firstName);
+    } catch (err) {
+      console.error('Failed to fetch user info:', err.message);
+    }
+  };
+
+  fetchUser();
+}, []);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const finalReason = reason === 'Other' ? customReason : reason;
@@ -46,6 +70,7 @@ const ReservationForm = () => {
       endDate,
       reason: finalReason,
       deviceType,
+      //userID?
     };
 
     try {
@@ -76,6 +101,8 @@ const ReservationForm = () => {
   return (
     <form onSubmit={handleSubmit} className="reserve-form">
       <h2 className="text-xl font-bold">Reservation Form</h2>
+      <h5>Hello, {firstName}</h5>
+      {/* Please remove "Hello" if irrelevant past checking session storage */}
 
       {/* Community Center Selection */}
       <div className="regfl">

@@ -10,7 +10,7 @@ app.use(cookieParser());
 
 const allowedOrigins = [
   'http://localhost:5173',
-   'http://localhost:3307',
+  'http://localhost:3307'
   //LIVE URL
 ];
 
