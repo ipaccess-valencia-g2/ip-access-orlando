@@ -67,7 +67,7 @@ const ReservationForm = () => {
   const finalReason = reason === 'Other' ? customReason : reason;
   const selectedCenter = centers.find(center => center.name === location);
   if (!selectedCenter) {
-    setMessage('❌ Invalid location selected.');
+    setMessage('Invalid location selected.');
     return;
   }
   const locationID = selectedCenter.locationID;
@@ -76,15 +76,16 @@ const ReservationForm = () => {
   let chosenDeviceID;
   try {
     const searchResponse = await fetch('http://18.223.161.174:3307/reserve/search', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        type: deviceType,
-        locationID,
-        startTime,
-        endTime
-      })
-    });
+		method: 'POST',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify({
+			type: deviceType,
+			locationID,
+			startTime: new Date(startDate).toISOString(),
+			endTime: new Date(endDate).toISOString()
+		})
+	});
+
 
     if (!searchResponse.ok) {
       const err = await searchResponse.json();
