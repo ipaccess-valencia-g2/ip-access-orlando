@@ -6,6 +6,7 @@ const deviceTypes = ["Laptop", "Tablet", "Hotspot"];
 
 const ReservationForm = () => {
   const [centers, setCenters] = useState([]);
+  const [reasons, setReasons] = useState([]);
   const [location, setLocation] = useState('');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
@@ -219,7 +220,7 @@ const ReservationForm = () => {
         <label>Why are you checking out this device today?</label>
         <select value={reason} onChange={(e) => setReason(e.target.value)} required>
         <option disabled value="">-- Select a reason --</option>
-        {reasons.map(center => (
+        {reasons.map(reason => (
 		<option key={reason.label} value={reason.label}>{reason.label}</option>
 		))}
         </select>
