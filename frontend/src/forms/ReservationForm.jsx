@@ -65,12 +65,11 @@ const ReservationForm = () => {
   setMessage('');
 
   const finalReason = reason === 'Other' ? customReason : reason;
-  const selectedCenter = centers.find(center => center.name === location);
   if (!selectedCenter) {
     setMessage('Invalid location selected.');
     return;
   }
-  const locationID = selectedCenter.locationID;
+  const locationID = parseInt(location, 10);
 
   //Search for available devices
   let chosenDeviceID;
@@ -151,11 +150,11 @@ const ReservationForm = () => {
       <div className="regfl">
         <label>Community Center:</label>
         <select value={location} onChange={(e) => setLocation(e.target.value)} required>
-          <option disabled value="">-- Select a Center --</option>
-          {centers.map((center) => (
-            <option key={center.locationID} value={center.name}>{center.name}</option>
-          ))}
-        </select>
+			<option disabled value="">-- Select a Center --</option>
+			{centers.map((center) => (
+			<option key={center.locationID} value={center.locationID}>{center.name}</option>
+		))}
+		</select>
       </div>
 
       {/* Start Date */}
