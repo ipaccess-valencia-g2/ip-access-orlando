@@ -1,20 +1,27 @@
+/// --- GET /reasons
+
 const express = require('express');
 const router = express.Router();
 const db = require('../db/connection');
 
-// GET /reservations/reasons
+// GET /reasons
 router.get('/', async (req, res) => {
   try {
-    // Query distinct reasons from reservations table
-    const [rows] = await db.query('SELECT DISTINCT reason FROM reservations');
+    const [rows] = await db.execute(
+      'SELECT reasonID, label FROM reasons ORDER BY reasonID'
+    );
 
-    // Extract reasons into an array of strings
-    const reasons = rows.map(row => row.reason);
+    // mapping database to objects
+    const reasons = rows.map(row => ({
+      reasonID: row.reasonID,
+      label: row.label
+    }));
+	console.log(rows);
 
     res.json({ reasons });
   } catch (error) {
-    console.error('Error fetching reservation reasons:', error);
-    res.status(500).json({ message: 'Internal server error' });
+    console.error('Error fetching locations:', error);
+    res.status(500).json({ error: 'Internal server error' });
   }
 });
 

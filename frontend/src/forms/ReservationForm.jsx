@@ -2,15 +2,6 @@
 import React, { useState, useEffect } from 'react';
 import '../pages/styles/ReservationPage.css';
 
-const reasonOptions = [
-  "Job interview",
-  "Homework / School",
-  "Telehealth appointment",
-  "Job applications / Resume building",
-  "City Services / Permits",
-  "Other",
-];
-
 const deviceTypes = ["Laptop", "Tablet", "Hotspot"];
 
 const ReservationForm = () => {
@@ -36,6 +27,19 @@ const ReservationForm = () => {
       }
     };
     loadCenters();
+  }, []);
+  
+  useEffect(() => {
+    const loadReasons = async () => {
+      try {
+        const res = await fetch('http://18.223.161.174:3307/reasons');
+        const data = await res.json();
+        setReasons(data.reasons || []);
+      } catch (err) {
+        console.error('Failed to fetch reasons:', err);
+      }
+    };
+    loadReasons();
   }, []);
 
   useEffect(() => {
@@ -214,10 +218,10 @@ const ReservationForm = () => {
       <div className="regfl">
         <label>Why are you checking out this device today?</label>
         <select value={reason} onChange={(e) => setReason(e.target.value)} required>
-          <option value="" disabled>-- Select a reason --</option>
-          {reasonOptions.map((option, index) => (
-            <option key={index} value={option}>{option}</option>
-          ))}
+        <option disabled value="">-- Select a reason --</option>
+        {reasons.map(center => (
+		<option key={reason.label} value={reason.label}>{reason.label}</option>
+		))}
         </select>
         {reason === 'Other' && (
           <input
