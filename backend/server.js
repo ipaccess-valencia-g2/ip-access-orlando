@@ -1,5 +1,3 @@
-// server set up
-
 const express = require('express');
 const cors = require('cors');
 const app = express();
@@ -16,23 +14,38 @@ const allowedOrigins = [
 
 app.use(cors({
   origin: function (origin, callback) {
+    console.log('Incoming Origin:', origin);
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
+      console.log('Blocked Origin:', origin);
       callback(new Error('Not allowed by CORS'));
     }
   },
   credentials: true
 }));
+
+app.options('*', cors({
+  origin: function (origin, callback) {
+    console.log('OPTIONS preflight Origin:', origin);
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      console.log('Blocked OPTIONS Origin:', origin);
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true
+}));
+
 app.use(express.json());
 
+//debug
 app.use((req, res, next) => {
   console.log(`${req.method} ${req.url} -- Body:`, req.body);
+  console.log('Headers:', req.headers);
   next();
 });
-
-
-
 
 app.use('/register', require('./routes/register'));
 app.use(require('./routes/login'));
@@ -44,10 +57,8 @@ app.use('/reasons', require('./routes/reasons'));
 app.use(require('./routes/user'));
 //app.use('/verify-address', require('./routes/verify-address'));
 
-//note: some routes use the prefix here, others when the route is called
-
 app.get('/', (req, res) => {
-    res.send('API is running');
+  res.send('API is running');
 });
 
 const PORT = process.env.PORT || 3307;
@@ -64,9 +75,5 @@ app.get('/dbtest', async (req, res) => {
 });
 
 app.listen(PORT, '0.0.0.0', () => {
-    console.log(`Server is listening on port ${PORT}`);
+  console.log(`Server is listening on port ${PORT}`);
 });
-
-
-
-
