@@ -25,7 +25,6 @@ const ReservationForm = () => {
   const [userID, setUserID] = useState(null);
   const [firstName, setFirstName] = useState('');
 
-
   useEffect(() => {
     const loadCenters = async () => {
       try {
@@ -39,122 +38,117 @@ const ReservationForm = () => {
     loadCenters();
   }, []);
 
-   useEffect(() => {
-  const fetchUser = async () => {
-    try {
-      const res = await fetch('http://18.223.161.174:3307/user/me', {
-      credentials: 'include',
-      });
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const res = await fetch('http://18.223.161.174:3307/user/me', {
+          credentials: 'include',
+        });
 
-      if (!res.ok) throw new Error('Session expired or not logged in.');
+        if (!res.ok) throw new Error('Session expired or not logged in.');
 
-      const data = await res.json();
-      console.log("User is logged in! userID:", data.userID); // ✅
-      setUserID(data.userID); // Optional: store it for use later
-      setFirstName(data.firstName);
-    } catch (err) {
-      console.error('Failed to fetch user info:', err.message);
-    }
-  };
+        const data = await res.json();
+        console.log("User is logged in! userID:", data.userID);
+        setUserID(data.userID);
+        setFirstName(data.firstName);
+      } catch (err) {
+        console.error('Failed to fetch user info:', err.message);
+      }
+    };
 
-  fetchUser();
-}, []);
+    fetchUser();
+  }, []);
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
-  setMessage('');
+    e.preventDefault();
+    setMessage('');
 
-  const finalReason = reason === 'Other' ? customReason : reason;
-  if (!selectedCenter) {
-    setMessage('Invalid location selected.');
-    return;
-  }
-  const locationID = parseInt(location, 10);
+    const finalReason = reason === 'Other' ? customReason : reason;
+    const locationID = parseInt(location, 10);
 
-  //Search for available devices
-  let chosenDeviceID;
-  try {
-    const searchResponse = await fetch('http://18.223.161.174:3307/reserve/search', {
-		method: 'POST',
-		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify({
-			type: deviceType,
-			locationID,
-			startTime: new Date(startDate).toISOString(),
-			endTime: new Date(endDate).toISOString()
-		})
-	});
+    // Device search
+    let chosenDeviceID;
+    try {
+      const searchResponse = await fetch('http://18.223.161.174:3307/reserve/search', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: deviceType,
+          locationID,
+          startTime: new Date(startDate).toISOString(),
+          endTime: new Date(endDate).toISOString()
+        })
+      });
 
+      if (!searchResponse.ok) {
+        const err = await searchResponse.json();
+        setMessage(`Device search failed: ${err.error}`);
+        return;
+      }
 
-    if (!searchResponse.ok) {
-      const err = await searchResponse.json();
-      setMessage(`Device search failed: ${err.error}`);
+      const deviceIDs = await searchResponse.json();
+      if (!deviceIDs.length) {
+        setMessage('No devices available for the selected criteria.');
+        return;
+      }
+
+      chosenDeviceID = deviceIDs[Math.floor(Math.random() * deviceIDs.length)];
+    } catch (err) {
+      console.error('Device search error:', err);
+      setMessage('Error during device search.');
       return;
     }
-    const deviceIDs = await searchResponse.json();
-    if (!deviceIDs.length) {
-      setMessage('No devices available for the selected criteria.');
-      return;
+
+    // Final reservation submission
+    try {
+      const reservationResponse = await fetch('http://18.223.161.174:3307/reserve', {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          deviceID: chosenDeviceID,
+          locationID,
+          userID,
+          startTime,
+          endTime,
+          reason: finalReason
+        })
+      });
+
+      const result = await reservationResponse.json();
+
+      if (!reservationResponse.ok) {
+        console.error('Reservation failed:', result);
+        setMessage(`Error: ${result.error}`);
+      } else {
+        setMessage('✅ Reservation submitted successfully!');
+        setLocation('');
+        setStartDate('');
+        setEndDate('');
+        setReason('');
+        setCustomReason('');
+        setDeviceType('');
+      }
+    } catch (err) {
+      console.error('Reservation error:', err);
+      setMessage('Error submitting reservation.');
     }
-    chosenDeviceID = deviceIDs[Math.floor(Math.random() * deviceIDs.length)];
-  } catch (err) {
-    console.error('Device search error:', err);
-    setMessage('Error during device search.');
-    return;
-  }
-
-  //Submit reservation
-  try {
-    const reservationResponse = await fetch('http://18.223.161.174:3307/reserve', {
-      method: 'POST',
-      credentials: 'include',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        deviceID: chosenDeviceID,
-        locationID,
-        userID,
-        startTime,
-        endTime,
-        reason: finalReason
-      })
-    });
-
-    const result = await reservationResponse.json();
-
-    if (!reservationResponse.ok) {
-      console.error('Reservation failed:', result);
-      setMessage(`Error: ${result.error}`);
-    } else {
-      setMessage('✅ Reservation submitted successfully!');
-      setLocation('');
-      setStartDate('');
-      setEndDate('');
-      setReason('');
-      setCustomReason('');
-      setDeviceType('');
-    }
-  } catch (err) {
-    console.error('Reservation error:', err);
-    setMessage('Error submitting reservation.');
-  }
-};
-
+  };
 
   return (
     <form onSubmit={handleSubmit} className="reserve-form">
       <h2 className="text-xl font-bold">Reservation Form</h2>
       <h5>Hello, {firstName}</h5>
-      {/* Please remove "Hello" if irrelevant past checking session storage */}
 
       {/* Community Center Selection */}
       <div className="regfl">
         <label>Community Center:</label>
         <select value={location} onChange={(e) => setLocation(e.target.value)} required>
-			<option disabled value="">-- Select a Center --</option>
-			{centers.map((center) => (
-			<option key={center.locationID} value={center.locationID}>{center.name}</option>
-		))}
-		</select>
+          <option disabled value="">-- Select a Center --</option>
+          {centers.map((center) => (
+            <option key={center.locationID} value={center.locationID}>{center.name}</option>
+          ))}
+        </select>
       </div>
 
       {/* Start Date */}
@@ -185,11 +179,11 @@ const ReservationForm = () => {
               : ''
           }
           required
-          disabled={!startDate} // Optional: disable until startDate is picked
+          disabled={!startDate}
         />
       </div>
 
-      {/* Device Type Dropdown */}
+      {/* Device Type */}
       <div className="regfl">
         <label>Device Type:</label>
         <select value={deviceType} onChange={(e) => setDeviceType(e.target.value)} required>
@@ -200,7 +194,7 @@ const ReservationForm = () => {
         </select>
       </div>
 
-      {/* Reason Dropdown + Optional Text Input */}
+      {/* Reason */}
       <div className="regfl">
         <label>Why are you checking out this device today?</label>
         <select value={reason} onChange={(e) => setReason(e.target.value)} required>
