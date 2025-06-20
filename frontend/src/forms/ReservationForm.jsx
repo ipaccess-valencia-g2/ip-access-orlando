@@ -61,42 +61,84 @@ const ReservationForm = () => {
 }, []);
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    const finalReason = reason === 'Other' ? customReason : reason;
+  e.preventDefault();
+  setMessage('');
 
-    const reservationData = {
-      location,
-      startDate,
-      endDate,
-      reason: finalReason,
-      deviceType,
-      //userID?
-    };
+  const finalReason = reason === 'Other' ? customReason : reason;
+  const selectedCenter = centers.find(center => center.name === location);
+  if (!selectedCenter) {
+    setMessage('❌ Invalid location selected.');
+    return;
+  }
+  const locationID = selectedCenter.locationID;
 
-    try {
-      const res = await fetch('http://18.223.161.174:3307/reserve', {
-        method: 'POST',
-        credentials: 'include',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(reservationData),
-      });
+  //Search for available devices
+  let chosenDeviceID;
+  try {
+    const searchResponse = await fetch('http://18.223.161.174:3307/reserve/search', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        type: deviceType,
+        locationID,
+        startTime,
+        endTime
+      })
+    });
 
-      if (res.ok) {
-        setMessage('✅ Reservation submitted successfully!');
-        setLocation('');
-        setStartDate('');
-        setEndDate('');
-        setReason('');
-        setCustomReason('');
-        setDeviceType('');
-      } else {
-        setMessage('❌ Failed to submit reservation.');
-      }
-    } catch (error) {
-      console.error('Error submitting reservation:', error);
-      setMessage('❌ Network error submitting reservation.');
+    if (!searchResponse.ok) {
+      const err = await searchResponse.json();
+      setMessage(`Device search failed: ${err.error}`);
+      return;
     }
-  };
+    const deviceIDs = await searchResponse.json();
+    if (!deviceIDs.length) {
+      setMessage('No devices available for the selected criteria.');
+      return;
+    }
+    chosenDeviceID = deviceIDs[Math.floor(Math.random() * deviceIDs.length)];
+  } catch (err) {
+    console.error('Device search error:', err);
+    setMessage('Error during device search.');
+    return;
+  }
+
+  //Submit reservation
+  try {
+    const reservationResponse = await fetch('http://18.223.161.174:3307/reserve', {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        deviceID: chosenDeviceID,
+        locationID,
+        userID,
+        startTime,
+        endTime,
+        reason: finalReason
+      })
+    });
+
+    const result = await reservationResponse.json();
+
+    if (!reservationResponse.ok) {
+      console.error('Reservation failed:', result);
+      setMessage(`Error: ${result.error}`);
+    } else {
+      setMessage('✅ Reservation submitted successfully!');
+      setLocation('');
+      setStartDate('');
+      setEndDate('');
+      setReason('');
+      setCustomReason('');
+      setDeviceType('');
+    }
+  } catch (err) {
+    console.error('Reservation error:', err);
+    setMessage('Error submitting reservation.');
+  }
+};
+
 
   return (
     <form onSubmit={handleSubmit} className="reserve-form">
