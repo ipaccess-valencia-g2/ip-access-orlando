@@ -12,7 +12,7 @@ const allowedOrigins = [
   'http://18.223.161.174'
 ];
 
-app.use(cors({
+const corsOptions = {
   origin: function (origin, callback) {
     console.log('Incoming Origin:', origin);
     if (!origin || allowedOrigins.includes(origin)) {
@@ -23,24 +23,12 @@ app.use(cors({
     }
   },
   credentials: true
-}));
+};
 
-app.options('*', cors({
-  origin: function (origin, callback) {
-    console.log('OPTIONS preflight Origin:', origin);
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      console.log('Blocked OPTIONS Origin:', origin);
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  credentials: true
-}));
+app.use(cors(corsOptions));
 
 app.use(express.json());
 
-//debug
 app.use((req, res, next) => {
   console.log(`${req.method} ${req.url} -- Body:`, req.body);
   console.log('Headers:', req.headers);
