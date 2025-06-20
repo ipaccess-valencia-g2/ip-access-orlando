@@ -62,15 +62,26 @@ const ReservationForm = () => {
   const handleSubmit = async (e) => {
   e.preventDefault();
   setMessage('');
-  const finalReason = reason === 'Other' ? customReason : reason;
-  const selectedCenter = centers.find(center => center.name === location);
 
+  const finalReason = reason === 'Other' ? customReason : reason;
+
+  console.log('Selected location name:', location);
+  console.log('Centers list:', centers);
+
+  const selectedCenter = centers.find(center => center.name === location);
   if (!selectedCenter) {
-    setMessage('Invalid location selected.');
+    setMessage(`Invalid location selected: ${location}`);
+    console.error('Selected location not found in centers.');
     return;
   }
-  const locationID = selectedCenter.locationID;
 
+  const locationID = selectedCenter.locationID;
+  console.log('Resolved locationID:', locationID);
+
+  if (!locationID) {
+    setMessage('Location ID not found for selected center.');
+    return;
+  }
 
   const startTime = new Date(startDate).toISOString();
   const endTime = new Date(endDate).toISOString();
@@ -96,13 +107,11 @@ const ReservationForm = () => {
     }
 
     const deviceIDs = await searchResponse.json();
-
     if (!deviceIDs.length) {
       setMessage('No devices available for the selected criteria.');
       return;
     }
 
-    // Randomly select one available device
     chosenDeviceID = deviceIDs[Math.floor(Math.random() * deviceIDs.length)];
   } catch (err) {
     console.error('Device search error:', err);
@@ -139,6 +148,7 @@ const ReservationForm = () => {
     setMessage('Error submitting reservation.');
   }
 };
+
 
 
   return (
