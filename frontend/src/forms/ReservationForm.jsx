@@ -74,7 +74,7 @@ const ReservationForm = () => {
     };
 
     try {
-      const res = await fetch('/reserve', {
+      const res = await fetch('http://18.223.161.174:3307/reserve', {
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
