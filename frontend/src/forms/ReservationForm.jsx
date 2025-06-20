@@ -42,7 +42,7 @@ const ReservationForm = () => {
    useEffect(() => {
   const fetchUser = async () => {
     try {
-      const res = await fetch('http://localhost:3307/user/me', {
+      const res = await fetch('http://18.223.161.174:3307/user/me', {
       credentials: 'include',
       });
 
