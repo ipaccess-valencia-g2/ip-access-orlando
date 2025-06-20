@@ -11,8 +11,7 @@ app.use(cookieParser());
 const allowedOrigins = [
   'http://localhost:5173',
   'http://localhost:3307',
-  'http://18.223.161.174:5173',
-  'http://18.223.161.174:3307'
+  'http://18.223.161.174'
 ];
 
 app.use(cors({
