@@ -157,9 +157,15 @@ const ReservationForm = () => {
 
 
   return (
-    <form onSubmit={handleSubmit} className="reserve-form">
-      <h2 className="text-xl font-bold">Reservation Form</h2>
-      <h5>Hello, {firstName}</h5>
+    <div className="reserve-form">
+    {!userID ? (
+      <p className="text-red-600 font-semibold">
+        Please log in to make a reservation.
+      </p>
+    ) : (
+      <form onSubmit={handleSubmit}>
+        <h2 className="text-xl font-bold">Reservation Form</h2>
+        <h5>Logged in as: {firstName}</h5>
 
       {/* Community Center Selection */}
       <div className="regfl">
@@ -239,10 +245,12 @@ const ReservationForm = () => {
       {message && <p className="text-sm font-medium">{message}</p>}
 
       <button type="submit" className="bg-green-600 text-white px-4 py-2 rounded">
-        Submit
-      </button>
-    </form>
-  );
+          Submit
+        </button>
+      </form>
+    )}
+  </div>
+);
 };
 
 export default ReservationForm;
