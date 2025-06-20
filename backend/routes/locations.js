@@ -16,6 +16,7 @@ router.get('/', async (req, res) => {
       locationID: row.locationID,
       name: row.name
     }));
+	console.log(rows);
 
     res.json({ locations });
   } catch (error) {
