@@ -13,7 +13,7 @@ router.get('/', async (req, res) => {
 
     // mapping database to objects
     const locations = rows.map(row => ({
-      locationId: row.locationID,
+      locationID: row.locationID,
       name: row.name
     }));
 
