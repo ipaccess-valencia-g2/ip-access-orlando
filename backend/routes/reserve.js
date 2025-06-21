@@ -21,7 +21,7 @@ router.post('/', Verify, async (req, res) => {
 
         if (locationID) {
 
-            const [locCount] = await db.query('SELECT * FROM locations WHERE locationID = ?', [locationId]);
+            const [locCount] = await db.query('SELECT * FROM locations WHERE locationID = ?', [locationID]);
 
             if (locCount.length === 0) {
                 return res.status(400).json({ error: 'Invalid location ID.' });
