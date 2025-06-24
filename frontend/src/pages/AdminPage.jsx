@@ -4,6 +4,8 @@ import React, { useState } from 'react';
 import AdminCheckInView from '../components/AdminCheckInView.jsx';
 import ManualCheckout from '../components/ManualCheckout.jsx';
 import UserManagementView from '../components/UserManagementView.jsx';
+import ManualReservationForm from '../components/ManualReservationForm';
+
 
 const AdminPage = () => {
   // State to keep track of the currently active tab
@@ -39,17 +41,22 @@ const AdminPage = () => {
 
       <main className="mt-6">
 
-        {activeTab === 'devices' && (
-          <div>
-            <section className="bg-white p-6 rounded-lg shadow-md">
-              <AdminCheckInView />
-            </section>
-            <hr className="my-10" />
-            <section className="bg-white p-6 rounded-lg shadow-md">
-              <ManualCheckout />
-            </section>
-          </div>
-        )}
+      {activeTab === 'devices' && (
+  <div>
+    <section className="bg-white p-6 rounded-lg shadow-md">
+      <AdminCheckInView />
+    </section>
+    <hr className="my-10" />
+    <section className="bg-white p-6 rounded-lg shadow-md">
+      <ManualCheckout />
+    </section>
+    <hr className="my-10" />
+    <section className="bg-white p-6 rounded-lg shadow-md">
+      <ManualReservationForm />
+    </section>
+  </div>
+)}
+
 
       
         {activeTab === 'users' && (
