@@ -43,6 +43,7 @@ app.use('/admin', require('./routes/admin'));
 app.use('/locations', require('./routes/locations'));
 app.use('/reasons', require('./routes/reasons'));
 app.use(require('./routes/user'));
+app.use(require('./routes/logout'));
 //app.use('/verify-address', require('./routes/verify-address'));
 
 app.get('/', (req, res) => {
