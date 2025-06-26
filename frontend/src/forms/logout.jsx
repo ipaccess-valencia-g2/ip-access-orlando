@@ -1,18 +1,31 @@
 import React, { useState } from 'react';
+import {useNavigate} from "react-router-dom";
 import './formStyles/Logout.css';
 
 const Logout = ({ onClose, onConfirm }) => {
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const navigate = useNavigate();
 
-    const handleLogout = () => {
+    const handleLogout = async () => {
         setIsSubmitting(true);
+        try {
+            const res = await fetch('http://18.223.161.174:3307/logout', {
+                method: 'POST',
+                credentials: 'include',
+            });
 
-        // TODO: Clear client-side session data here. Login itself does not hold any authenticated user state globally yet.
+            if (!res.ok) {
+                throw new Error('Failed to log out');
+            }
 
-        onConfirm?.();
-
-        // Redirect to login page
-        window.location.href = '/login';
+            // Redirect to log in after successful logout
+            navigate('/login');
+        } catch (err) {
+            console.error('Logout error:', err);
+            alert('Something went wrong while logging out.');
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     return (

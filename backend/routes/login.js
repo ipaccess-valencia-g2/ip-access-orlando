@@ -3,77 +3,60 @@ const router = express.Router();
 const db = require('../db/connection');
 const bcrypt = require("bcrypt");
 const jwt = require('jsonwebtoken');
-const verify = require('../middleware/verify');
-const {Verify} = require("../middleware/verify");
+const { Verify } = require("../middleware/verify");
 
-const generateAccessJWT = function (userID)
-{
-    let payload =
-        {
-            id: userID
-        };
-    return jwt.sign(payload, process.env.SECRET_ACCESS_TOKEN, { expiresIn: '2m' });
+// JWT creation
+const generateAccessJWT = (userID) => {
+    return jwt.sign({ id: userID }, process.env.SECRET_ACCESS_TOKEN, { expiresIn: '2m' });
 };
 
-// --- POST /login/:username/:password
-// use to encrypt passwords? const isMatch = await bcrypt.compare(inputPassword, storedHashedPassword);
-router.post('/login/', async (req,res) =>
-{
+// ✅ POST /login
+router.post('/login', async (req, res) => {
     const { username, password } = req.body;
 
-    try 
-    {
-    // Check that username is in the database
-    const [userMatch] = await db.execute(
-        'SELECT userID, username, password FROM users WHERE username = ?',
-        [username]
-    );
-    if (userMatch.length === 0) {
-        throw new Error('Username is incorrect');
-    }
+    try {
+        const [users] = await db.execute(
+            'SELECT userID, username, password FROM users WHERE username = ?',
+            [username]
+        );
 
-    // Check that password is correct
-    const isMatch = await bcrypt.compare(password, userMatch[0].password);
+        if (users.length === 0) {
+            return res.status(401).json({ message: 'Username is incorrect' });
+        }
 
-    if (isMatch)
-    {
-        const options = {
-            maxAge: 2 * 60 * 1000, // 2 minutes
+        const isMatch = await bcrypt.compare(password, users[0].password);
+        if (!isMatch) {
+            return res.status(401).json({ message: 'Incorrect password' });
+        }
+
+        const token = generateAccessJWT(users[0].userID);
+
+        res.cookie('SessionID', token, {
+            maxAge: 2 * 60 * 1000,
             httpOnly: true,
             secure: false,
             sameSite: 'Lax'
-        };
-
-        const token = generateAccessJWT(userMatch[0].userID);
-        res.cookie('SessionID', token, options);
+        });
 
         res.status(200).json({
             status: 'success',
-            message: 'You have successfully logged in.',
-            userID: userMatch[0].userID
-            //pulls the userID for console messages later
+            message: 'Login successful',
+            userID: users[0].userID
         });
-    }
-    else
-    {
-        res.json({ message: 'Incorrect password' });
-    }
-    }
-    catch (error)
-    {
-        console.error('Error validating user:', error);
-        res.status(500).json({ message: error.message });
-    }
 
+    } catch (error) {
+        console.error('Login error:', error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
 });
 
-router.get('/login/:username', Verify, (req, res) =>
-{
-    res.status(200).json(
-        {
-            status: "success",
-            message: "Welcome to your Dashboard!"
-        });
+// ✅ Protected route: GET /api/dashboard
+router.get('/dashboard', Verify, (req, res) => {
+    res.status(200).json({
+        status: 'success',
+        message: 'Welcome to your dashboard!',
+        user: req.user[0] // from verify.js
+    });
 });
 
 module.exports = router;
