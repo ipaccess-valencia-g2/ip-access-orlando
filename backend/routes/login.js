@@ -17,7 +17,7 @@ const generateAccessJWT = function (userID)
 
 // --- POST /login/:username/:password
 // use to encrypt passwords? const isMatch = await bcrypt.compare(inputPassword, storedHashedPassword);
-router.post('/login/', async (req,res) =>
+router.post('/login/', async (req, res) =>
 {
     const { username, password } = req.body;
 
