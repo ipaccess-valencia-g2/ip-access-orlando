@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -16,6 +16,31 @@ const logo = require('../assets/TabletLogoOfficial.png');
 
 export default function HomeScreen({ navigation }) {
   const [isAdmin, setIsAdmin] = useState(false); // toggle admin
+
+  const [userInfo, setUserInfo] = useState(null); // holds logged in user info
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const res = await fetch('http://18.223.161.174:3307/user/me', {
+          credentials: 'include',
+        });
+
+        if (!res.ok) {
+          throw new Error('Not logged in');
+        }
+
+        const data = await res.json();
+        console.log('Logged in user info:', data);
+        setUserInfo(data);
+      } catch (err) {
+        console.log('Failed to fetch user info:', err.message);
+        setUserInfo(null);
+      }
+    };
+
+    fetchUser();
+  }, []);
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -53,6 +78,13 @@ export default function HomeScreen({ navigation }) {
         </Text>
         
       </TouchableOpacity>
+
+       {userInfo ? (
+        <Text style={styles.loggedInText}>Logged in as {userInfo.firstName}</Text>
+      ) : (
+        <Text style={styles.loggedInText}>Not logged in</Text>
+      )}
+
       <Image source={logo} style={styles.logo} resizeMode="contain" />
 
     </ScrollView>
@@ -96,6 +128,12 @@ const styles = StyleSheet.create({
   toggleText: {
     fontWeight: '600',
     color: '#003153', // Midnight Navy
+    fontFamily: 'Lato-Regular',
+  },
+  loggedInText: {
+    textAlign: 'center',
+    marginTop: 10,
+    color: '#003153',
     fontFamily: 'Lato-Regular',
   },
   logo: {
