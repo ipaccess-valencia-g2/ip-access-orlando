@@ -3,18 +3,70 @@ import {
   View, Text, TextInput, TouchableOpacity, StyleSheet,
   KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard, Image
 } from 'react-native';
+import * as SecureStore from 'expo-secure-store';
 
 export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleLogin = () => {
+  // Save stuff using SecureStore
+  const saveSecureValue = async () => {
+    await SecureStore.setItemAsync(email, password);
+    console.log(email, " and ", password, " saved!");
+  }
+
+  // Retrieve stuff from SecureStore
+  const retrieveSecureValue = async () => {
+    let result = await SecureStore.getItemAsync(email);
+    console.log(result);
+  }
+
+  // Delete stuff off of SecureStore
+  const deleteKey = async () => {
+    await SecureStore.deleteItemAsync(email);
+    console.log(email, " and ", password, " deleted!");
+  }
+
+  const handleLogin = async () => {
     if (!email || !password) {
       Alert.alert('Please fill in all fields');
       return;
     }
 
+    // EXtra
+    try {
+      // Send POST request to backend login endpoint
+      const response = await fetch(
+          `http://18.223.161.174:3307/login/`,
+          {
+            method: 'POST',
+            headers: {'Content-type': 'application/json'},
+            //comment out credentials if testing live URL
+            credentials: 'include',
+            body: JSON.stringify({
+              username: encodeURIComponent(email),
+              password: encodeURIComponent(password)
+            })
+          }
+      );
+
+      const data = await response.json();
+      console.log(response);
+      console.log(response.cookie);
+      //console message proving which user is logged in
+      console.log("Logged in userID ", data.userID);
+
+      // If response not OK, throw an error
+      if (!response.ok) {
+        throw new Error(data.error || 'Login failed');
+      }
+    } catch (err) {
+      // Show any errors that occurred
+      console.log(err.message);
+    }
+
     // backend fix ?  console.log('Logging in with:', { email, password });
+    console.log('Logging in with:', { email, password });
     
     navigation.navigate('Home');
   };
@@ -50,6 +102,18 @@ export default function LoginScreen({ navigation }) {
 
           <TouchableOpacity style={styles.button} onPress={handleLogin}>
             <Text style={styles.buttonText}>Login</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.button} onPress={saveSecureValue}>
+            <Text style={styles.buttonText}>Save</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.button} onPress={retrieveSecureValue}>
+            <Text style={styles.buttonText}>Retrieve</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.button} onPress={deleteKey}>
+            <Text style={styles.buttonText}>Delete</Text>
           </TouchableOpacity>
 
           <TouchableOpacity onPress={() => navigation.navigate('Register')}>
