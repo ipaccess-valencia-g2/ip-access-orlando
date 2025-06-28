@@ -13,14 +13,21 @@ router.post('/', async (req, res) => {
 
   try {
     // Replace with the City of Orlando ArcGIS API endpoint
-    const lookupUrl = 'https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates'; 
-    const response = await axios.get(`${lookupUrl}?address=${encodeURIComponent(address)}`);
+    const lookupUrl = 'https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates';
+    const response = await axios.get(lookupUrl, {
+      params: {
+        f: 'json',
+        SingleLine: address,
+        outFields: 'City,Municipality'
+      }
+    });
 
-    const isInsideOrlando = response.data?.features?.some(f =>
-      f.attributes?.Municipality === 'Orlando'
-    );
+    const isInsideOrlando = Array.isArray(response.data?.candidates) &&
+      response.data.candidates.some(c =>
+        c.attributes?.City === 'Orlando' || c.attributes?.Municipality === 'Orlando'
+      );
 
-    res.json({ valid: isInsideOrlando });
+    res.json({ inOrlando: isInsideOrlando });
   } catch (err) {
     res.status(500).json({ error: 'Address verification failed' });
   }
