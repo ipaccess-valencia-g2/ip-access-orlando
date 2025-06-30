@@ -4,6 +4,7 @@ const db = require('../db/connection');
 const bcrypt = require("bcrypt");
 const jwt = require('jsonwebtoken');
 const { Verify } = require("../middleware/verify");
+const useragent = require('express-useragent');
 
 // JWT creation
 const generateAccessJWT = (userID) => {
@@ -13,7 +14,7 @@ const generateAccessJWT = (userID) => {
 // ✅ POST /login
 router.post('/login', async (req, res) => {
     const { username, password } = req.body;
-
+    console.log(req.headers);
     try {
         const [users] = await db.execute(
             'SELECT userID, username, password FROM users WHERE username = ?',
@@ -38,11 +39,22 @@ router.post('/login', async (req, res) => {
             sameSite: 'Lax'
         });
 
-        res.status(200).json({
-            status: 'success',
-            message: 'Login successful',
-            userID: users[0].userID
-        });
+        // Send a token if the request is from a mobile device
+        if (req.useragent.isMobile) {
+            res.status(200).json({
+                status: 'success',
+                message: 'Login successful',
+                userID: users[0].userID,
+                token: token
+            });
+        }
+        else {
+            res.status(200).json({
+                status: 'success',
+                message: 'Login successful',
+                userID: users[0].userID
+            });
+        }
 
     } catch (error) {
         console.error('Login error:', error);
