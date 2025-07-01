@@ -1,9 +1,38 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-
+import { useEffect } from 'react';
 export default function ReservationConfirmationScreen({ route, navigation }) {
   const { zipCode, deviceType, selectedDate, selectedTime } = route.params;
+  useEffect(() => {
+    const logReservation = async () => {
+      try {
+        const response = await fetch('http://18.223.161.174/:3000/reservations', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            zipCode,
+            deviceType,
+            selectedDate,
+            selectedTime,
+          }),
+        });
 
+        const result = await response.json();
+
+        if (!response.ok) {
+          console.error('Reservation log failed:', result.error || result);
+        } else {
+          console.log('Reservation logged:', result.message || result);
+        }
+      } catch (err) {
+        console.error('Network error:', err);
+      }
+    };
+
+    logReservation();
+  }, []);
   return (
 
    
