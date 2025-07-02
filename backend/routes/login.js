@@ -4,7 +4,6 @@ const db = require('../db/connection');
 const bcrypt = require("bcrypt");
 const jwt = require('jsonwebtoken');
 const { Verify } = require("../middleware/verify");
-const useragent = require('express-useragent');
 
 // JWT creation
 const generateAccessJWT = (userID) => {
