@@ -25,6 +25,10 @@ const corsOptions = {
   credentials: true
 };
 
+const useragent = require('express-useragent');
+
+app.use(useragent.express());
+
 app.use(cors(corsOptions));
 
 app.use(express.json());
