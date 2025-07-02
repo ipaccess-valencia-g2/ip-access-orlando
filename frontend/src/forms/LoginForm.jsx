@@ -58,39 +58,45 @@ const LoginForm = () => {
         // Run validation
         if (!validate()) return;
 
-        // Begin submitting
         setIsSubmitting(true);
         setErrors({});
         setSuccessMessage('');
 
         try {
-            // Send POST request to backend login endpoint
+
+            const BASE_URL = 'http://localhost:3307'; // or swap for remote IP later
+
             const response = await fetch(
-                `http://18.223.161.174:3307/login/${encodeURIComponent(formData.usernameOrEmail)}/${encodeURIComponent(formData.password)}`,
+                `${BASE_URL}/login/${encodeURIComponent(formData.usernameOrEmail)}/${encodeURIComponent(formData.password)}`,
                 { method: 'POST' }
             );
 
-
             const data = await response.json();
 
-            // If response not OK, throw an error
             if (!response.ok) {
                 throw new Error(data.error || 'Login failed');
             }
 
-            // Show success message
+            //  Store user ID in localStorage for session tracking
+            if (data.userID) {
+                localStorage.setItem('userID', data.userID);
+            }
+
+            //  Redirect to dashboard
             setSuccessMessage('Login successful!');
+            setTimeout(() => {
+                window.location.href = '/dashboard';
+            }, 1000);
 
             // Reset form
             setFormData({
                 usernameOrEmail: '',
                 password: '',
             });
+
         } catch (err) {
-            // Show any errors that occurred
             setErrors((prev) => ({ ...prev, form: err.message }));
         } finally {
-            // Stop submitting
             setIsSubmitting(false);
         }
     };

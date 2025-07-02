@@ -7,8 +7,9 @@ const Logout = ({ onClose, onConfirm }) => {
     const handleLogout = () => {
         setIsSubmitting(true);
 
-        // Clear client-side session data here. Login itself does not hold any authenticated user state globally yet.
-
+        // ✅ Clear client-side session data
+        localStorage.removeItem('userID');
+        
         onConfirm?.();
 
         // Redirect to login page

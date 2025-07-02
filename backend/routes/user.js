@@ -23,7 +23,7 @@ router.get('/users', async (req, res) => {
 });
 
 // GET /users/:userID
-router.get('/users/:userID', async (req, res) => {
+router.get('/:userID', async (req, res) => {
   try {
     const [userInfo] = await db.execute(
       'SELECT * FROM users WHERE userID = ?',
@@ -138,6 +138,48 @@ router.get('/devices/unavailable', async (req, res) =>
         console.error('Error fetching devices:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
+});
+
+// POST /users/:userID/verify-password
+router.post('/users/:userID/verify-password', async (req, res) => {
+  const { currentPassword } = req.body;
+
+  if (!currentPassword) {
+    return res.status(400).json({ error: 'Current password is required.' });
+  }
+
+  try {
+    const [rows] = await db.execute(
+      'SELECT password FROM users WHERE userID = ?',
+      [req.params.userID]
+    );
+
+    if (!rows || rows.length === 0) {
+      return res.status(404).json({ error: 'User not found.' });
+    }
+
+    const storedHash = rows[0].password;
+    const match = await bcrypt.compare(currentPassword, storedHash);
+
+    res.json({ match });
+  } catch (err) {
+    console.error('Password verification error:', err);
+    res.status(500).json({ error: 'Internal server error.' });
+  }
+});
+
+// GET /reservations/user/:userID
+router.get('/reservations/user/:userID', async (req, res) => {
+  try {
+    const [rows] = await db.query(
+      'SELECT * FROM reservations WHERE userID = ?',
+      [req.params.userID]
+    );
+    res.json({ reservations: rows });
+  } catch (err) {
+    console.error('Error fetching user reservations:', err);
+    res.status(500).json({ message: 'Internal server error' });
+  }
 });
 
 module.exports = router;

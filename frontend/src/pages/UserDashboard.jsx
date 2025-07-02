@@ -21,37 +21,40 @@ const UserDashboard = () => {
     const [showLogoutPanel, setShowLogoutPanel] = useState(false);
     const [showDeletePanel, setShowDeletePanel] = useState(false);
 
-/*
-    const fetchUserData = async () => {
-        try {
-            const userID = 2; // TODO:Replace with dynamic user ID logic
+useEffect(() => {
+  const fetchUserData = async () => {
+    try {
 
-            // Fetch user info
-            const userRes = await fetch(`http://18.223.161.174:3307/users/${userID}`);
-            if (!userRes.ok) throw new Error('Failed to fetch user');
-            const userData = await userRes.json();
-
-            if (!userData.userInfo || userData.userInfo.length === 0) throw new Error('User not found');
-            setUser(userData.userInfo[0]);
-
-            // Fetch reservations for this user
-            const resRes = await fetch(`http://18.223.161.174:3307/reserve?userID=${userID}`);
-            if (!resRes.ok) throw new Error('Failed to fetch reservations');
-            const resData = await resRes.json();
-
-            setReservations(resData.rows || []);
-
-        } catch (err) {
-            console.error('Dashboard fetch error:', err);
-            setUser(null);
-            setReservations([]);
+        const userID = localStorage.getItem('userID');
+        if (!userID) {
+        window.location.href = '/login';
+        return;
         }
-    };
 
-    useEffect(() => {
-        fetchUserData();
-    }, []);
-*/
+      // Fetch user info
+      const userRes = await fetch(`http://localhost:3307/users/${userID}`);
+      if (!userRes.ok) throw new Error('Failed to fetch user');
+      const userData = await userRes.json();
+
+      if (!userData.userInfo || userData.userInfo.length === 0) throw new Error('User not found');
+      setUser(userData.userInfo[0]);
+
+      // Fetch reservations for this user
+      const resRes = await fetch(`http://localhost:3307/users/reservations/user/${userID}`);
+      if (!resRes.ok) throw new Error('Failed to fetch reservations');
+      const resData = await resRes.json();
+      setReservations(resData.reservations || []); // Your backend returns an array directly
+
+    } catch (err) {
+      console.error('Dashboard fetch error:', err);
+      setUser({});
+      setReservations([]);
+    }
+  };
+
+  fetchUserData();
+}, []);
+
     // Show/hide handlers for each panel
     const handleEditProfile = () => setShowEditPanel(true);
     const handleChangePasswordClick = () => setShowPasswordPanel(true);
@@ -81,7 +84,8 @@ const UserDashboard = () => {
                     <ul>
                         {reservations.map((res, i) => (
                             <li key={i}>
-                                Location: {res.location}, Reason: {res.reason}, Date: {res.reservation_date}
+                                Device ID: {res.deviceID}, Location ID: {res.locationID}, Reason: {res.reason}, 
+                                Start: {new Date(res.startTime).toLocaleString()}, End: {new Date(res.endTime).toLocaleString()}
                             </li>
                         ))}
                     </ul>

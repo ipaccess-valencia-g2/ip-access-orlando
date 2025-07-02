@@ -21,7 +21,7 @@ app.use('/admin', require('./routes/admin'));
 //app.use('/history', require('./routes/history'));
 app.use('/locations', require('./routes/locations'));
 app.use('/reasons', require('./routes/reasons'));
-app.use('/user', require('./routes/user'));
+app.use('/users', require('./routes/user'));
 //app.use('/verify-address', require('./routes/verify-address'));
 
 
@@ -45,7 +45,3 @@ app.get('/dbtest', async (req, res) => {
 app.listen(PORT, '0.0.0.0', () => {
     console.log(`Server is listening on port ${PORT}`);
 });
-
-
-
-

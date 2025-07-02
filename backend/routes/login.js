@@ -17,13 +17,13 @@ const generateAccessJWT = function (userID)
 
 // --- POST /login/:username/:password
 // use to encrypt passwords? const isMatch = await bcrypt.compare(inputPassword, storedHashedPassword);
-router.post('/login/:username/:password', async (req,res) =>
+router.post('/:username/:password', async (req,res) =>
 {
     try
     {
         // Check that username is in the database
         const [userMatch] = await db.execute(
-            'SELECT username, password FROM users WHERE username = ?',
+            'SELECT userID, username, password FROM users WHERE username = ?',
             [req.params.username]
         );
         if (userMatch.length === 0) {
@@ -33,23 +33,22 @@ router.post('/login/:username/:password', async (req,res) =>
         // Check that password is correct
         const isMatch = await bcrypt.compare(req.params.password, userMatch[0].password);
 
-        if (isMatch)
-        {
-            //res.json({ message: 'Logging in...' });
-
-            // Generate token for user
-            let options =
-                {
-                    maxAge: 2 * 60 * 1000,
-                    httpOnly: true,
-                    secure: true,
-                    sameSite: "None",
-                };
+        if (isMatch) {
+            // Generate token (you can keep this if needed for future use)
+            let options = {
+                maxAge: 2 * 60 * 1000,
+                httpOnly: true,
+                secure: true,
+                sameSite: "None",
+            };
             const token = generateAccessJWT(userMatch[0].userID);
             res.cookie("SessionID", token, options);
+
+            // Send userID and message to frontend
             res.status(200).json({
                 status: "success",
-                message: "You have successfully logged in."
+                message: "You have successfully logged in.",
+                userID: userMatch[0].userID  //  important for frontend
             });
         }
         else
