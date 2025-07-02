@@ -12,6 +12,8 @@ const allowedOrigins = [
   'http://18.223.161.174'
 ];
 
+const useragent = require('express-useragent');
+
 const corsOptions = {
   origin: function (origin, callback) {
     console.log('Incoming Origin:', origin);
@@ -24,8 +26,6 @@ const corsOptions = {
   },
   credentials: true
 };
-
-const useragent = require('express-useragent');
 
 app.use(useragent.express());
 

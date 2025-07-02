@@ -13,7 +13,7 @@ const generateAccessJWT = (userID) => {
 // ✅ POST /login
 router.post('/login', async (req, res) => {
     const { username, password } = req.body;
-    console.log(req.headers);
+
     try {
         const [users] = await db.execute(
             'SELECT userID, username, password FROM users WHERE username = ?',
