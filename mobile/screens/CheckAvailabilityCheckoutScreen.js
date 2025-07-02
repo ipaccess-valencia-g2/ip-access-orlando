@@ -37,7 +37,7 @@ export default function CheckAvailabilityCheckoutScreen({ navigation }) {
   }, []);
 
   const handleZipSearch = () => {
-    const found = locations.filter((loc) => loc.zip === zipCode);
+    const found = locations.filter((loc) => loc.address.substring(loc.address.lastIndexOf(" ") + 1) === zipCode);
     if (found.length > 0) {
       setMatchingCenters(found);
     } else {
