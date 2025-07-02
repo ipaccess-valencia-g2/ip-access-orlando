@@ -39,8 +39,15 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use('/register', require('./routes/register'));
-app.use(require('./routes/login'));
+const loginRoute = require('./routes/login');
+app.use('/', (req, res, next) => {
+  if (!req.useragent && req.headers['user-agent'] ) {
+    req.useragent = useragent.parse(req.headers['user-agent']);
+  }
+  next();
+}, loginRoute);
+
+app.use('/regiqster', require('./routes/register'));
 app.use('/reserve', require('./routes/reserve'));
 app.use('/admin', require('./routes/admin'));
 //app.use('/history', require('./routes/history'));
