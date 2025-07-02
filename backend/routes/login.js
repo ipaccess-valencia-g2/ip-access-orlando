@@ -40,7 +40,8 @@ router.post('/login', async (req, res) => {
         });
 
         // Send a token if the request is from a mobile device
-        if (req.useragent.isMobile) {
+        const isMobile = req.useragent && req.useragent.isMobile;
+        if (isMobile) { {
             res.status(200).json({
                 status: 'success',
                 message: 'Login successful',
