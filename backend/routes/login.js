@@ -31,6 +31,7 @@ router.post('/login', async (req, res) => {
 
         const token = generateAccessJWT(users[0].userID);
 
+        // Web logic – Set cookie
         res.cookie('SessionID', token, {
             maxAge: 2 * 60 * 1000,
             httpOnly: true,
@@ -38,23 +39,18 @@ router.post('/login', async (req, res) => {
             sameSite: 'Lax'
         });
 
-        // Send a token if the request is from a mobile device
-        const isMobile = req.useragent?.isMobile;
+        // Detect mobile client (safe fallback)
+        const ua = req.useragent && req.useragent.isMobile;
+
         if (isMobile) {
-            res.status(200).json({
-                status: 'success',
-                message: 'Login successful',
-                userID: users[0].userID,
-                token: token
-            });
+            console.log("Mobile device login detected");
         }
-        else {
-            res.status(200).json({
-                status: 'success',
-                message: 'Login successful',
-                userID: users[0].userID
-            });
-        }
+
+        res.status(200).json({
+            status: 'success',
+            message: 'Login successful',
+            userID: users[0].userID
+        });
 
     } catch (error) {
         console.error('Login error:', error);
