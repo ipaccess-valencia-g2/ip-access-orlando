@@ -42,7 +42,7 @@ export default function LoginScreen({ navigation }) {
             method: 'POST',
             headers: {'Content-type': 'application/json'},
             //comment out credentials if testing live URL
-            credentials: 'include',
+            //credentials: 'include',
             body: JSON.stringify({
               username: encodeURIComponent(email),
               password: encodeURIComponent(password)
