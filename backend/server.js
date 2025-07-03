@@ -12,8 +12,6 @@ const allowedOrigins = [
   'http://18.223.161.174'
 ];
 
-const useragent = require('express-useragent');
-
 const corsOptions = {
   origin: function (origin, callback) {
     console.log('Incoming Origin:', origin);
@@ -27,8 +25,6 @@ const corsOptions = {
   credentials: true
 };
 
-app.use(useragent.express());
-
 app.use(cors(corsOptions));
 
 app.use(express.json());
@@ -39,15 +35,8 @@ app.use((req, res, next) => {
   next();
 });
 
-const loginRoute = require('./routes/login');
-app.use('/', (req, res, next) => {
-  if (!req.useragent && req.headers['user-agent'] ) {
-    req.useragent = useragent.parse(req.headers['user-agent']);
-  }
-  next();
-}, loginRoute);
-
-app.use('/regiqster', require('./routes/register'));
+app.use('/register', require('./routes/register'));
+app.use(require('./routes/login'));
 app.use('/reserve', require('./routes/reserve'));
 app.use('/admin', require('./routes/admin'));
 //app.use('/history', require('./routes/history'));

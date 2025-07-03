@@ -31,20 +31,12 @@ router.post('/login', async (req, res) => {
 
         const token = generateAccessJWT(users[0].userID);
 
-        // Web logic – Set cookie
         res.cookie('SessionID', token, {
             maxAge: 2 * 60 * 1000,
             httpOnly: true,
             secure: false,
             sameSite: 'Lax'
         });
-
-        // Detect mobile client (safe fallback)
-        const ua = req.useragent && req.useragent.isMobile;
-
-        if (isMobile) {
-            console.log("Mobile device login detected");
-        }
 
         res.status(200).json({
             status: 'success',
