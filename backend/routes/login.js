@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { Verify } = require('../middleware/verify');
 
-// helper to generate a short-lived JWT
+//short-lived JWT
 function generateAccessJWT(userID) {
   return jwt.sign(
     { id: userID },
@@ -15,15 +15,15 @@ function generateAccessJWT(userID) {
 }
 
 // POST /login
-// Handles both web (via cookie) and mobile (via JSON token) clients.
+// Handles both web (via cookie) and mobile (via JSON token)
 router.post('/login', async (req, res) => {
   const { username, password } = req.body;
 
-  // detect mobile clients (express-useragent middleware must be applied globally)
+  // detect mobile clients (global express-useragent middleware)
   const isMobile = req.useragent?.isMobile === true;
 
   try {
-    // 1) look up the user
+    //looks up the user
     const [rows] = await db.execute(
       'SELECT userID, username, password FROM users WHERE username = ? OR email = ?',
       [username, username]
@@ -33,17 +33,17 @@ router.post('/login', async (req, res) => {
       return res.status(401).json({ message: 'No account with those credentials.' });
     }
 
-    // 2) verify password
+    //verifies password
     const match = await bcrypt.compare(password, user.password);
     if (!match) {
       return res.status(401).json({ message: 'No account with those credentials.' });
     }
 
-    // 3) issue a JWT
+    //issues a JWT
     const token = generateAccessJWT(user.userID);
 
     if (isMobile) {
-      // ─── MOBILE CLIENT ──────────────────────────────────────
+      // mobile client
       // return token in JSON payload
       return res.status(200).json({
         status: 'success',
@@ -52,7 +52,7 @@ router.post('/login', async (req, res) => {
         token
       });
     } else {
-      // ─── WEB CLIENT ─────────────────────────────────────────
+      // web client
       // set HttpOnly cookie
       res.cookie('SessionID', token, {
         maxAge: 2 * 60 * 1000,   // 2 minutes
@@ -73,9 +73,9 @@ router.post('/login', async (req, res) => {
   }
 });
 
-// optional protected route for testing
+// protected route for testing
 router.get('/dashboard', Verify, (req, res) => {
-  // req.user is set by your Verify middleware
+  // req.user is set by Verify middleware
   res.status(200).json({
     status: 'success',
     message: 'Welcome to your dashboard!',
