@@ -13,8 +13,8 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 
 export default function CheckAvailabilityCheckoutScreen({ navigation }) {
   const [zipCode, setZipCode] = useState('');
-  const [locations, setLocations] = useState([]); // ✅ All centers from backend
-  const [matchingCenters, setMatchingCenters] = useState([]); // ✅ Matches for entered ZIP
+  const [locations, setLocations] = useState([]); // All centers from backend
+  const [matchingCenters, setMatchingCenters] = useState([]); // Matches for entered ZIP
   const [deviceType, setDeviceType] = useState(null);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
@@ -24,20 +24,26 @@ export default function CheckAvailabilityCheckoutScreen({ navigation }) {
   const tabletTypes = ['iPad Pro', 'iPad Mini', 'Samsung Galaxy', 'Amazon Fire', 'Chrome Tablet'];
   const times = ['9:00am', '10:00am', '11:00am', '1:00pm', '2:00pm', '3:00pm', '4:00pm'];
 
-  // ✅ Fetch all centers from your backend once
+  //  Fetch all centers from your backend once
   useEffect(() => {
-    fetch('http://192.168.1.55:3307/reserve_mobile')
+    fetch('http://192.168.1.55:3307/locations')
       .then((res) => res.json())
       .then((data) => {
-        if (data.locations) {
           setLocations(data.locations);
-        }
+        
       })
       .catch((err) => console.error('Error fetching locations:', err));
   }, []);
 
   const handleZipSearch = () => {
-    const found = locations.filter((loc) => loc.address.substring(loc.address.lastIndexOf(" ") + 1) === zipCode);
+    //const found = locations.filter((loc) => loc.address.substring(loc.address.lastIndexOf(" ") + 1) === zipCode);
+    console.log('ZIP entered:', zipCode.trim());
+console.log('Locations:', locations.map(l => `${l.name}: ${l.zip}`));
+
+    const found = locations.filter(
+  (loc) => loc.zip.trim() === zipCode.trim()
+);
+
     if (found.length > 0) {
       setMatchingCenters(found);
     } else {
