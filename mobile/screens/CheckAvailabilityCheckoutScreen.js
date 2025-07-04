@@ -21,7 +21,7 @@ export default function CheckAvailabilityCheckoutScreen({ navigation }) {
   const [selectedTime, setSelectedTime] = useState(null);
 
   const [showTablets, setShowTablets] = useState(false);
-  const tabletTypes = ['iPad Pro', 'iPad Mini', 'Samsung Galaxy', 'Amazon Fire', 'Chrome Tablet'];
+  const tabletTypes = ['Dell Latitude 3550 Laptop', 'Apple iPad 10th Gen', 'Inseego MiFi X Pro 5G Hotspot'];
   const times = ['9:00am', '10:00am', '11:00am', '1:00pm', '2:00pm', '3:00pm', '4:00pm'];
 
   //  Fetch all centers from your backend once
@@ -125,7 +125,7 @@ console.log('Locations:', locations.map(l => `${l.name}: ${l.zip}`));
       {showTablets && (
         <>
           <View style={styles.section}>
-            <Text style={styles.label}>Select Tablet Type:</Text>
+            <Text style={styles.label}>Select Device Type:</Text>
             <View style={styles.tabletGrid}>
               {tabletTypes.map((tablet) => (
                 <TouchableOpacity
