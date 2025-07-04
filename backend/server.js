@@ -3,8 +3,10 @@ const cors = require('cors');
 const app = express();
 const db = require('./db/connection');
 const cookieParser = require('cookie-parser');
+const useragent = require('express-useragent');
 
 app.use(cookieParser());
+app.use(useragent.express());
 
 const allowedOrigins = [
   'http://localhost:5173',
@@ -28,7 +30,6 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 app.use(express.json());
-app.use(useragent.express());
 
 app.use((req, res, next) => {
   console.log(`${req.method} ${req.url} -- Body:`, req.body);
@@ -37,7 +38,7 @@ app.use((req, res, next) => {
 });
 
 app.use('/register', require('./routes/register'));
-app.use(require('./routes/login'));
+app.use('/', require('./routes/login'));
 app.use('/reserve', require('./routes/reserve'));
 app.use('/admin', require('./routes/admin'));
 //app.use('/history', require('./routes/history'));
