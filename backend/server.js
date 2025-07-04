@@ -28,6 +28,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 app.use(express.json());
+app.use(useragent.express());
 
 app.use((req, res, next) => {
   console.log(`${req.method} ${req.url} -- Body:`, req.body);
