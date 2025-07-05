@@ -49,8 +49,7 @@ router.post('/login', async (req, res) => {
         status: 'success',
         message: 'Login successful',
         userID: user.userID,
-        useragent: req.useragent, // temporary code for debugging
-        token: token
+        token
       });
     } else {
       // web client
@@ -65,7 +64,6 @@ router.post('/login', async (req, res) => {
         status: 'success',
         message: 'Login successful',
         userID: user.userID,
-        useragent: req.useragent // temporary code for debugging
       });
     }
 
