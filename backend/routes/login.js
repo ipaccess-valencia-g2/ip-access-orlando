@@ -21,7 +21,7 @@ router.post('/login', async (req, res) => {
 
   // detect mobile clients (global express-useragent middleware)
   const isMobile = req.useragent?.isMobile === true;
-  console.log(req.useragent);
+
   try {
     //looks up the user
     const [rows] = await db.execute(
@@ -49,6 +49,7 @@ router.post('/login', async (req, res) => {
         status: 'success',
         message: 'Login successful',
         userID: user.userID,
+        useragent: req.useragent, // temporary code for debugging
         token: token
       });
     } else {
@@ -63,7 +64,8 @@ router.post('/login', async (req, res) => {
       return res.status(200).json({
         status: 'success',
         message: 'Login successful',
-        userID: user.userID
+        userID: user.userID,
+        useragent: req.useragent // temporary code for debugging
       });
     }
 
