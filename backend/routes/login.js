@@ -21,7 +21,7 @@ router.post('/login', async (req, res) => {
 
   // detect mobile clients (global express-useragent middleware)
   const isMobile = req.useragent?.isMobile === true;
-
+  console.log(req.useragent);
   try {
     //looks up the user
     const [rows] = await db.execute(
