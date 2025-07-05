@@ -52,8 +52,9 @@ export default function LoginScreen({ navigation }) {
 
       const data = await response.json();
       console.log(data);
+      console.log(data.token);
       console.log(response);
-      console.log(response.cookie);
+
       //console message proving which user is logged in
       console.log("Logged in userID ", data.userID);
 

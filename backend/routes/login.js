@@ -49,7 +49,7 @@ router.post('/login', async (req, res) => {
         status: 'success',
         message: 'Login successful',
         userID: user.userID,
-        token
+        token: token
       });
     } else {
       // web client
