@@ -1,4 +1,8 @@
-import React, { useState, useEffect } from 'react';
+
+//need to be able to show devices / times available vs faded out if unavailable
+
+
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -13,86 +17,40 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 
 export default function CheckAvailabilityCheckoutScreen({ navigation }) {
   const [zipCode, setZipCode] = useState('');
-  const [locations, setLocations] = useState([]); // All centers from backend
-  const [matchingCenters, setMatchingCenters] = useState([]); // Matches for entered ZIP
+  const [neighborhood, setNeighborhood] = useState(null);
   const [deviceType, setDeviceType] = useState(null);
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState(new Date()); // todays date by default
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [selectedTime, setSelectedTime] = useState(null);
 
   const [showTablets, setShowTablets] = useState(false);
-  const tabletTypes = ['Dell Latitude 3550 Laptop', 'Apple iPad 10th Gen', 'Inseego MiFi X Pro 5G Hotspot'];
+  const tabletTypes = ['iPad Pro', 'iPad Mini', 'Samsung Galaxy', 'Amazon Fire', 'Chrome Tablet'];
   const times = ['9:00am', '10:00am', '11:00am', '1:00pm', '2:00pm', '3:00pm', '4:00pm'];
 
-  //  Fetch all centers from your backend once
-  useEffect(() => {
-    fetch('http://192.168.1.55:3307/locations')
-      .then((res) => res.json())
-      .then((data) => {
-          setLocations(data.locations);
-        
-      })
-      .catch((err) => console.error('Error fetching locations:', err));
-  }, []);
-
   const handleZipSearch = () => {
-    //const found = locations.filter((loc) => loc.address.substring(loc.address.lastIndexOf(" ") + 1) === zipCode);
-    console.log('ZIP entered:', zipCode.trim());
-console.log('Locations:', locations.map(l => `${l.name}: ${l.zip}`));
-
-    const found = locations.filter(
-  (loc) => loc.zip.trim() === zipCode.trim()
-);
-
-    if (found.length > 0) {
-      setMatchingCenters(found);
+    if (zipCode === '32801') {
+      setNeighborhood('Downtown Tech Center');
+    } else if (zipCode === '32822') {
+      setNeighborhood('East Orlando Hub');
     } else {
-      setMatchingCenters([]);
-      Alert.alert('No centers found for this ZIP code.');
+      setNeighborhood('Neighborhood Center Name');
     }
     setShowTablets(true);
   };
 
-  const handleConfirm = async () => {
+  const handleConfirm = () => {
     if (!zipCode || !deviceType || !selectedTime) {
       Alert.alert('Please fill in all fields.');
       return;
     }
 
-    try {
-      const response = await fetch('http://192.168.1.55:3307/reserve_mobile', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          userId: 123,
-          deviceType: deviceType,
-          locationId: matchingCenters.length > 0 ? matchingCenters[0].locationID : null, // pick first for now
-          date: selectedDate.toISOString().split('T')[0],
-          time: selectedTime,
-        }),
-      });
-
-      const data = await response.json();
-      console.log('Server response:', data);
-
-      if (response.ok) {
-        Alert.alert('Reservation created!', `Reservation ID: ${data.reservation.id}`);
-        navigation.navigate('Reservation Confirmation', {
-          zipCode,
-          matchingCenters,
-          deviceType,
-          selectedDate,
-          selectedTime,
-        });
-      } else {
-        Alert.alert('Failed to reserve.', data.message || 'Unknown error.');
-      }
-    } catch (error) {
-      console.error('Reservation failed:', error);
-      Alert.alert('Network error', 'Could not reach server.');
-    }
+    navigation.navigate('Reservation Confirmation', {
+      zipCode,
+      neighborhood,
+      deviceType,
+      selectedDate,
+      selectedTime,
+    });
   };
 
   return (
@@ -111,21 +69,17 @@ console.log('Locations:', locations.map(l => `${l.name}: ${l.zip}`));
         <Text style={styles.searchText}>Find Neighborhood Center</Text>
       </TouchableOpacity>
 
-      {matchingCenters.length > 0 && (
+      {neighborhood && (
         <View style={styles.section}>
-          <Text style={styles.label}>Available Centers:</Text>
-          {matchingCenters.map((center) => (
-            <Text key={center.locationID} style={styles.value}>
-              {center.name}
-            </Text>
-          ))}
+          <Text style={styles.label}>Nearest Center:</Text>
+          <Text style={styles.value}>{neighborhood}</Text>
         </View>
       )}
 
       {showTablets && (
         <>
           <View style={styles.section}>
-            <Text style={styles.label}>Select Device Type:</Text>
+            <Text style={styles.label}>Select Tablet Type:</Text>
             <View style={styles.tabletGrid}>
               {tabletTypes.map((tablet) => (
                 <TouchableOpacity
@@ -150,6 +104,7 @@ console.log('Locations:', locations.map(l => `${l.name}: ${l.zip}`));
             </View>
           </View>
 
+          {/* Date Selection */}
           <Text style={styles.label}>Select Pickup Date:</Text>
           <TouchableOpacity
             style={styles.dateButton}
@@ -166,10 +121,11 @@ console.log('Locations:', locations.map(l => `${l.name}: ${l.zip}`));
                 setShowDatePicker(false);
                 if (date) setSelectedDate(date);
               }}
-              minimumDate={new Date()}
+              minimumDate={new Date()} // prevent past dates
             />
           )}
 
+          {/* Time Selection */}
           <Text style={styles.label}>Select Pickup Time:</Text>
           <View style={styles.timeGrid}>
             {times.map((time) => (
@@ -206,12 +162,12 @@ console.log('Locations:', locations.map(l => `${l.name}: ${l.zip}`));
 const styles = StyleSheet.create({
   container: {
     padding: 24,
-    backgroundColor: '#F3F2EF',
+    backgroundColor: '#F3F2EF', // Neutral Linen
   },
   heading: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#003153',
+    color: '#003153', // Midnight Navy
     marginBottom: 20,
     textAlign: 'center',
     fontFamily: 'CrimsonText-Bold',
@@ -226,7 +182,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Lato-Regular',
   },
   searchButton: {
-    backgroundColor: '#003153',
+    backgroundColor: '#003153', // Midnight Navy
     padding: 12,
     borderRadius: 6,
     alignItems: 'center',
@@ -244,7 +200,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
     marginBottom: 6,
-    color: '#0B3D20',
+    color: '#0B3D20', // Evergreen
     fontFamily: 'Lato-Bold',
   },
   value: {
@@ -261,7 +217,7 @@ const styles = StyleSheet.create({
   tabletOption: {
     padding: 10,
     borderWidth: 1,
-    borderColor: '#003153',
+    borderColor: '#003153', // Midnight Navy
     borderRadius: 6,
     margin: 4,
     minWidth: 120,

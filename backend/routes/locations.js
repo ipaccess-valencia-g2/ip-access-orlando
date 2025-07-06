@@ -8,17 +8,15 @@ const db = require('../db/connection');
 router.get('/', async (req, res) => {
   try {
     const [rows] = await db.execute(
-      //'SELECT locationID, name FROM locations ORDER BY name'
-      'SELECT locationID, name, RIGHT(address, 5) AS zip FROM locations ORDER BY name'
+      'SELECT locationID, name FROM locations ORDER BY name'
     );
 
     // mapping database to objects
     const locations = rows.map(row => ({
       locationID: row.locationID,
-      name: row.name,
-      zip: row.zip
+      name: row.name
     }));
-	//console.log(rows);
+	console.log(rows);
 
     res.json({ locations });
   } catch (error) {
