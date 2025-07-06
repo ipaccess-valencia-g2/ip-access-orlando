@@ -5,14 +5,9 @@ export default function ReservationConfirmationScreen({ route, navigation }) {
   const { zipCode, deviceType, selectedDate, selectedTime } = route.params;
 
   return (
-
-   
-
-
-
     <View style={styles.container}>
          <Text style={styles.qrNote}>QR code here.</Text>
-      <Text style={styles.title}>Reservation Confirmed 🎉</Text>
+      <Text style={styles.title}>Reservation Confirmed </Text>
 
       <View style={styles.card}>
         <Text style={styles.label}>Device:</Text>
@@ -37,7 +32,6 @@ export default function ReservationConfirmationScreen({ route, navigation }) {
     </View>
   );
 }
-
 
 
 const styles = StyleSheet.create({

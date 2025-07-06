@@ -9,24 +9,6 @@ export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  // Save token
-  const saveToken = async (token) => {
-    await SecureStore.setItemAsync(email, token);
-    console.log("Token ", token, " saved!");
-  }
-
-  // Retrieve token from SecureStore
-  const retrieveToken = async () => {
-    let result = await SecureStore.getItemAsync(email);
-    return result;
-  }
-
-  // Delete token off of SecureStore
-  const deleteToken = async (token) => {
-    await SecureStore.deleteItemAsync(email);
-    console.log(email, " and ", token, " deleted!");
-  }
-
   const handleLogin = async () => {
     if (!email || !password) {
       Alert.alert('Please fill in all fields');
@@ -54,18 +36,11 @@ export default function LoginScreen({ navigation }) {
       );
 
       const data = await response.json();
+      console.log(data);
+      console.log(data.token);
 
       //console message proving which user is logged in
       console.log("Logged in userID ", data.userID);
-
-      // Save token for a user
-      await saveToken(data.token);
-
-      // Retrieve the token - test
-      const testToken = retrieveToken();
-
-      // Delete the token - test
-      await deleteToken(testToken);
 
       // If response not OK, throw an error
       if (!response.ok) {
