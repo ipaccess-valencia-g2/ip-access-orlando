@@ -33,27 +33,29 @@ export default function LoginScreen({ navigation }) {
       return;
     }
 
-    // EXtra
+    // Extra
     try {
       // Send POST request to backend login endpoint
       const response = await fetch(
-          `http://18.223.161.174:3307/login/`,
-          {
-            method: 'POST',
-            headers: {'Content-type': 'application/json'},
-            //comment out credentials if testing live URL
-            //credentials: 'include',
-            body: JSON.stringify({
-              username: encodeURIComponent(email),
-              password: encodeURIComponent(password)
-            })
-          }
+        `http://18.223.161.174:3307/login/`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-type': 'application/json',
+            'User-Agent': 'Expo (Mobile)'
+          },
+          //comment out credentials if testing live URL
+          //credentials: 'include',
+          body: JSON.stringify({
+            username: encodeURIComponent(email),
+            password: encodeURIComponent(password)
+          })
+        }
       );
 
       const data = await response.json();
       console.log(data);
       console.log(data.token);
-      console.log(response);
 
       //console message proving which user is logged in
       console.log("Logged in userID ", data.userID);
@@ -104,18 +106,6 @@ export default function LoginScreen({ navigation }) {
 
           <TouchableOpacity style={styles.button} onPress={handleLogin}>
             <Text style={styles.buttonText}>Login</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.button} onPress={saveSecureValue}>
-            <Text style={styles.buttonText}>Save</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.button} onPress={retrieveSecureValue}>
-            <Text style={styles.buttonText}>Retrieve</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.button} onPress={deleteKey}>
-            <Text style={styles.buttonText}>Delete</Text>
           </TouchableOpacity>
 
           <TouchableOpacity onPress={() => navigation.navigate('Register')}>

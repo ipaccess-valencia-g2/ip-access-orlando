@@ -42,11 +42,13 @@ app.use('/', require('./routes/login'));
 app.use('/reserve', require('./routes/reserve'));
 app.use('/admin', require('./routes/admin'));
 //app.use('/history', require('./routes/history'));
-app.use('/locations', require('./routes/locations'));
+app.use('/locations', require('./routes/locations')); //app.use('/api/locations', require('./routes/locations'));
 app.use('/reasons', require('./routes/reasons'));
 app.use(require('./routes/user'));
 app.use(require('./routes/logout'));
 app.use('/verify-address', require('./routes/verify-address'));
+app.use('/reserve_mobile', require('./routes/reserve_mobile')); //adding reserve_mobile
+
 
 app.get('/', (req, res) => {
   res.send('API is running');
