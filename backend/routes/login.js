@@ -14,46 +14,29 @@ function generateAccessJWT(userID) {
   );
 }
 
-// --- POST /login/:username/:password
-// use to encrypt passwords? const isMatch = await bcrypt.compare(inputPassword, storedHashedPassword);
-router.post('/:username/:password', async (req,res) =>
-{
-    try
-    {
-        // Check that username is in the database
-        const [userMatch] = await db.execute(
-            'SELECT userID, username, password FROM users WHERE username = ?',
-            [req.params.username]
-        );
-        if (userMatch.length === 0) {
-            throw new Error('Username is incorrect');
-        }
+// POST /login
+// Handles both web (via cookie) and mobile (via JSON token)
+router.post('/login', async (req, res) => {
+  const { username, password } = req.body;
 
   // detect mobile clients (global express-useragent middleware)
   const isMobile = req.useragent?.isMobile === true;
 
-        if (isMatch) {
-            // Generate token (you can keep this if needed for future use)
-            let options = {
-                maxAge: 2 * 60 * 1000,
-                httpOnly: true,
-                secure: true,
-                sameSite: "None",
-            };
-            const token = generateAccessJWT(userMatch[0].userID);
-            res.cookie("SessionID", token, options);
+  try {
+    //looks up the user
+    const [rows] = await db.execute(
+      'SELECT userID, username, password FROM users WHERE username = ? OR email = ?',
+      [username, username]
+    );
+    const user = rows[0];
+    if (!user) {
+      return res.status(401).json({ message: 'No account with those credentials.' });
+    }
 
-            // Send userID and message to frontend
-            res.status(200).json({
-                status: "success",
-                message: "You have successfully logged in.",
-                userID: userMatch[0].userID  //  important for frontend
-            });
-        }
-        else
-        {
-            res.json({ message: 'Incorrect password' });
-        }
+    //verifies password
+    const match = await bcrypt.compare(password, user.password);
+    if (!match) {
+      return res.status(401).json({ message: 'No account with those credentials.' });
     }
 
     //issues a JWT

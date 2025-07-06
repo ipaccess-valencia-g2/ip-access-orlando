@@ -37,13 +37,12 @@ const LoginForm = () => {
         setSuccessMessage('');
 
         try {
-
-            const BASE_URL = 'http://localhost:3307'; // or swap for remote IP later
-
-            const response = await fetch(
-                `${BASE_URL}/login/${encodeURIComponent(formData.usernameOrEmail)}/${encodeURIComponent(formData.password)}`,
-                { method: 'POST' }
-            );
+            const response = await fetch(`http://18.223.161.174:3307/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include', // important for cookie
+                body: JSON.stringify(formData),
+            });
 
             const data = await response.json();
 
@@ -51,25 +50,12 @@ const LoginForm = () => {
                 throw new Error(data.message || 'Login failed');
             }
 
-            //  Store user ID in localStorage for session tracking
-            if (data.userID) {
-                localStorage.setItem('userID', data.userID);
-            }
-
-            //  Redirect to dashboard
-            setSuccessMessage('Login successful!');
-            setTimeout(() => {
-                window.location.href = '/dashboard';
-            }, 1000);
-
-            // Reset form
-            setFormData({
-                usernameOrEmail: '',
-                password: '',
-            });
+            console.log("Logged in userID:", data.userID);
+            setSuccessMessage('Login successful! Redirecting...');
+            setTimeout(() => navigate('/dashboard'), 1000); // redirect after short delay
 
         } catch (err) {
-            setErrors((prev) => ({ ...prev, form: err.message }));
+            setErrors(prev => ({ ...prev, form: err.message }));
         } finally {
             setIsSubmitting(false);
         }

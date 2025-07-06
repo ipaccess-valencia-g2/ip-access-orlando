@@ -25,15 +25,15 @@
     padding: 10px 15px;
     font-size: 1rem;
     border: none;
-    background-color: white;
-    color: Black;
+    background-color: #003153;
+    color: #FFF8DC;
     border-radius: 6px;
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
 
 .dashboard-actions-buttons button:hover {
-    background-color: gray;
+    background-color: #0a3e63;
 }
 
 .dashboard-actions-buttons {
