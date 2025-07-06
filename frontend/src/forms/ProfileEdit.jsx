@@ -21,7 +21,7 @@ const ProfileEdit = ({ user, onClose, onSave }) => {
             for (const [column, value] of Object.entries(formData)) {
                 if (user[column] !== value) {
                     const response = await fetch(
-                        `http://18.223.161.174:3307/users/${user.userID}/${column}/${encodeURIComponent(value)}`,
+                        `http://18.223.161.174:3307/users/${user.userId}/${column}/${encodeURIComponent(value)}`,
                         {
                             method: 'PUT',
                         }
@@ -80,7 +80,7 @@ const ProfileEdit = ({ user, onClose, onSave }) => {
                     required
                 />
 
-                <div className="action-btn ">
+                <div className="modal-actions">
                     <button type="submit">Save</button>
                     <button type="button" onClick={onClose}>Cancel</button>
                 </div>

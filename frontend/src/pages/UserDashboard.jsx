@@ -8,62 +8,84 @@ import ProfileEdit from "../forms/ProfileEdit.jsx";
 import ChangePasswordPanel from "../forms/ChangePassword.jsx";
 import DeleteAccount from "../forms/DeleteAccount.jsx";
 import Logout from "../forms/logout.jsx";
-import Modal from "../components/common/Modal.jsx";
 
 const UserDashboard = () => {
+
+    // Dynamic states for user info and reservations (will be fetched)
     const [user, setUser] = useState({});
     const [reservations, setReservations] = useState([]);
 
-    // Modal states
-    const [activePanel, setActivePanel] = useState(null); // 'edit' | 'password' | 'logout' | 'delete'
+    // Panel visibility states
+    const [showEditPanel, setShowEditPanel] = useState(false);
+    const [showPasswordPanel, setShowPasswordPanel] = useState(false);
+    const [showLogoutPanel, setShowLogoutPanel] = useState(false);
+    const [showDeletePanel, setShowDeletePanel] = useState(false);
 
-    const userID = 2; // TODO:Replace with dynamic user ID logic
+useEffect(() => {
+  const fetchUserData = async () => {
+    try {
 
-    const fetchUserData = async () => {
-        try {
-            // Fetch user info
-            const userRes = await fetch(`http://18.223.161.174:3307/users/${userID}`);
-            if (!userRes.ok) throw new Error('Failed to fetch user');
-            const userData = await userRes.json();
-            if (!userData.userInfo || userData.userInfo.length === 0) throw new Error('User not found');
-            setUser(userData.userInfo[0]);
-
-            // Fetch reservations for this user
-            const resRes = await fetch(`http://18.223.161.174:3307/reservations/${userID}`);
-            if (!resRes.ok) throw new Error('Failed to fetch reservations');
-            const resData = await resRes.json();
-            setReservations(resData.rows || []);
-
-        } catch (err) {
-            console.error('Dashboard fetch error:', err);
-            setUser(null);
-            setReservations([]);
+        const userID = localStorage.getItem('userID');
+        if (!userID) {
+        window.location.href = '/login';
+        return;
         }
-    };
 
-    useEffect(() => {
-        fetchUserData();
-    }, []);
+      // Fetch user info
+      const userRes = await fetch(`http://localhost:3307/users/${userID}`);
+      if (!userRes.ok) throw new Error('Failed to fetch user');
+      const userData = await userRes.json();
+
+      if (!userData.userInfo || userData.userInfo.length === 0) throw new Error('User not found');
+      setUser(userData.userInfo[0]);
+
+      // Fetch reservations for this user
+      const resRes = await fetch(`http://localhost:3307/users/reservations/user/${userID}`);
+      if (!resRes.ok) throw new Error('Failed to fetch reservations');
+      const resData = await resRes.json();
+      setReservations(resData.reservations || []); // Your backend returns an array directly
+
+    } catch (err) {
+      console.error('Dashboard fetch error:', err);
+      setUser({});
+      setReservations([]);
+    }
+  };
+
+  fetchUserData();
+}, []);
+
+    // Show/hide handlers for each panel
+    const handleEditProfile = () => setShowEditPanel(true);
+    const handleChangePasswordClick = () => setShowPasswordPanel(true);
+    const handleLogoutClick = () => setShowLogoutPanel(true);
+    const handleDeleteAccountClick = () => setShowDeletePanel(true);
 
     return (
+        // Main container for dashboard content
         <div className="dashboard-container">
+
+            {/* Header greeting the user*/}
             <header className="dashboard-header">
                 <div className="user-info-header">
-                    <div className="avatar-placeholder" />
+                    <div className="avatar-placeholder"/>
                     <div>
-                        <h1>Good morning {user?.firstName || 'User'}!</h1>
+                        <h1>Good morning {user.firstName || 'User'}!</h1>
                         <p>Welcome to your dashboard. Here you can view your reservations and manage your account.</p>
                     </div>
                 </div>
             </header>
 
+
+            {/* Section listing the user's reservations */}
             <section className="dashboard-section">
                 <h2>My Reservations</h2>
                 {reservations.length > 0 ? (
                     <ul>
                         {reservations.map((res, i) => (
-                            <li key={res.i}>
-                                Location: {res.location}, Reason: {res.reason}, Date: {res.reservation_date}
+                            <li key={i}>
+                                Device ID: {res.deviceID}, Location ID: {res.locationID}, Reason: {res.reason}, 
+                                Start: {new Date(res.startTime).toLocaleString()}, End: {new Date(res.endTime).toLocaleString()}
                             </li>
                         ))}
                     </ul>
@@ -72,6 +94,7 @@ const UserDashboard = () => {
                 )}
             </section>
 
+            {/* Section displaying user's account details */}
             <section className="dashboard-section">
                 <h2>Account Details</h2>
                 <p><strong>Username:</strong> {user.username || 'Not provided'}</p>
@@ -80,47 +103,49 @@ const UserDashboard = () => {
                 <p><strong>Address:</strong> {user.address || 'Not provided'}</p>
             </section>
 
+            {/* Section with buttons for common user actions */}
             <section className="dashboard-section">
                 <h2>Actions</h2>
-                {activePanel === null && (
+
+                {/* Hide action buttons when a panel is open */}
+                {!showEditPanel && !showPasswordPanel && !showLogoutPanel && !showDeletePanel && (
                     <div className="dashboard-actions-buttons">
-                        <button onClick={() => setActivePanel('edit')}>Edit Profile</button>
-                        <button onClick={() => setActivePanel('password')}>Change Password</button>
-                        <button onClick={() => setActivePanel('logout')}>Logout</button>
-                        <button onClick={() => setActivePanel('delete')}>Delete Account</button>
+                        <button onClick={handleEditProfile}>Edit Profile</button>
+                        <button onClick={handleChangePasswordClick}>Change Password</button>
+                        <button onClick={handleLogoutClick}>Logout</button>
+                        <button onClick={handleDeleteAccountClick}>Delete Account</button>
                     </div>
                 )}
 
-                {/* Modal logic based on active panel */}
-                {activePanel === 'edit' && (
-                    <Modal isOpen onClose={() => setActivePanel(null)}>
-                        <ProfileEdit user={user} onClose={() => setActivePanel(null)} onSave={fetchUserData} />
-                    </Modal>
-                )}
+                {/* Conditionally render each component panel */}
+                <div>
+                    {showEditPanel && (
+                        <div style={{ marginTop: '12px' }}>
+                            <ProfileEdit user={user} onClose={() => setShowEditPanel(false)} />
+                        </div>
+                    )}
 
-                {activePanel === 'password' && (
-                    <Modal isOpen onClose={() => setActivePanel(null)}>
-                        <ChangePasswordPanel
-                            userID={userID}
-                            onClose={() => setActivePanel(null)}
-                            onSave={fetchUserData}
-                        />
-                    </Modal>
-                )}
+                    {showPasswordPanel && (
+                        <div style={{ marginTop: '12px' }}>
+                            <ChangePasswordPanel onClose={() => setShowPasswordPanel(false)} />
+                        </div>
+                    )}
 
-                {activePanel === 'logout' && (
-                    <Modal isOpen onClose={() => setActivePanel(null)}>
-                        <Logout onClose={() => setActivePanel(null)} />
-                    </Modal>
-                )}
+                    {showLogoutPanel && (
+                        <div style={{ marginTop: '12px' }}>
+                            <Logout onClose={() => setShowLogoutPanel(false)} />
+                        </div>
+                    )}
 
-                {activePanel === 'delete' && (
-                    <Modal isOpen onClose={() => setActivePanel(null)}>
-                        <DeleteAccount onClose={() => setActivePanel(null)} />
-                    </Modal>
-                )}
+                    {showDeletePanel && (
+                        <div style={{ marginTop: '12px' }}>
+                            <DeleteAccount onClose={() => setShowDeletePanel(false)} />
+                        </div>
+                    )}
+                </div>
             </section>
 
+            {/* Footer with support message */}
             <footer className="dashboard-footer">
                 <p>If you have any questions or need assistance, please contact support.</p>
                 <p>Thank you for using our service!</p>

@@ -44,10 +44,8 @@ app.use('/admin', require('./routes/admin'));
 //app.use('/history', require('./routes/history'));
 app.use('/locations', require('./routes/locations')); //app.use('/api/locations', require('./routes/locations'));
 app.use('/reasons', require('./routes/reasons'));
-app.use(require('./routes/user'));
-app.use(require('./routes/logout'));
-app.use('/verify-address', require('./routes/verify-address'));
-app.use('/reserve_mobile', require('./routes/reserve_mobile')); //adding reserve_mobile
+app.use('/users', require('./routes/user'));
+//app.use('/verify-address', require('./routes/verify-address'));
 
 
 app.get('/', (req, res) => {
@@ -68,5 +66,5 @@ app.get('/dbtest', async (req, res) => {
 });
 
 app.listen(PORT, '0.0.0.0', () => {
-  console.log(`Server is listening on port ${PORT}`);
+    console.log(`Server is listening on port ${PORT}`);
 });

@@ -46,7 +46,7 @@ const ChangePassword = ({ userID, onClose, onSave }) => {
 
             const result = await response.json();
 
-            if (onSave) onSave(result);
+            onSave(result);
             onClose();
 
         } catch (error) {
@@ -60,10 +60,9 @@ const ChangePassword = ({ userID, onClose, onSave }) => {
         <div className="panel-container">
             <h2>Change Password</h2>
             <form onSubmit={handleSubmit}>
-                <label htmlFor="currentPassword">Current Password:</label>
+                <label>Current Password:</label>
                 <input
                     type={showPassword ? "text" : "password"}
-                    id="currentPassword"
                     name="currentPassword"
                     value={formData.currentPassword}
                     onChange={handleChange}
@@ -71,10 +70,9 @@ const ChangePassword = ({ userID, onClose, onSave }) => {
                     disabled={isProcessing}
                 />
 
-                <label htmlFor="newPassword">New Password:</label>
+                <label>New Password:</label>
                 <input
                     type={showPassword ? "text" : "password"}
-                    id="newPassword"
                     name="newPassword"
                     value={formData.newPassword}
                     onChange={handleChange}
@@ -82,10 +80,9 @@ const ChangePassword = ({ userID, onClose, onSave }) => {
                     disabled={isProcessing}
                 />
 
-                <label htmlFor="confirmPassword">Confirm New Password:</label>
+                <label>Confirm New Password:</label>
                 <input
                     type={showPassword ? "text" : "password"}
-                    id="confirmPassword"
                     name="confirmPassword"
                     value={formData.confirmPassword}
                     onChange={handleChange}
@@ -104,7 +101,7 @@ const ChangePassword = ({ userID, onClose, onSave }) => {
                     />
                 </div>
 
-                <div className="action-btn">
+                <div className="modal-actions">
                     <button type="submit" disabled={isProcessing}>
                         {isProcessing ? 'Saving...' : 'Save'}
                     </button>
