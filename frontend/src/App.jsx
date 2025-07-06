@@ -10,7 +10,6 @@ function App() {
         <Link to="/login">Login</Link><span className="separator">|</span>
         <Link to="/dashboard">User Dashboard</Link><span className="separator">|</span>
         <Link to="/reservation">Reserve</Link><span className="separator">|</span>
-        <Link to="/confirmation">Confirmation</Link><span className="separator">|</span>
         <Link to="/admin">Admin</Link>
       </nav>
 

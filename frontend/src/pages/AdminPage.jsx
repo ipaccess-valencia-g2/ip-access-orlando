@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 // Import all the components for the dashboard
 import AdminCheckInView from '../components/AdminCheckInView.jsx';
@@ -8,6 +8,22 @@ import ManualReservationForm from '../components/ManualReservationForm.jsx';
 
 const AdminPage = () => {
   const [activeTab, setActiveTab] = useState('devices'); // 'devices', 'users', or 'howto'
+  const [firstName, setFirstName] = useState('');
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const res = await fetch('http://18.223.161.174:3307/user/me', { credentials: 'include' });
+        if (res.ok) {
+          const data = await res.json();
+          setFirstName(data.firstName);
+        }
+      } catch (err) {
+        console.error('Failed to fetch user info:', err);
+      }
+    };
+    fetchUser();
+  }, []);
 
   const tabStyle = "px-4 py-2 font-semibold rounded-t-lg focus:outline-none";
   const activeTabStyle = "bg-gray-800 text-white";
@@ -17,6 +33,7 @@ const AdminPage = () => {
     <div className="container mx-auto p-4 md:p-8">
       <header className="text-center mb-10">
         <h1 className="text-4xl font-bold">Admin Dashboard</h1>
+        {firstName && <p className="mt-2">Welcome, {firstName}!</p>}
       </header>
 
       {/* Tab Navigation */}

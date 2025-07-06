@@ -1,10 +1,12 @@
 // ReservationForm.jsx
 import React, { useState, useEffect } from 'react';
 import '../pages/styles/ReservationPage.css';
+import { useNavigate } from 'react-router-dom';
 
 const deviceTypes = ["Laptop", "Tablet", "Hotspot"];
 
 const ReservationForm = () => {
+  const navigate = useNavigate();
   const [centers, setCenters] = useState([]);
   const [reasons, setReasons] = useState([]);
   const [location, setLocation] = useState('');
@@ -147,6 +149,7 @@ const ReservationForm = () => {
       setMessage(`Error: ${result.error}`);
     } else {
       setMessage('Reservation submitted successfully!');
+      navigate('/confirmation');
     }
   } catch (err) {
     console.error('Reservation error:', err);
