@@ -1,24 +1,25 @@
-/// --- GET /locations
-
 const express = require('express');
 const router = express.Router();
 const db = require('../db/connection');
 
+// ------------------------------------
 // GET /locations
+// ------------------------------------
 router.get('/', async (req, res) => {
   try {
+    // ✅ Pull the full address instead of just ZIP
     const [rows] = await db.execute(
-      //'SELECT locationID, name FROM locations ORDER BY name'
-      'SELECT locationID, name, RIGHT(address, 5) AS zip FROM locations ORDER BY name'
+      'SELECT locationID, name, address FROM locations ORDER BY name'
     );
 
-    // mapping database to objects
     const locations = rows.map(row => ({
       locationID: row.locationID,
       name: row.name,
-      zip: row.zip
+      address: row.address, // ✅ Include full address!
+      zip: row.address ? row.address.slice(-5) : null  // ✅ Still get zip if you want it
     }));
-	//console.log(rows);
+
+    console.log('Fetched locations:', locations);
 
     res.json({ locations });
   } catch (error) {
