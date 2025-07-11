@@ -2,6 +2,7 @@
 // Central hub for logged-in users to view their reservations and details.
 
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import '../styles/global.css';
 import './styles/UserDashboard.css';
 import ProfileEdit from "../forms/ProfileEdit.jsx";
@@ -10,14 +11,14 @@ import DeleteAccount from "../forms/DeleteAccount.jsx";
 import Logout from "../forms/logout.jsx";
 import Modal from "../components/common/Modal.jsx";
 
+
 const UserDashboard = () => {
     const [user, setUser] = useState({});
     const [reservations, setReservations] = useState([]);
-
-    // Modal states
     const [activePanel, setActivePanel] = useState(null); // 'edit' | 'password' | 'logout' | 'delete'
-
-    const userID = 2; // TODO:Replace with dynamic user ID logic
+    const navigate = useNavigate();
+    //const userID = localStorage.getItem('userID');
+    const userID = 2;
 
     const fetchUserData = async () => {
         try {
@@ -25,6 +26,7 @@ const UserDashboard = () => {
             const userRes = await fetch(`http://18.223.161.174:3307/users/${userID}`);
             if (!userRes.ok) throw new Error('Failed to fetch user');
             const userData = await userRes.json();
+
             if (!userData.userInfo || userData.userInfo.length === 0) throw new Error('User not found');
             setUser(userData.userInfo[0]);
 
@@ -44,6 +46,15 @@ const UserDashboard = () => {
     useEffect(() => {
         fetchUserData();
     }, []);
+
+    if (!userID) {
+        return (
+            <div>
+                <h1>Welcome to your Dashboard</h1>
+                <p>Please log in to see your dashboard.</p>
+            </div>
+        );
+    }
 
     return (
         <div className="dashboard-container">
@@ -70,10 +81,13 @@ const UserDashboard = () => {
                 ) : (
                     <p>No reservations found.</p>
                 )}
+                <div className="dashboard-actions-buttons">
+                    <button onClick={() => navigate('/reservation')}>Reserve a device</button>
+                </div>
             </section>
 
             <section className="dashboard-section">
-                <h2>Account Details</h2>
+            <h2>Account Details</h2>
                 <p><strong>Username:</strong> {user.username || 'Not provided'}</p>
                 <p><strong>Email:</strong> {user.email || 'Not provided'}</p>
                 <p><strong>Phone Number:</strong> {user.phone || 'Not provided'}</p>
