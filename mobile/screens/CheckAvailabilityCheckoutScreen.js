@@ -40,7 +40,7 @@ export default function CheckAvailabilityCheckoutScreen({ navigation }) {
   const times = ['9:00am', '10:00am', '11:00am', '1:00pm', '2:00pm', '3:00pm', '4:00pm'];
 
   useEffect(() => {
-    fetch('http://192.168.1.55:3307/locations')
+    fetch('http://18.223.161.174:3307/locations')
       .then((res) => res.json())
       .then((data) => {
         setLocations(data.locations);
@@ -55,7 +55,7 @@ export default function CheckAvailabilityCheckoutScreen({ navigation }) {
   }, []);
 
   useEffect(() => {
-    fetch('http://192.168.1.55:3307/reasons')
+    fetch('http://18.223.161.174:3307/reasons')
       .then((res) => res.json())
       .then((data) => {
         setReasons(data.reasons || []);
@@ -78,7 +78,7 @@ export default function CheckAvailabilityCheckoutScreen({ navigation }) {
     }
 
     try {
-      const response = await fetch('http://192.168.1.55:3307/reserve_mobile', {
+      const response = await fetch('http://18.223.161.174:3307/reserve_mobile', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
