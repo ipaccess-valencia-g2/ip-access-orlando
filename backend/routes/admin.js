@@ -60,11 +60,25 @@ router.post('/admin', async (req, res) => {
 });
 
 // GET /admin
+
+
+// Dashboard summary stats
+router.get('/admin/dashboard', (req, res) => {
+    const dashboardData = {
+        totalDevices: 12,
+        checkedOutToday: 4,
+        checkedInToday: 2,
+        overdue: 1,
+    };
+
+    res.status(200).json(dashboardData);
+});
 router.get('/admin', (req, res) => {
-  res.send('Admin Dashboard');
+    res.send('Admin Dashboard');
 });
 
 // Reuse all user routes under the /admin prefix
+const userRoutes = require('./user');
 const userRoutes = require('./user');
 router.use('/admin', userRoutes);
 
