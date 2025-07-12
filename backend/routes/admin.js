@@ -64,15 +64,48 @@ router.post('/admin', async (req, res) => {
 
 // Dashboard summary stats
 router.get('/admin/dashboard', (req, res) => {
-    const dashboardData = {
-        totalDevices: 12,
-        checkedOutToday: 4,
-        checkedInToday: 2,
-        overdue: 1,
-    };
+    const today = new Date().toISOString().slice(0, 10);
 
-    res.status(200).json(dashboardData);
+    db.serialize(() => {
+        db.get('SELECT COUNT(*) AS total FROM reservations', (err, row1) => {
+            if (err) return res.status(500).json({ error: err.message });
+
+            db.get(
+                `SELECT COUNT(*) AS checkedOutToday FROM reservations WHERE checkedOutAt LIKE ?`,
+                [`${today}%`],
+                (err, row2) => {
+                    if (err) return res.status(500).json({ error: err.message });
+
+                    db.get(
+                        `SELECT COUNT(*) AS checkedInToday FROM reservations WHERE checkedInAt LIKE ?`,
+                        [`${today}%`],
+                        (err, row3) => {
+                            if (err) return res.status(500).json({ error: err.message });
+
+                            db.get(
+                                `SELECT COUNT(*) AS overdue FROM reservations WHERE checkedInAt IS NULL AND checkedOutAt < ?`,
+                                [today],
+                                (err, row4) => {
+                                    if (err) return res.status(500).json({ error: err.message });
+
+                                    res.json({
+                                        totalDevices: row1.total,
+                                        checkedOutToday: row2.checkedOutToday,
+                                        checkedInToday: row3.checkedInToday,
+                                        overdue: row4.overdue,
+                                    });
+                                }
+                            );
+                        }
+                    );
+                }
+            );
+        });
+    });
 });
+
+module.exports = router;
+
 router.get('/admin', (req, res) => {
     res.send('Admin Dashboard');
 });
