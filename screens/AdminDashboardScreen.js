@@ -35,17 +35,17 @@ export default function AdminDashboardScreen() {
     <ScrollView contentContainerStyle={styles.container}>
       {/* Top 4 Metrics */}
       <View style={styles.metricsRow}>
-        {[
-          { label: 'Total Devices Available', value: 3 },
-          { label: 'Check Out Today', value: 9 },
-          { label: 'Check In Today', value: 2 },
-          { label: 'Overdue', value: 1 },
+        {dashboardData && [
+          { label: 'Total Devices Available', value: dashboardData.totalDevices },
+          { label: 'Check Out Today', value: dashboardData.checkedOutToday },
+          { label: 'Check In Today', value: dashboardData.checkedInToday },
+          { label: 'Overdue', value: dashboardData.overdue },
         ].map((item, index) => (
-          <View key={index} style={styles.metricBox}>
-            <Text style={styles.metricLabel}>{item.label}</Text>
-            <Text style={styles.metricValue}>{item.value}</Text>
-            <TouchableOpacity><Text style={styles.viewText}>view</Text></TouchableOpacity>
-          </View>
+            <View key={index} style={styles.metricBox}>
+              <Text style={styles.metricLabel}>{item.label}</Text>
+              <Text style={styles.metricValue}>{item.value}</Text>
+              <TouchableOpacity><Text style={styles.viewText}>view</Text></TouchableOpacity>
+            </View>
         ))}
       </View>
 
