@@ -1,7 +1,7 @@
 // screens/WelcomeScreen.js
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
-const logo = require('../assets/TabletLogoOfficial.png'); // adjust path if needed
+const logo = require('../assets/TabletLogoOfficial.png'); // logo
 
 
 
@@ -22,6 +22,10 @@ export default function WelcomeScreen({ navigation }) {
 
   );
 }
+
+
+//styles 
+
 
 const styles = StyleSheet.create({
   container: {

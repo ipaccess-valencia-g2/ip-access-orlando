@@ -6,7 +6,7 @@ import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-nati
 export default function AdminDashboardScreen() {
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      {/* Top 4 Metrics */}
+      {/* Top 4 Metrics  replace with real data later*/}
       <View style={styles.metricsRow}>
         {[
           { label: 'Total Devices Available', value: 3 },
@@ -23,7 +23,7 @@ export default function AdminDashboardScreen() {
       </View>
 
       
-
+{/* Columns Section - Recent Activity and Admin Requests - Add backend later*/}
       
       <View style={styles.columns}>
         <View style={styles.column}>
@@ -45,7 +45,7 @@ export default function AdminDashboardScreen() {
 }
 
 
-
+//styles
 const styles = StyleSheet.create({
   container: {
     padding: 20,

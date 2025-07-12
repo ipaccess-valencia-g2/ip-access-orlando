@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, Switch, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 
 export default function SettingsScreen({ navigation }) {
+  //notificaion and reminder toggle states
   const [reminderEnabled, setReminderEnabled] = useState(true);
   const [notifEmail, setNotifEmail] = useState(true);
   const [notifText, setNotifText] = useState(false);
@@ -114,7 +115,7 @@ export default function SettingsScreen({ navigation }) {
         </TouchableOpacity>
       </View>
 
-      {/* Other */}
+      {/* Misc Actions*/}
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Other</Text>
 
@@ -134,6 +135,7 @@ export default function SettingsScreen({ navigation }) {
   );
 }
 
+//styles
 
 const styles = StyleSheet.create({
   container: {

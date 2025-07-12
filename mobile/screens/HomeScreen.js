@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 
 const screenWidth = Dimensions.get('window').width;
+//logo
 const logo = require('../assets/TabletLogoOfficial.png');
 
 
@@ -20,10 +21,11 @@ export default function HomeScreen({ navigation }) {
   const [userInfo, setUserInfo] = useState(null); // holds logged in user info
 
   useEffect(() => {
+    //fetch current user info - IP must match backend - update if needed
     const fetchUser = async () => {
       try {
         const res = await fetch('http://18.223.161.174:3307/user/me', {
-          credentials: 'include',
+          credentials: 'include', //pass cookie for session authorization 
         });
 
         if (!res.ok) {
@@ -78,7 +80,7 @@ export default function HomeScreen({ navigation }) {
         </Text>
         
       </TouchableOpacity>
-
+{/*Show logged in user */}
        {userInfo ? (
         <Text style={styles.loggedInText}>Logged in as {userInfo.firstName}</Text>
       ) : (
@@ -92,6 +94,8 @@ export default function HomeScreen({ navigation }) {
     
   );
 }
+
+//styles
 const styles = StyleSheet.create({
   container: {
     padding: 20,

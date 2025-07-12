@@ -13,6 +13,9 @@ import {
 import DateTimePicker from '@react-native-community/datetimepicker';
 import DropDownPicker from 'react-native-dropdown-picker';
 
+
+//centers, device, date, time, reason
+
 export default function CheckAvailabilityCheckoutScreen({ navigation }) {
   const [locations, setLocations] = useState([]);
   const [selectedCenterId, setSelectedCenterId] = useState(null);
@@ -26,6 +29,9 @@ export default function CheckAvailabilityCheckoutScreen({ navigation }) {
   const [reason, setReason] = useState('');
   const [customReason, setCustomReason] = useState('');
 
+
+//dropdown pickers controls
+
   const [centerOpen, setCenterOpen] = useState(false);
   const [centerItems, setCenterItems] = useState([]);
 
@@ -38,6 +44,12 @@ export default function CheckAvailabilityCheckoutScreen({ navigation }) {
     'Inseego MiFi X Pro 5G Hotspot',
   ];
   const times = ['9:00am', '10:00am', '11:00am', '1:00pm', '2:00pm', '3:00pm', '4:00pm'];
+//fetch centers
+
+//===========================
+// IP address should be updated if you switch to ec2 or local IP
+//================
+
 
   useEffect(() => {
     fetch('http://18.223.161.174:3307/locations')
@@ -54,6 +66,8 @@ export default function CheckAvailabilityCheckoutScreen({ navigation }) {
       .catch(err => console.error('Error fetching locations:', err));
   }, []);
 
+//update IP if needed
+
   useEffect(() => {
     fetch('http://18.223.161.174:3307/reasons')
       .then((res) => res.json())
@@ -69,6 +83,7 @@ export default function CheckAvailabilityCheckoutScreen({ navigation }) {
       .catch(err => console.error('Error fetching reasons:', err));
   }, []);
 
+  //POST request to reserve_mobile - check IP and update if needed
   const handleConfirm = async () => {
     const selectedCenter = locations.find(loc => loc.locationID === selectedCenterId);
 
@@ -242,6 +257,9 @@ export default function CheckAvailabilityCheckoutScreen({ navigation }) {
   );
 }
 
+
+//styles
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -251,7 +269,7 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     paddingHorizontal: 20,
     paddingTop: 24,
-    paddingBottom: 40, // ✅ Ensure room for confirm button
+    paddingBottom: 40, 
   },
   heading: {
     fontSize: 24,

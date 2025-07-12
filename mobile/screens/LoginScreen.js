@@ -3,7 +3,7 @@ import {
   View, Text, TextInput, TouchableOpacity, StyleSheet,
   KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard, Image
 } from 'react-native';
-import * as SecureStore from 'expo-secure-store';
+import * as SecureStore from 'expo-secure-store'; // use for storing tokens if needed
 
 export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState('');
@@ -17,7 +17,7 @@ export default function LoginScreen({ navigation }) {
 
     // Extra
     try {
-      // Send POST request to backend login endpoint
+      // Send POST request to backend login endpoint - check IP 
       const response = await fetch(
         `http://18.223.161.174:3307/login/`,
         {
@@ -51,7 +51,7 @@ export default function LoginScreen({ navigation }) {
       console.log(err.message);
     }
 
-    // backend fix ?  console.log('Logging in with:', { email, password });
+    // update backend ? 
     console.log('Logging in with:', { email, password });
     
     navigation.navigate('Home');
@@ -61,7 +61,7 @@ export default function LoginScreen({ navigation }) {
     <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={{ flex: 1 }}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.container}>
-          <Image source={require('../assets/TabletLogoOfficial.png')} style={styles.logo} />
+          <Image source={require('../assets/TabletLogoOfficial.png')} style={styles.logo} /> {/*logo*/}
 
           <Text style={styles.title}>ConnectOrlando</Text>
           <Text style={styles.subtitle}>Login</Text>
@@ -81,6 +81,7 @@ export default function LoginScreen({ navigation }) {
             secureTextEntry
           />
 
+{/*forgot password link placeholder - NOT COMPLETE */}
           <TouchableOpacity onPress={() => alert('Page coming soon')}>
   <Text style={styles.forgotText}>Forgot Password?</Text>
 </TouchableOpacity>
@@ -100,7 +101,7 @@ export default function LoginScreen({ navigation }) {
 }
 
 
-
+//styles
 const styles = StyleSheet.create({
   container: {
     flex: 1,

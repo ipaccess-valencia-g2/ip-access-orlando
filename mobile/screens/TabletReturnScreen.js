@@ -81,6 +81,10 @@ export default function TabletReturnScreen({ navigation }) {
   );
 }
 
+
+//styles 
+
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,

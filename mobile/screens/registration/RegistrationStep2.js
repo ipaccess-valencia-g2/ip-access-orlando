@@ -15,12 +15,16 @@ import RegistrationProgress from '../../components/RegistrationProgress';
 export default function RegistrationStep2({ navigation, route }) {
   const { firstName, lastName, dob, email } = route.params;
 
+  //address and contact information 
   const [address, setAddress] = useState('');
   const [unit, setUnit] = useState('');
   const [city, setCity] = useState('');
   const [state, setState] = useState('');
   const [zip, setZip] = useState('');
   const [phone, setPhone] = useState('');
+
+
+//validate and navigate to step 3
 
   const handleNext = () => {
     if (!address || !city || !state || !zip || !phone) {
@@ -34,7 +38,7 @@ export default function RegistrationStep2({ navigation, route }) {
       dob,
       email,
       address,
-      unit,
+      unit, //optional
       city,
       state,
       zip,
@@ -106,6 +110,8 @@ export default function RegistrationStep2({ navigation, route }) {
   );
 }
 
+
+//styles
 const styles = StyleSheet.create({
   container: {
     flex: 1,

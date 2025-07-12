@@ -1,4 +1,6 @@
 // screens/RegistrationStep1.js
+
+
 import React, { useState } from 'react';
 import {
   View,
@@ -15,12 +17,14 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import RegistrationProgress from '../../components/RegistrationProgress';
 
 export default function RegistrationStep1({ navigation }) {
+  // Step 1 fields // 
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [dob, setDob] = useState(new Date());
   const [email, setEmail] = useState('');
   const [showDatePicker, setShowDatePicker] = useState(false);
 
+  // validate inputs and pass to next registration step 
   const handleNext = () => {
     if (!firstName || !lastName || !dob || !email) {
       alert('Please fill in all required fields.');
@@ -105,6 +109,9 @@ export default function RegistrationStep1({ navigation }) {
 }
 
 
+
+// =====================  
+// styles ===================== 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -131,7 +138,7 @@ const styles = StyleSheet.create({
     padding: 12,
     borderRadius: 8,
     marginBottom: 16,
-    backgroundColor: '#F3F2EF', // Match linen background
+    backgroundColor: '#F3F2EF', 
     color: '#0B3D20', // Evergreen text
   },
   button: {

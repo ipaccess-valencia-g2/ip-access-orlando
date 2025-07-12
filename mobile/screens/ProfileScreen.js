@@ -4,7 +4,7 @@ import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity } from 'rea
 export default function ProfileScreen() {
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      {/* Profile Header */}
+      {/* Profile Header PLACEHOLDER */}
       <View style={styles.header}>
         <View style={styles.avatar} />
         <Text style={styles.name}>Name</Text>
@@ -13,7 +13,7 @@ export default function ProfileScreen() {
    <View style={styles.section}>
   <Text style={styles.sectionTitle}>My Reservations:</Text>
 
-  {/* Reservation 1 */}
+  {/* Reservation 1  PLACEHOLDER*/}
   <View style={styles.myReservationCard}>
     <Text style={styles.resLabel}>Device:</Text>
     <Text style={styles.resValue}>Amazon Fire</Text>
@@ -25,7 +25,7 @@ export default function ProfileScreen() {
     <Text style={styles.resValue}>10:00 AM</Text>
   </View>
 
-  {/* Reservation 2 */}
+  {/* Reservation 2 PLACEHOLDER */}
   <View style={styles.myReservationCard}>
     <Text style={styles.resLabel}>Device:</Text>
     <Text style={styles.resValue}>Chrome Tablet</Text>
@@ -38,7 +38,7 @@ export default function ProfileScreen() {
   </View>
 
 
-      {/* My Stats */}
+      {/* My Stats  PLACEHOLDER*/}
       <Text style={styles.sectionTitle}>My Stats:</Text>
       <View style={styles.statsContainer}>
         <View style={styles.statItem}>
@@ -63,7 +63,7 @@ export default function ProfileScreen() {
         </View>
       </View>
 
-      {/* Past Reservations */}
+      {/* Past Reservations PLACEHOLDER*/}
       <Text style={styles.sectionTitle}>Past Reservations:</Text>
       <View style={styles.section}>
   
@@ -71,7 +71,7 @@ export default function ProfileScreen() {
 
 <View style={styles.reservationGrid}>
 
-  {/* Reservation 1 */}
+  {/* Reservation 1 PLACEHOLDER*/}
   <View style={styles.pastReservationCard}>
     <Text style={styles.resLabel}>Date:</Text>
     <Text style={styles.resValue}>May 29, 2025</Text>
@@ -83,7 +83,7 @@ export default function ProfileScreen() {
     <Text style={styles.resValue}>36 hours</Text>
   </View>
 
-  {/* Reservation 2 */}
+  {/* Reservation 2 PLACEHOLDER*/}
   <View style={styles.pastReservationCard}>
     <Text style={styles.resLabel}>Date:</Text>
     <Text style={styles.resValue}>May 21, 2025</Text>
@@ -96,7 +96,7 @@ export default function ProfileScreen() {
   </View>
 
 
-{/*Reservation 3 */}
+{/*Reservation 3 PLACEHOLDER*/}
     <View style={styles.pastReservationCard}>
     <Text style={styles.resLabel}>Date:</Text>
     <Text style={styles.resValue}>May 31, 2025</Text>
@@ -108,7 +108,7 @@ export default function ProfileScreen() {
     <Text style={styles.resValue}>24 hours</Text>
   </View>
 
-  {/*Reservation 4 */}
+  {/*Reservation 4 PLACEHOLDER*/}
     <View style={styles.pastReservationCard}>
     <Text style={styles.resLabel}>Date:</Text>
     <Text style={styles.resValue}>May 18, 2025</Text>
@@ -130,6 +130,8 @@ export default function ProfileScreen() {
   );
 }
 
+
+//styles
 const styles = StyleSheet.create({
   container: {
     padding: 24,

@@ -9,7 +9,8 @@ export default function RegistrationStep3({ navigation, route }) {
   const { name, email, zipCode, phone } = route.params;
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-
+//validate and handle submission
+//TODO: Connect to backend here? 
   const handleSubmit = () => {
     if (!password || !confirmPassword) {
       Alert.alert('Missing fields', 'Please enter all fields.');
@@ -21,7 +22,7 @@ export default function RegistrationStep3({ navigation, route }) {
       return;
     }
 
-    // call backend ? ->With this I think: console.log('User Registered:', { name, email, zipCode, phone, password });
+    
     
 
     Alert.alert('Welcome to ConnectOrlando!', 'Reserve your tablet today');
@@ -65,6 +66,9 @@ export default function RegistrationStep3({ navigation, route }) {
   );
 }
 
+
+
+//styles
 const styles = StyleSheet.create({
   container: {
     flex: 1,

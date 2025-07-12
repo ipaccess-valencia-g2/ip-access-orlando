@@ -1,6 +1,6 @@
 import React from 'react';
 import { SafeAreaView, ScrollView, View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import QRCode from 'react-native-qrcode-svg'; // ✅ Import the QR code component
+import QRCode from 'react-native-qrcode-svg'; //  Import the QR code component
 
 export default function ReservationConfirmationScreen({ route, navigation }) {
   const { selectedCenter, deviceType, selectedDate, selectedTime } = route.params;
@@ -17,11 +17,12 @@ export default function ReservationConfirmationScreen({ route, navigation }) {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.innerContent}>
+        {/*QR code with reservation details*/}
         <View style={styles.qrContainer}>
           <QRCode value={qrValue} size={180} />
           <Text style={styles.qrNote}>Scan this QR code to return</Text>
         </View>
-
+{/*Confirmation title and details*/}
         <Text style={styles.title}>Reservation Confirmed 🎉</Text>
 
         <View style={styles.card}>
@@ -54,6 +55,8 @@ export default function ReservationConfirmationScreen({ route, navigation }) {
   );
 }
 
+
+//styles
 const styles = StyleSheet.create({
   container: {
     flex: 1,

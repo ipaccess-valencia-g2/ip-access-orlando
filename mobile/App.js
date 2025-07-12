@@ -1,33 +1,36 @@
+// App.js
+// Root entry points for ConnectORLANDO mobile app
+
 
 import { LogBox } from 'react-native';
 
-LogBox.ignoreAllLogs(true); // 👈 turns off ALL warnings
+LogBox.ignoreAllLogs(true); //  turns off ALL warnings in app - careful - probably remove or comment out for final 
 
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 
-
+//screens
 import WelcomeScreen from './screens/WelcomeScreen';
 import HomeScreen from './screens/HomeScreen';
 import LoginScreen from './screens/LoginScreen'; 
 
-//
+//registration steps
 import RegistrationStep1 from './screens/registration/RegistrationStep1';
 import RegistrationStep2 from './screens/registration/RegistrationStep2';
 import RegistrationStep3 from './screens/registration/RegistrationStep3';
 
-//
+//profile
 import ProfileScreen from './screens/ProfileScreen';
 
-//
+// reserve
 import CheckAvailabilityCheckoutScreen from './screens/CheckAvailabilityCheckoutScreen';
 import ReservationConfirmationScreen from './screens/ReservationConfirmationScreen';
-//
+//return 
 import TabletReturnScreen from './screens/TabletReturnScreen';
 
-//
+//admin and settings
 import AdminDashboardScreen from './screens/AdminDashboardScreen';
 import SettingsScreen from './screens/SettingsScreen';
 
