@@ -2,9 +2,36 @@
 
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { useState, useEffect } from 'react';
 
-export default function AdminDashboardScreen() {
-  return (
+const [dashboardData, setDashboardData] = useState(null);
+const [loading, setLoading] = useState(true);
+
+useEffect(() => {
+  const fetchDashboard = async () => {
+    try {
+      const res = await fetch('\'http://18.223.161.174:3000/admin/dashboard');
+      const json = await res.json();
+      setDashboardData(json);
+    } catch (err) {
+      console.error('Failed to fetch dashboard data:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  loadDashboard();
+}, []);
+
+if (loading) {
+  return <ActivityIndicator style={{ flex: 1 }} size="large" color="#338669" />;
+}
+
+return (
+    <Verify role="admin">
+      {loading ? (
+          <ActivityIndicator size="large" style={{ flex: 1 }} color="#338669" />
+      ) : (
     <ScrollView contentContainerStyle={styles.container}>
       {/* Top 4 Metrics  replace with real data later*/}
       <View style={styles.metricsRow}>
@@ -41,11 +68,13 @@ export default function AdminDashboardScreen() {
         </View>
       </View>
     </ScrollView>
-  );
+      )}
+    </Verify>
+);
 }
 
 
-//styles
+
 const styles = StyleSheet.create({
   container: {
     padding: 20,
