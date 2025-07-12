@@ -10,7 +10,7 @@ export default function AdminDashboardScreen() {
   useEffect(() => {
     const loadDashboard = async () => {
       try {
-        const res = await fetch('http://18.223.161.174/:3000/admin/dashboard');
+        const res = await fetch('http://18.223.161.174:3000/admin/dashboard');
         const json = await res.json();
         setData(json);
       } catch (err) {
