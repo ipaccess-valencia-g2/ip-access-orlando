@@ -5,12 +5,6 @@ import {
 } from 'react-native';
 import * as SecureStore from 'expo-secure-store'; // use for storing tokens if needed
 
-// // test for jwt token
-// const token = retrieveToken();
-// if (token[2]) {
-//   console.log("Token retrieved, ", token);
-//   navigation.navigate('Home');
-// }
 
 export default function LoginScreen({ navigation }) {
   const [username, setUsername] = useState('');

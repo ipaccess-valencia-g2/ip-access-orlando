@@ -10,7 +10,7 @@ function generateAccessJWT(userID) {
   return jwt.sign(
     { id: userID },
     process.env.SECRET_ACCESS_TOKEN,
-    { expiresIn: '2m' }
+    { expiresIn: '1hr' }
   );
 }
 
@@ -57,7 +57,7 @@ router.post('/login', async (req, res) => {
       res.cookie('SessionID', token, {
         maxAge: 2 * 60 * 1000,   // 2 minutes
         httpOnly: true,
-        secure: false,           // set to `true` in production (HTTPS)
+        secure: process.env.NODE_ENV === 'production',           // set to `true` in production (HTTPS)
         sameSite: 'Lax'
       });
       return res.status(200).json({
@@ -79,7 +79,7 @@ router.get('/dashboard', Verify, (req, res) => {
   res.status(200).json({
     status: 'success',
     message: 'Welcome to your dashboard!',
-    user: req.user[0]
+    user: req.user
   });
 });
 
