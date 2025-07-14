@@ -112,7 +112,6 @@ router.get('/admin', (req, res) => {
 
 // Reuse all user routes under the /admin prefix
 const userRoutes = require('./user');
-const userRoutes = require('./user');
 router.use('/admin', userRoutes);
 
 module.exports = router;
