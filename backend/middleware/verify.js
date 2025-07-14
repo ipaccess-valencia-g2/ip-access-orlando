@@ -36,7 +36,7 @@ const VerifyRole = async function (req, res, next)
     {
         const user = req.user;
 
-        if (user[0].isStaff != 1)
+        if (user[0].isStaff !== 1)
         {
             return res.status(401).json({
                 status: "failed",
