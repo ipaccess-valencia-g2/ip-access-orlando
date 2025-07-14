@@ -1,84 +1,77 @@
 // screens/AdminDashboardScreen.js
 
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
 
-const [dashboardData, setDashboardData] = useState(null);
-const [loading, setLoading] = useState(true);
 
-useEffect(() => {
-  const fetchDashboard = async () => {
-    try {
-      const res = await fetch('\'http://18.223.161.174:3000/admin/dashboard');
-      const json = await res.json();
-      setDashboardData(json);
-    } catch (err) {
-      console.error('Failed to fetch dashboard data:', err);
-    } finally {
-      setLoading(false);
-    }
-  };
+const AdminDashboardScreen = () => {
+  const [dashboardData, setDashboardData] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  loadDashboard();
-}, []);
+  useEffect(() => {
+    const fetchDashboard = async () => {
+      try {
+        const res = await fetch('http://18.223.161.174:3000/admin/dashboard');
+        const json = await res.json();
+        setDashboardData(json);
+      } catch (err) {
+        console.error('Failed to fetch dashboard data:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-if (loading) {
-  return <ActivityIndicator style={{ flex: 1 }} size="large" color="#338669" />;
-}
+    fetchDashboard();
+  }, []);
 
-return (
+  if (loading) {
+    return <ActivityIndicator style={{ flex: 1 }} size="large" color="#338669" />;
+  }
+
+  return (
     <Verify role="admin">
-      {loading ? (
-          <ActivityIndicator size="large" style={{ flex: 1 }} color="#338669" />
-      ) : (
-    <ScrollView contentContainerStyle={styles.container}>
-      {/* Top 4 Metrics  replace with real data later*/}
-      <View style={styles.metricsRow}>
-        {dashboardData && [
-          { label: 'Total Devices Available', value: dashboardData.totalDevices },
-          { label: 'Check Out Today', value: dashboardData.checkedOutToday },
-          { label: 'Check In Today', value: dashboardData.checkedInToday },
-          { label: 'Overdue', value: dashboardData.overdue },
-        ].map((item, index) => (
-          <View key={index} style={styles.metricBox}>
-            <Text style={styles.metricLabel}>{item.label}</Text>
-            <Text style={styles.metricValue}>{item.value}</Text>
-            <TouchableOpacity><Text style={styles.viewText}>view</Text></TouchableOpacity>
+      <ScrollView contentContainerStyle={styles.container}>
+        <View style={styles.metricsRow}>
+          {dashboardData && [
+            { label: 'Total Devices Available', value: dashboardData.totalDevices },
+            { label: 'Check Out Today', value: dashboardData.checkedOutToday },
+            { label: 'Check In Today', value: dashboardData.checkedInToday },
+            { label: 'Overdue', value: dashboardData.overdue },
+          ].map((item, index) => (
+            <View key={index} style={styles.metricBox}>
+              <Text style={styles.metricLabel}>{item.label}</Text>
+              <Text style={styles.metricValue}>{item.value}</Text>
+              <TouchableOpacity><Text style={styles.viewText}>view</Text></TouchableOpacity>
+            </View>
+          ))}
+        </View>
+
+        <View style={styles.columns}>
+          <View style={styles.column}>
+            <Text style={styles.columnTitle}>Recent Activity</Text>
+            {[...Array(6)].map((_, idx) => (
+              <View key={idx} style={styles.activityItem} />
+            ))}
           </View>
-        ))}
-      </View>
 
-      
-{/* Columns Section - Recent Activity and Admin Requests - Add backend later*/}
-      
-      <View style={styles.columns}>
-        <View style={styles.column}>
-          <Text style={styles.columnTitle}>Recent Activity</Text>
-          {[...Array(6)].map((_, idx) => (
-            <View key={idx} style={styles.activityItem} />
-          ))}
+          <View style={styles.column}>
+            <Text style={styles.columnTitle}>Admin / Request</Text>
+            {[...Array(6)].map((_, idx) => (
+              <View key={idx} style={styles.activityItem} />
+            ))}
+          </View>
         </View>
-
-        <View style={styles.column}>
-          <Text style={styles.columnTitle}>Admin / Request</Text>
-          {[...Array(6)].map((_, idx) => (
-            <View key={idx} style={styles.activityItem} />
-          ))}
-        </View>
-      </View>
-    </ScrollView>
-      )}
+      </ScrollView>
     </Verify>
-);
-}
+  );
+};
 
-
+export default AdminDashboardScreen;
 
 const styles = StyleSheet.create({
   container: {
     padding: 20,
-    backgroundColor: '#F3F2EF', // Neutral Linen
+    backgroundColor: '#F3F2EF',
   },
   metricsRow: {
     flexDirection: 'row',
@@ -94,24 +87,24 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     alignItems: 'center',
     borderLeftWidth: 4,
-    borderLeftColor: '#338669', // Green accent border
+    borderLeftColor: '#338669',
   },
   metricLabel: {
     fontWeight: '600',
     textAlign: 'center',
     marginBottom: 8,
-    color: '#338669', // Green label
+    color: '#338669',
     fontFamily: 'Lato-Bold',
   },
   metricValue: {
     fontSize: 36,
     fontWeight: '900',
     marginBottom: 4,
-    color: '#338669', // Green value
+    color: '#338669',
     fontFamily: 'CrimsonText-Bold',
   },
   viewText: {
-    color: '#003153', 
+    color: '#003153',
     fontWeight: '500',
     fontFamily: 'Lato-Regular',
   },
@@ -132,12 +125,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
     marginBottom: 12,
-    color: '#003153', 
+    color: '#003153',
     fontFamily: 'Lato-Bold',
   },
   activityItem: {
     height: 20,
-    backgroundColor: '#D6E6F2', // Soft Blue bar
+    backgroundColor: '#D6E6F2',
     borderRadius: 6,
     marginBottom: 10,
   },
