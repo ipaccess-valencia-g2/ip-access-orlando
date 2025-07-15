@@ -47,8 +47,8 @@ export default function LoginScreen({ navigation }) {
     const response = await fetch('http://3.15.153.52:3307/login/', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
-        //'User-Agent': 'Expo (Mobile)'
+        'Content-Type': 'application/json',
+        'User-Agent': 'Expo (Mobile)'
       },
       body: JSON.stringify({
         username: username,
@@ -64,8 +64,9 @@ export default function LoginScreen({ navigation }) {
       throw new Error(data.error || 'Login failed');
     }
 
-    console.log("Logged in userID", data.userID);
+    console.log("Token received:", data.token);
     await SecureStore.setItemAsync("jwt", data.token);
+    console.log("Logged in userID", data.userID);
     
     navigation.navigate('Home'); // ✅ confirm route name is 'Home'
 

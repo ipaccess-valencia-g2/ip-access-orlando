@@ -26,6 +26,7 @@ export default function HomeScreen({ navigation }) {
   const fetchUser = async () => {
     try {
       const token = await SecureStore.getItemAsync("jwt");
+      console.log("Verifying token used:", token);
 
       const res = await fetch('http://3.15.153.52:3307/user/me', {
         method: 'GET',
@@ -37,14 +38,16 @@ export default function HomeScreen({ navigation }) {
 
       if (!res.ok) {
         const text = await res.text(); // ← try to get raw response
-      
-      console.log('Failed to fetch user info:', text);
-
+        console.log('Failed to fetch user info:', text); //unauthorized error is being thrown here
+        return;
       }
 
-      const data = await res.json(); // ✅ only if response is ok
+      const data = await res.json(); //if response is ok
+      console.log("User data:", data);
       setUserInfo(data);
+
     } catch (err) {
+      console.log("Error during fetch:", err.message)
       setUserInfo(null);
     }
   };

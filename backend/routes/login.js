@@ -41,6 +41,7 @@ router.post('/login', async (req, res) => {
 
     //issues a JWT
     const token = generateAccessJWT(user.userID);
+    console.log("Token sent to client:", token);
 
     if (isMobile) {
       // mobile client
@@ -49,8 +50,9 @@ router.post('/login', async (req, res) => {
         status: 'success',
         message: 'Login successful',
         userID: user.userID,
-        token
+        token: token
       });
+      
     } else {
       // web client
       // set HttpOnly cookie
