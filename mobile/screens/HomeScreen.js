@@ -5,13 +5,13 @@ import {
   TouchableOpacity,
   StyleSheet,
   ScrollView,
-  Dimensions, 
+  //Dimensions, 
   Image
 } from 'react-native';
 import * as SecureStore from 'expo-secure-store';
 
 
-const screenWidth = Dimensions.get('window').width;
+//const screenWidth = Dimensions.get('window').width;
 //logo
 const logo = require('../assets/TabletLogoOfficial.png');
 

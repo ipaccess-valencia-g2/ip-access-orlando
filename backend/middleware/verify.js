@@ -1,5 +1,5 @@
-const express = require('express');
-const router = express.Router();
+//const express = require('express');
+//const router = express.Router();
 const db = require("../db/connection");
 const jwt = require('jsonwebtoken');
 
@@ -7,9 +7,11 @@ const Verify = async function (req, res, next)
 {
     try
     {
-        const cookie = req.cookies.SessionID;
-        if (!cookie) return res.sendStatus(401);
-        jwt.verify(cookie, process.env.SECRET_ACCESS_TOKEN, async (err, decoded) =>
+        const token =
+            req.cookies.SessionID ||
+            (req.headers.authorization && req.headers.authorization.split(' ')[1]);
+        if (!token) return res.sendStatus(401);
+        jwt.verify(token, process.env.SECRET_ACCESS_TOKEN, async (err, decoded) =>
         {
             if (err)
             {
@@ -17,7 +19,7 @@ const Verify = async function (req, res, next)
             }
 
             const id = decoded.id;
-            const [data] = await db.query(`SELECT * FROM users WHERE userID = ${id}`);
+            const [data] = await db.execute('SELECT * FROM users WHERE userID = ?', [id]);
             req.user = data;
             next();
         });

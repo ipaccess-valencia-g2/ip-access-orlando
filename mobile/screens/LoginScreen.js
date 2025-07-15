@@ -1,7 +1,16 @@
 import React, { useState } from 'react';
 import {
-  View, Text, TextInput, TouchableOpacity, StyleSheet,
-  KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard, Image
+   View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  KeyboardAvoidingView,
+  Platform,
+  TouchableWithoutFeedback,
+  Keyboard,
+  Image,
+  Alert,
 } from 'react-native';
 import * as SecureStore from 'expo-secure-store'; // use for storing tokens if needed
 
@@ -23,10 +32,10 @@ export default function LoginScreen({ navigation }) {
     };
 
   // Delete token off of SecureStore
-  const deleteToken = async (token) => {
-    await SecureStore.deleteItemAsync(email);
-    console.log(email, " and ", token, " deleted!");
-  }
+  const deleteToken = async () => {
+  await SecureStore.deleteItemAsync('jwt');
+  console.log('Token deleted');
+};
 
   const handleLogin = async () => {
   if (!username || !password) {
@@ -38,8 +47,8 @@ export default function LoginScreen({ navigation }) {
     const response = await fetch('http://18.223.161.174:3307/login/', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
-        //er-Agent': 'Expo (Mobile)'
+        'Content-Type': 'application/json'
+        //'User-Agent': 'Expo (Mobile)'
       },
       body: JSON.stringify({
         username: username,
@@ -57,6 +66,7 @@ export default function LoginScreen({ navigation }) {
 
     console.log("Logged in userID", data.userID);
     await SecureStore.setItemAsync("jwt", data.token);
+    
     navigation.navigate('Home'); // ✅ confirm route name is 'Home'
 
   } catch (err) {

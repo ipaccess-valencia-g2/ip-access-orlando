@@ -7,11 +7,11 @@ const { Verify } = require('../middleware/verify');
 
 //short-lived JWT
 function generateAccessJWT(userID) {
-  return jwt.sign(
-    { id: userID },
-    process.env.SECRET_ACCESS_TOKEN,
-    { expiresIn: '1hr' }
-  );
+  const secret = process.env.SECRET_ACCESS_TOKEN;
+  if (!secret) {
+    throw new Error('SECRET_ACCESS_TOKEN not configured');
+  }
+  return jwt.sign({ id: userID }, secret, { expiresIn: '2m' });
 }
 
 // POST /login
