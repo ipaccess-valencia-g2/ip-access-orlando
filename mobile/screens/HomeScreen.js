@@ -27,7 +27,7 @@ export default function HomeScreen({ navigation }) {
     try {
       const token = await SecureStore.getItemAsync("jwt");
 
-      const res = await fetch('http://18.223.161.174:3307/user/me', {
+      const res = await fetch('http://3.15.153.52:3307/user/me', {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,

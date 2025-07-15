@@ -22,7 +22,7 @@ const ReservationForm = () => {
   useEffect(() => {
     const loadCenters = async () => {
       try {
-        const res = await fetch('http://18.223.161.174:3307/locations');
+        const res = await fetch('http://3.15.153.52:3307/locations');
         const data = await res.json();
         setCenters(data.locations || []);
       } catch (err) {
@@ -35,7 +35,7 @@ const ReservationForm = () => {
   useEffect(() => {
     const loadReasons = async () => {
       try {
-        const res = await fetch('http://18.223.161.174:3307/reasons');
+        const res = await fetch('http://3.15.153.52:3307/reasons');
         const data = await res.json();
         setReasons(data.reasons || []);
       } catch (err) {
@@ -48,7 +48,7 @@ const ReservationForm = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await fetch('http://18.223.161.174:3307/user/me', {
+        const res = await fetch('http://3.15.153.52:3307/user/me', {
           credentials: 'include',
         });
 
@@ -96,7 +96,7 @@ const ReservationForm = () => {
   // Search for available devices
   let chosenDeviceID;
   try {
-    const searchResponse = await fetch('http://18.223.161.174:3307/reserve/search', {
+    const searchResponse = await fetch('http://3.15.153.52:3307/reserve/search', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -128,7 +128,7 @@ const ReservationForm = () => {
 
   // Submit reservation
   try {
-    const reservationResponse = await fetch('http://18.223.161.174:3307/reserve', {
+    const reservationResponse = await fetch('http://3.15.153.52:3307/reserve', {
       method: 'POST',
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
