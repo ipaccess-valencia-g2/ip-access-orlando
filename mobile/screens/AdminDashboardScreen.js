@@ -12,7 +12,7 @@ const AdminDashboardScreen = () => {
   useEffect(() => {
     const fetchDashboard = async () => {
       try {
-        const res = await fetch('http://18.223.161.174:3000/admin/dashboard');
+        const res = await fetch('http://3.15.153.52:3000/admin/dashboard');
         const json = await res.json();
         setDashboardData(json);
       } catch (err) {
