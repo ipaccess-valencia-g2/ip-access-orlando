@@ -9,10 +9,11 @@ const logo = require('../assets/TabletLogoOfficial.png'); // logo
 
 export default function WelcomeScreen({ navigation }) {
   // Test for token
-  const timeNow = Math.floor(Date.now() / 1000);
   const testToken = SecureStore.getItem("jwt");
   const decoded = jwtDecode(testToken);
-  const tokenIsValid = decoded.exp > timeNow;
+  const timeNowSeconds = Math.floor(Date.now() / 1000);
+  const expirationDateSeconds = decoded.exp;
+  const tokenIsValid = expirationDateSeconds > timeNowSeconds;
 
   if (!tokenIsValid) {
     console.log("WelcomeScreen.js: Token expired.");
