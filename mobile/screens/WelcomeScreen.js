@@ -2,15 +2,26 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import * as SecureStore from "expo-secure-store";
+import { jwtDecode } from "jwt-decode";
 const logo = require('../assets/TabletLogoOfficial.png'); // logo
 
 
 
 export default function WelcomeScreen({ navigation }) {
   // Test for token
+  const timeNow = Math.floor(Date.now() / 1000);
   const testToken = SecureStore.getItem("jwt");
-  if (testToken) {
+  const decoded = jwtDecode(testToken);
+  const tokenIsValid = decoded.exp > timeNow;
+
+  if (!tokenIsValid) {
+    console.log("WelcomeScreen.js: Token expired.");
+    SecureStore.deleteItemAsync('jwt');
+  }
+
+  if (tokenIsValid) {
     console.log("WelcomeScreen.js: Token", testToken, "confirmed");
+    console.log("WelcomeScreen.js: Token payload:", decoded);
     navigation.navigate('Home');
   }
   else {
