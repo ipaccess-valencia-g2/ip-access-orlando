@@ -1,26 +1,36 @@
 // screens/WelcomeScreen.js
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import * as SecureStore from "expo-secure-store";
 const logo = require('../assets/TabletLogoOfficial.png'); // logo
 
 
 
 export default function WelcomeScreen({ navigation }) {
-  return (
-    <View style={styles.container}>
-  <Image source={logo} style={styles.logo} resizeMode="contain" />
-  
-  <Text style={styles.title}>Welcome to ConnectOrlando</Text>
-  <Text style={styles.subtitle}>
-    Find, reserve, and return tablets from your local community center.
-  </Text>
+  // Test for token
+  const testToken = SecureStore.getItem("jwt");
+  if (testToken) {
+    console.log("WelcomeScreen.js: Token", testToken, "confirmed");
+    navigation.navigate('Home');
+  }
+  else {
+    console.log("WelcomeScreen.js: No token found");
+    return (
+        <View style={styles.container}>
+          <Image source={logo} style={styles.logo} resizeMode="contain" />
 
-  <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Register')}>
-    <Text style={styles.buttonText}>Get Started</Text>
-  </TouchableOpacity>
-</View>
+          <Text style={styles.title}>Welcome to ConnectOrlando</Text>
+          <Text style={styles.subtitle}>
+            Find, reserve, and return tablets from your local community center.
+          </Text>
 
-  );
+          <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Register')}>
+            <Text style={styles.buttonText}>Get Started</Text>
+          </TouchableOpacity>
+        </View>
+
+    );
+  }
 }
 
 

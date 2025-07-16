@@ -26,16 +26,16 @@ export default function LoginScreen({ navigation }) {
   };
 
   // Retrieve token from SecureStore
-    const retrieveToken = async () => {
-      let result = await SecureStore.getItemAsync("jwt");
-      return result;
-    };
+  const retrieveToken = async () => {
+    let result = await SecureStore.getItemAsync("jwt");
+    return result;
+  };
 
   // Delete token off of SecureStore
   const deleteToken = async () => {
-  await SecureStore.deleteItemAsync('jwt');
-  console.log('Token deleted');
-};
+    await SecureStore.deleteItemAsync('jwt');
+    console.log('Token deleted');
+  };
 
   const handleLogin = async () => {
   if (!username || !password) {
