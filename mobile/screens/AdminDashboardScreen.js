@@ -15,7 +15,6 @@ import Verify from '../components/Verify';
 
 const API_BASE = 'http://3.15.153.52:3307';
 
-
 const AdminDashboardScreen = () => {
   const [dashboardData, setDashboardData] = useState(null);
   const [loading, setLoading] = useState(true);

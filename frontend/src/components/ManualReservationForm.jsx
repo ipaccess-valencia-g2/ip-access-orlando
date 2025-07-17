@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 
 const ManualReservationForm = () => {
   const [formData, setFormData] = useState({
-    name: '',
-    device: '',
-    date: '',
+    userId: '',
+    deviceId: '',
+    startTime: '',
+    endTime: '',
     reason: '',
   });
 
@@ -15,12 +16,24 @@ const ManualReservationForm = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // TODO: Send to backend or update state
-    console.log('Reservation submitted:', formData);
-    alert('Reservation manually added.');
-    setFormData({ name: '', device: '', date: '', reason: '' });
+     try {
+      const res = await fetch('http://3.15.153.52:3307/admin/reservations', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify(formData)
+      });
+      if (!res.ok) {
+        console.error('Manual reservation failed', await res.text());
+      } else {
+        alert('Reservation manually added.');
+        setFormData({ userId: '', deviceId: '', startTime: '', endTime: '', reason: '' });
+      }
+    } catch (err) {
+      console.error('Manual reservation error:', err);
+    }
   };
 
   return (
@@ -29,9 +42,9 @@ const ManualReservationForm = () => {
 
       <input
         type="text"
-        name="name"
-        placeholder="Resident Name"
-        value={formData.name}
+        name="userId"
+        placeholder="User ID"
+        value={formData.userId}
         onChange={handleChange}
         className="w-full p-2 border rounded"
         required
@@ -39,18 +52,27 @@ const ManualReservationForm = () => {
 
       <input
         type="text"
-        name="device"
-        placeholder="Device ID or Name"
-        value={formData.device}
+        name="deviceId"
+        placeholder="Device ID"
+        value={formData.deviceId}
         onChange={handleChange}
         className="w-full p-2 border rounded"
         required
       />
 
       <input
-        type="date"
-        name="date"
-        value={formData.date}
+        type="datetime-local"
+        name="startTime"
+        value={formData.startTime}
+        onChange={handleChange}
+        className="w-full p-2 border rounded"
+        required
+      />
+
+      <input
+        type="datetime-local"
+        name="endTime"
+        value={formData.endTime}
         onChange={handleChange}
         className="w-full p-2 border rounded"
         required

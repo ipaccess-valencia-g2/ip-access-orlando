@@ -106,4 +106,15 @@ router.post('/admin/reservations', async (req, res) => {
   }
 });
 
+// GET /admin/reservations - list current reservations
+router.get('/admin/reservations', async (req, res) => {
+  try {
+    const [rows] = await db.query('SELECT * FROM reservations');
+    res.json(rows);
+  } catch (err) {
+    console.error('Error fetching reservations:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 module.exports = router;
