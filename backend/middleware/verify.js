@@ -3,52 +3,48 @@
 const db = require("../db/connection");
 const jwt = require('jsonwebtoken');
 
-const Verify = async function (req, res, next)
-{
-    try
-    {
+const Verify = async function (req, res, next) {
+    try {
         const token =
-            req.cookies.SessionID ||
+            req.cookies?.SessionID ||
             (req.headers.authorization && req.headers.authorization.split(' ')[1]);
+
         if (!token) return res.sendStatus(401);
-        jwt.verify(token, process.env.SECRET_ACCESS_TOKEN, async (err, decoded) =>
-        {
-            if (err)
-            {
+        jwt.verify(token, process.env.SECRET_ACCESS_TOKEN, async (err, decoded) => {
+            if (err) {
                 return res.status(401).json({ message: "This session has expired. Please login" });
             }
 
             const id = decoded.id;
             const [data] = await db.execute('SELECT * FROM users WHERE userID = ?', [id]);
-            req.user = data;
+
+
+            if (!data || data.length === 0) {
+                return res.status(401).json({ message: "User not found" });
+            }
+            req.user = data[0];
             next();
         });
-    }
-    catch (err)
-    {
-        res.status(500).json({
-            message: "Internal Server Error"
-        });
+    } catch (err) {
+        console.error("Verify error:", err);
+        res.status(500).json({ message: "Error" });
     }
 };
 
-const VerifyRole = async function (req, res, next)
-{
-    try
-    {
+const VerifyRole = async function (req, res, next) {
+    try {
         const user = req.user;
 
-        if (user[0].isStaff !== 1)
-        {
+        if (user.isStaff !== 1) {
             return res.status(401).json({
                 status: "failed",
                 message: "You are not authorized to view this page."
-            })
+            });
         }
+
         next();
-    }
-    catch (err)
-    {
+    } catch (err) {
+        console.error("VerifyRole middleware error:", err);
         res.status(500).json({
             status: "error",
             code: 500,
