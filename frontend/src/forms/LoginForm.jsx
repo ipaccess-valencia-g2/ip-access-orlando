@@ -37,7 +37,7 @@ const LoginForm = () => {
         setSuccessMessage('');
 
         try {
-            const response = await fetch(`http://18.223.161.174:3307/login`, {
+            const response = await fetch(`http://3.15.153.52:3307/login`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 credentials: 'include', // important for cookie
@@ -49,6 +49,9 @@ const LoginForm = () => {
             if (!response.ok) {
                 throw new Error(data.message || 'Login failed');
             }
+
+            // Save user ID to local storage
+            localStorage.setItem('userID', data.userID);
 
             console.log("Logged in userID:", data.userID);
             setSuccessMessage('Login successful! Redirecting...');

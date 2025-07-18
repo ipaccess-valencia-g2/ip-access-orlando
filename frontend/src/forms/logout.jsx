@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import {useNavigate} from "react-router-dom";
 import './formStyles/Logout.css';
 
-const Logout = ({ onClose, onConfirm }) => {
+const Logout = ({ onClose }) => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const navigate = useNavigate();
 
@@ -17,6 +17,9 @@ const Logout = ({ onClose, onConfirm }) => {
             if (!res.ok) {
                 throw new Error('Failed to log out');
             }
+
+            // Clear user ID from local storage
+            localStorage.removeItem('userID');
 
             // Redirect to log in after successful logout
             navigate('/login');

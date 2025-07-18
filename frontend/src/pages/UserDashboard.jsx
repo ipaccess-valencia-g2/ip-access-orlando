@@ -17,8 +17,7 @@ const UserDashboard = () => {
     const [reservations, setReservations] = useState([]);
     const [activePanel, setActivePanel] = useState(null); // 'edit' | 'password' | 'logout' | 'delete'
     const navigate = useNavigate();
-    //const userID = localStorage.getItem('userID');
-    const userID = 2;
+    const userID = localStorage.getItem('userID');
 
     const fetchUserData = async () => {
         try {
