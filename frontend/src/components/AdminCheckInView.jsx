@@ -6,37 +6,56 @@ const AdminCheckInView = () => {
   const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
-    const mockData = [
-      { id: 1, user: 'Jane Doe', device: 'iPad', condition: 'Good' },
-      { id: 2, user: 'John Doe', device: 'Inseego MIFI X PRO 5G', condition: 'Good' },
-      { id: 3, user: 'Johnny Doe', device: 'Dell Latitude 3550', condition: 'Good' },
-      { id: 4, user: 'Emily White', device: 'iPad', condition: 'Good' },
-    ];
-    setCheckedOutDevices(mockData);
+    const fetchData = async () => {
+      try {
+        const res = await fetch('http://3.15.153.52:3307/admin/reservations', {
+          credentials: 'include'
+        });
+        const data = await res.json();
+        setCheckedOutDevices(data);
+      } catch (err) {
+        console.error('Failed to load reservations:', err);
+      }
+    };
+    fetchData();
   }, []);
 
-  const handleConditionChange = (deviceId, newCondition) => {
-    setCheckedOutDevices((prevDevices) =>
-      prevDevices.map((device) =>
-        device.id === deviceId ? { ...device, condition: newCondition } : device
+  const handleConditionChange = (reservationId, newCondition) => {
+    setCheckedOutDevices(prev =>
+      prev.map(r =>
+        r.reservationID === reservationId ? { ...r, condition: newCondition } : r
       )
     );
   };
 
-  const handleCheckIn = (deviceToCheckIn) => {
-    console.log(
-      `Checking in device ID: ${deviceToCheckIn.id} for user ${deviceToCheckIn.user} with final condition: ${deviceToCheckIn.condition}`
-    );
-    setCheckedOutDevices((prev) =>
-      prev.filter((device) => device.id !== deviceToCheckIn.id)
-    );
+  const handleCheckIn = async (reservation) => {
+    try {
+      const res = await fetch(
+        'http://3.15.153.52:3307/admin/reservations/${reservation.reservationID}/checkin',
+        {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({ condition: reservation.condition })
+        }
+      );
+      if (res.ok) {
+        setCheckedOutDevices(prev =>
+          prev.filter(r => r.reservationID !== reservation.reservationID)
+        );
+      } else {
+        console.error('Check-in failed', await res.text());
+      }
+    } catch (err) {
+      console.error('Check-in error:', err);
+    }
   };
 
 
   const filteredDevices = checkedOutDevices.filter(
-    (device) =>
-      device.user.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      device.device.toLowerCase().includes(searchTerm.toLowerCase())
+    (r) =>
+      String(r.userID).toLowerCase().includes(searchTerm.toLowerCase()) ||
+      String(r.deviceID).toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -60,21 +79,21 @@ const AdminCheckInView = () => {
         <table className="w-full border-collapse border border-gray-300">
           <thead className="bg-gray-100">
             <tr>
-              <th className="border p-2">User</th>
-              <th className="border p-2">Device</th>
+              <th className="border p-2">User ID</th>
+              <th className="border p-2">Device ID</th>
               <th className="border p-2">Condition</th>
               <th className="border p-2">Action</th>
             </tr>
           </thead>
           <tbody>
             {filteredDevices.map((device) => (
-              <tr key={device.id}>
-                <td className="border p-2">{device.user}</td>
-                <td className="border p-2">{device.device}</td>
+              <tr key={device.reservationID}>
+                <td className="border p-2">{device.userID}</td>
+                <td className="border p-2">{device.deviceID}</td>
                 <td className="border p-2">
                   <select
-                    value={device.condition}
-                    onChange={(e) => handleConditionChange(device.id, e.target.value)}
+                     value={device.condition || 'Good'}
+                    onChange={(e) => handleConditionChange(device.reservationID, e.target.value)}
                     className="p-1 border rounded"
                   >
                     <option>Good</option>

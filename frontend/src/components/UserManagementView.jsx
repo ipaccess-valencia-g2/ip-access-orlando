@@ -1,31 +1,27 @@
-import React, { useState, useEffect } from 'react'; // <--- FIX: Added useEffect
+import React, { useState, useEffect } from 'react';
 
 const UserManagementView = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [editingUser, setEditingUser] = useState(null);
-  const [editData, setEditData] = useState({ name: '', email: '' });
+  const [editData, setEditData] = useState({ firstName: '', lastName: '', email: '' });
   const [searchTerm, setSearchTerm] = useState('');
-  const [sortKey, setSortKey] = useState('name');
+  const [sortKey, setSortKey] = useState('firstName');
   const [sortOrder, setSortOrder] = useState('asc');
 
   const [showAddForm, setShowAddForm] = useState(false);
-  const [newUser, setNewUser] = useState({ name: '', email: '', isAdmin: false });
+  const [newUser, setNewUser] = useState({ firstName: '', lastName: '', username: '', email: '', isAdmin: false });
 
-  // --- FETCH USERS ON COMPONENT MOUNT ---
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        setLoading(true); // Set loading true before fetching
+        setLoading(true);
         const res = await fetch('http://3.15.153.52:3307/admin/users', { credentials: 'include' });
-        if (!res.ok) {
-          throw new Error(`HTTP error! status: ${res.status}`);
-        }
+        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
         const data = await res.json();
         setUsers(data);
       } catch (err) {
         console.error('Failed to fetch users:', err);
-        // You might want to show an error message to the user here
       } finally {
         setLoading(false);
       }
@@ -33,10 +29,9 @@ const UserManagementView = () => {
     fetchUsers();
   }, []);
 
-  // --- HANDLERS ---
   const handleEdit = (user) => {
-    setEditingUser(user.id);
-    setEditData({ name: user.name, email: user.email });
+    setEditingUser(user.userID ?? user.id);
+    setEditData({ firstName: user.firstName, lastName: user.lastName, email: user.email });
   };
 
   const handleCancelEdit = () => {
@@ -51,22 +46,15 @@ const UserManagementView = () => {
 
   const handleSave = async () => {
     if (!editingUser) return;
-
     try {
-      // Simulate API call to update user
-      // Replace with your actual PUT/PATCH API call
       const res = await fetch(`http://3.15.153.52:3307/admin/users/${editingUser}`, {
-        method: 'PUT', // Or 'PATCH'
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(editData),
         credentials: 'include',
       });
 
-      if (!res.ok) {
-        throw new Error(`Failed to save user: ${res.status}`);
-      }
+      if (!res.ok) throw new Error(`Failed to save user: ${res.status}`);
 
       setUsers((prev) =>
         prev.map((u) => (u.id === editingUser ? { ...u, ...editData } : u))
@@ -74,26 +62,19 @@ const UserManagementView = () => {
       setEditingUser(null);
     } catch (err) {
       console.error('Error saving user:', err);
-      // Handle error (e.g., show a toast notification)
     }
   };
 
   const handlePromote = async (id) => {
     try {
-      // Simulate API call to promote user
-      // Replace with your actual PUT/PATCH API call
       const res = await fetch(`http://3.15.153.52:3307/admin/users/${id}/promote`, {
-        method: 'PATCH', // Or 'PUT'
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ isAdmin: true }),
         credentials: 'include',
       });
 
-      if (!res.ok) {
-        throw new Error(`Failed to promote user: ${res.status}`);
-      }
+      if (!res.ok) throw new Error(`Failed to promote user: ${res.status}`);
 
       setUsers((prev) =>
         prev.map((user) =>
@@ -102,7 +83,6 @@ const UserManagementView = () => {
       );
     } catch (err) {
       console.error('Error promoting user:', err);
-      // Handle error
     }
   };
 
@@ -112,74 +92,49 @@ const UserManagementView = () => {
   };
 
   const handleAddUser = async () => {
-    // Basic validation
-    if (!newUser.name || !newUser.email) {
-      alert('Name and Email are required.');
-      return;
-    }
-
-    try {
-      // Simulate API call to add new user
-      // Replace with your actual POST API call
-      const res = await fetch('http://3.15.153.52:3307/admin/users', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(newUser),
-        credentials: 'include',
-      });
-
-      if (!res.ok) {
-        throw new Error(`Failed to add user: ${res.status}`);
-      }
-
-      const addedUserData = await res.json(); // Assuming your API returns the new user with an ID
-      setUsers((prev) => [...prev, addedUserData]); // Use data from API for ID
-      setNewUser({ name: '', email: '', isAdmin: false });
-      setShowAddForm(false);
-    } catch (err) {
-      console.error('Error adding user:', err);
-      // Handle error
-    }
+    const newId = users.length ? Math.max(...users.map(u => u.userID ?? u.id)) + 1 : 1;
+    setUsers([...users, { userID: newId, ...newUser }]);
+    setNewUser({ firstName: '', lastName: '', email: '', isAdmin: false });
+    setShowAddForm(false);
   };
 
-  // --- FILTERING AND SORTING LOGIC ---
   const filteredAndSortedUsers = users
-    .filter(user =>
-      user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      user.email.toLowerCase().includes(searchTerm.toLowerCase())
-    )
+    .filter(user => {
+      const term = searchTerm.toLowerCase();
+      const fullName = `${user.firstName || ''} ${user.lastName || ''}`.toLowerCase();
+      return (
+        fullName.includes(term) ||
+        user.username?.toLowerCase().includes(term) ||
+        user.email?.toLowerCase().includes(term)
+      );
+    })
     .sort((a, b) => {
-      const valA = String(a[sortKey]).toLowerCase(); // Ensure string conversion
-      const valB = String(b[sortKey]).toLowerCase(); // Ensure string conversion
-
+      const valA = a[sortKey]?.toLowerCase?.() || a[sortKey];
+      const valB = b[sortKey]?.toLowerCase?.() || b[sortKey];
       if (valA < valB) return sortOrder === 'asc' ? -1 : 1;
       if (valA > valB) return sortOrder === 'asc' ? 1 : -1;
       return 0;
     });
 
-  // --- RENDER COMPONENT ---
-  return (
-    <div className="p-4"> {/* Added some padding for better spacing */}
+   return (
+    <div className="p-4">
       <h2 className="text-2xl font-bold mb-4">User Management</h2>
 
-      {/* Top Controls */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
-        <div className="flex flex-1 gap-2 flex-wrap"> {/* Added flex-wrap for responsiveness */}
+        <div className="flex flex-1 gap-2 flex-wrap">
           <input
             type="text"
             placeholder="Search by name or email..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="p-2 border border-gray-300 rounded w-full md:w-auto flex-grow" // flex-grow for better filling
+            className="p-2 border border-gray-300 rounded w-full md:w-auto flex-grow"
           />
           <select
             value={sortKey}
             onChange={(e) => setSortKey(e.target.value)}
             className="p-2 border border-gray-300 rounded"
           >
-            <option value="name">Sort by Name</option>
+            <option value="firstName">Sort by Name</option>
             <option value="email">Sort by Email</option>
           </select>
           <button
@@ -198,45 +153,25 @@ const UserManagementView = () => {
         </button>
       </div>
 
-      {/* Add New User Form */}
       {showAddForm && (
         <div className="mb-6 border p-4 rounded-lg shadow-sm bg-gray-50">
           <h3 className="font-semibold text-lg mb-3">Add New User</h3>
           <div className="flex flex-col md:flex-row gap-3">
-            <input
-              name="name"
-              value={newUser.name}
-              onChange={handleAddChange}
-              placeholder="Full Name"
-              className="p-2 border border-gray-300 rounded w-full flex-grow"
-              required
-            />
-            <input
-              name="email"
-              type="email" // Use type="email" for better validation
-              value={newUser.email}
-              onChange={handleAddChange}
-              placeholder="Email"
-              className="p-2 border border-gray-300 rounded w-full flex-grow"
-              required
-            />
-            <button
-              onClick={handleAddUser}
-              className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition-colors"
-            >
-              Add User
-            </button>
+            <input name="firstName" value={newUser.firstName} onChange={handleAddChange} placeholder="First Name" className="p-2 border rounded w-full" />
+            <input name="lastName" value={newUser.lastName} onChange={handleAddChange} placeholder="Last Name" className="p-2 border rounded w-full" />
+            <input name="username" value={newUser.username} onChange={handleAddChange} placeholder="Username" className="p-2 border rounded w-full" />
+            <input name="email" type="email" value={newUser.email} onChange={handleAddChange} placeholder="Email" className="p-2 border border-gray-300 rounded w-full flex-grow" required />
+            <button onClick={handleAddUser} className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition-colors">Add User</button>
           </div>
         </div>
       )}
 
-      {/* User Table */}
       {loading ? (
         <p className="text-center text-lg mt-8">Loading users...</p>
       ) : (
-        <div className="overflow-x-auto rounded-lg shadow"> {/* Changed overflow-y-auto to overflow-x-auto for table scrolling */}
+        <div className="overflow-x-auto rounded-lg shadow">
           <table className="min-w-full table-auto border-collapse border border-gray-200">
-            <thead className="bg-gray-100 sticky top-0"> {/* sticky top-0 for fixed header */}
+            <thead className="bg-gray-100 sticky top-0">
               <tr>
                 <th className="border p-3 text-left">Name</th>
                 <th className="border p-3 text-left">Email</th>
@@ -251,66 +186,36 @@ const UserManagementView = () => {
                 </tr>
               ) : (
                 filteredAndSortedUsers.map((user) => (
-                  <tr key={user.id} className="bg-white hover:bg-gray-50 transition-colors">
-                    {editingUser === user.id ? (
+                  <tr key={user.userID ?? user.id} className="text-center">
+                    {editingUser === (user.userID ?? user.id) ? (
                       <>
                         <td className="border p-2">
-                          <input
-                            name="name"
-                            value={editData.name}
-                            onChange={handleChange}
-                            className="p-1 border border-gray-300 rounded w-full"
-                          />
+                          <input name="firstName" value={editData.firstName} onChange={handleChange} className="p-1 border rounded" />
                         </td>
                         <td className="border p-2">
-                          <input
-                            name="email"
-                            type="email"
-                            value={editData.email}
-                            onChange={handleChange}
-                            className="p-1 border border-gray-300 rounded w-full"
-                          />
+                          <input name="lastName" value={editData.lastName} onChange={handleChange} className="p-1 border border-gray-300 rounded w-full" />
+                        </td>
+                        <td className="border p-2">
+                          <input name="email" type="email" value={editData.email} onChange={handleChange} className="p-1 border border-gray-300 rounded w-full" />
                         </td>
                         <td className="border p-2">
                           {user.isAdmin ? 'Admin' : 'User'}
                         </td>
                         <td className="border p-2 space-x-2 flex flex-wrap gap-2 justify-center">
-                          <button
-                            onClick={handleSave}
-                            className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 transition-colors"
-                          >
-                            Save
-                          </button>
-                          <button
-                            onClick={handleCancelEdit}
-                            className="bg-gray-500 text-white px-3 py-1 rounded hover:bg-gray-600 transition-colors"
-                          >
-                            Cancel
-                          </button>
+                          <button onClick={handleSave} className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 transition-colors">Save</button>
+                          <button onClick={handleCancelEdit} className="bg-gray-500 text-white px-3 py-1 rounded hover:bg-gray-600 transition-colors">Cancel</button>
                           {!user.isAdmin && (
-                            <button
-                              onClick={() => handlePromote(user.id)}
-                              className="bg-purple-600 text-white px-3 py-1 rounded hover:bg-purple-700 transition-colors"
-                            >
-                              Promote to Admin
-                            </button>
+                            <button onClick={() => handlePromote(user.id)} className="bg-purple-600 text-white px-3 py-1 rounded hover:bg-purple-700 transition-colors">Promote to Admin</button>
                           )}
                         </td>
                       </>
                     ) : (
                       <>
-                        <td className="border p-2">{user.name}</td>
+                        <td className="border p-2">{`${user.firstName} ${user.lastName}`}</td>
                         <td className="border p-2">{user.email}</td>
                         <td className="border p-2">{user.isAdmin ? 'Admin' : 'User'}</td>
                         <td className="border p-2 space-x-2 flex flex-wrap gap-2 justify-center">
-                          <button
-                            onClick={() => handleEdit(user)}
-                            className="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700 transition-colors"
-                          >
-                            Edit
-                          </button>
-                          {/* You might want a delete button here too */}
-                          {/* <button className="bg-red-600 text-white px-3 py-1 rounded">Delete</button> */}
+                          <button onClick={() => handleEdit(user)} className="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700 transition-colors">Edit</button>
                         </td>
                       </>
                     )}

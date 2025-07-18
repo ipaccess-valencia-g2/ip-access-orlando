@@ -117,4 +117,19 @@ router.get('/admin/reservations', async (req, res) => {
   }
 });
 
+router.put('/admin/reservations/:id/checkin', async (req, res) => {
+  const { id } = req.params;
+  const { condition } = req.body;
+  try {
+    await db.execute(
+      'UPDATE reservations SET checkedInAt = NOW(), condition = ? WHERE reservationID = ?',
+      [condition || null, id]
+    );
+    res.json({ message: 'Reservation checked in' });
+  } catch (err) {
+    console.error('Manual check-in error:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 module.exports = router;
