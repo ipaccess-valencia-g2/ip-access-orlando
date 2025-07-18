@@ -5,3 +5,4 @@ export { default as LoginPage } from './LoginPage';
 export { default as AdminPage } from './AdminPage';
 export { default as ConfirmationPage } from './ConfirmationPage';
 export { default as UserDashboard } from './UserDashboard';
+export { default as AboutPage } from './AboutPage';

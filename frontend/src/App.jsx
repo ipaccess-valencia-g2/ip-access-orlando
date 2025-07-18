@@ -1,6 +1,7 @@
 import { Routes, Route, Link, Navigate } from 'react-router-dom';
 import {
   HomePage,
+  AboutPage,
   RegisterPage,
   ReservationPage,
   LoginPage,
@@ -14,6 +15,7 @@ function App() {
     <>
       <nav className="main-nav">
         <Link to="/">Home</Link><span className="separator">|</span>
+        <Link to="/about">About</Link><span className="separator">|</span>
         <Link to="/register">Register</Link><span className="separator">|</span>
         <Link to="/login">Login</Link><span className="separator">|</span>
         <Link to="/dashboard">User Dashboard</Link><span className="separator">|</span>
@@ -23,6 +25,7 @@ function App() {
 
       <Routes>
         <Route path="/"             element={<HomePage />}          />
+        <Route path="/about"        element={<AboutPage />}         />
         <Route path="/register"     element={<RegisterPage />}      />
         <Route path="/login"        element={<LoginPage />}         />
         <Route path="/dashboard"    element={<UserDashboard />}     />
