@@ -6,19 +6,35 @@ const ManualCheckout = () => {
   const [returnDate, setReturnDate] = useState('');
   const [reason, setReason] = useState('');
 
-  const handleSubmit = (e) => {
- 
-    e.preventDefault(); 
-    
-  
-    console.log({
-      userId,
-      deviceId,
-      returnDate,
-      reason,
-    });
-    
-    alert('Checkout form submitted! Check the console for the data.');
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const res = await fetch('http://3.15.153.52:3307/admin/log-device', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({
+          userId,
+          deviceId,
+          startTime: new Date().toISOString(),
+          endTime: returnDate,
+          reason
+        })
+      });
+
+      if (!res.ok) {
+        console.error('Manual checkout failed', await res.text());
+      } else {
+        setUserId('');
+        setDeviceId('');
+        setReturnDate('');
+        setReason('');
+        alert('Checkout logged.');
+      }
+    } catch (err) {
+      console.error('Manual checkout error:', err);
+    }
   };
 
   return (

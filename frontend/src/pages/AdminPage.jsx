@@ -13,7 +13,7 @@ const AdminPage = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await fetch('http://18.223.161.174:3307/user/me', { credentials: 'include' });
+        const res = await fetch('http://3.15.153.52:3307/user/me', { credentials: 'include' });
         if (res.ok) {
           const data = await res.json();
           setFirstName(data.firstName);

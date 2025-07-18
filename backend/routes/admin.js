@@ -16,102 +16,105 @@ const bcrypt = require('bcrypt');
 
 // POST /admin — admin login :)
 router.post('/admin', async (req, res) => {
-    const { identifier, password } = req.body;
-
-    if (!identifier || !password) {
-        return res.status(400).json({ error: 'Username/email and password are required.' });
+     const { identifier, password } = req.body;
+  if (!identifier || !password) {
+    return res.status(400).json({ error: 'Username/email and password are required.' });
+  }
+  try {
+    const [rows] = await db.execute('SELECT * FROM users WHERE username = ? OR email = ?', [identifier, identifier]);
+    const user = rows[0];
+    if (!user) {
+      return res.status(401).json({ error: 'No account with those credentials found.' });
     }
 
-    try {
-        // Look up user by username or email
-        const [rows] = await db.execute(
-            'SELECT * FROM users WHERE username = ? OR email = ?',
-            [identifier, identifier]
-        );
-
-        const user = rows[0];
-
-        if (!user) {
-            return res.status(401).json({ error: 'No account with those credentials found.' });
-        }
-
-        if (!user.isStaff) {
-            return res.status(403).json({ error: 'Access denied: not an admin user.' });
-        }
-
-        // Compare hashed passwords
-        const passwordMatch = await bcrypt.compare(password, user.password);
-        if (!passwordMatch) {
-            return res.status(401).json({ error: 'Invalid credentials.' });
-        }
-
-        // Respond with success
-        res.json({
-            message: 'Admin login successful',
-            userId: user.userID,
-            username: user.username,
-            isStaff: true
-        });
-
-    } catch (error) {
-        console.error('Admin login error:', error);
-        res.status(500).json({ error: 'Internal server error.' });
+    if (!user.isStaff) {
+      return res.status(403).json({ error: 'Access denied: not an admin user.' });
     }
+    const passwordMatch = await bcrypt.compare(password, user.password);
+    if (!passwordMatch) {
+      return res.status(401).json({ error: 'Invalid credentials.' });
+    }
+    res.json({ message: 'Admin login successful', userId: user.userID, username: user.username, isStaff: true });
+  } catch (error) {
+    console.error('Admin login error:', error);
+    res.status(500).json({ error: 'Internal server error.' });
+  }
 });
 
 // GET /admin
 
 
 // Dashboard summary stats
-router.get('/admin/dashboard', (req, res) => {
+router.get('/admin/dashboard', async(req, res) => {
     const today = new Date().toISOString().slice(0, 10);
-
-    db.serialize(() => {
-        db.get('SELECT COUNT(*) AS total FROM reservations', (err, row1) => {
-            if (err) return res.status(500).json({ error: err.message });
-
-            db.get(
-                `SELECT COUNT(*) AS checkedOutToday FROM reservations WHERE checkedOutAt LIKE ?`,
-                [`${today}%`],
-                (err, row2) => {
-                    if (err) return res.status(500).json({ error: err.message });
-
-                    db.get(
-                        `SELECT COUNT(*) AS checkedInToday FROM reservations WHERE checkedInAt LIKE ?`,
-                        [`${today}%`],
-                        (err, row3) => {
-                            if (err) return res.status(500).json({ error: err.message });
-
-                            db.get(
-                                `SELECT COUNT(*) AS overdue FROM reservations WHERE checkedInAt IS NULL AND checkedOutAt < ?`,
-                                [today],
-                                (err, row4) => {
-                                    if (err) return res.status(500).json({ error: err.message });
-
-                                    res.json({
-                                        totalDevices: row1.total,
-                                        checkedOutToday: row2.checkedOutToday,
-                                        checkedInToday: row3.checkedInToday,
-                                        overdue: row4.overdue,
-                                    });
-                                }
-                            );
-                        }
-                    );
-                }
-            );
-        });
-    });
+  try {
+    const [[{ total }]] = await db.query('SELECT COUNT(*) AS total FROM reservations');
+    const [[{ checkedOutToday }]] = await db.query('SELECT COUNT(*) AS checkedOutToday FROM reservations WHERE checkedOutAt LIKE ?', [`${today}%`]);
+    const [[{ checkedInToday }]] = await db.query('SELECT COUNT(*) AS checkedInToday FROM reservations WHERE checkedInAt LIKE ?', [`${today}%`]);
+    const [[{ overdue }]] = await db.query('SELECT COUNT(*) AS overdue FROM reservations WHERE checkedInAt IS NULL AND checkedOutAt < ?', [today]);
+    res.json({ totalDevices: total, checkedOutToday, checkedInToday, overdue });
+  } catch (err) {
+    console.error('Dashboard query error:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
 });
 
-module.exports = router;
-
-router.get('/admin', (req, res) => {
-    res.send('Admin Dashboard');
+// GET /admin/users - list users
+router.get('/admin/users', async (req, res) => {
+  try {
+    const [rows] = await db.query('SELECT * FROM users');
+    res.json(rows);
+  } catch (err) {
+    console.error('Error fetching users:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
 });
 
-// Reuse all user routes under the /admin prefix
-const userRoutes = require('./user');
-router.use('/admin', userRoutes);
+// POST /admin/log-device - manual device checkout
+router.post('/admin/log-device', async (req, res) => {
+  const { userId, deviceId, locationId, startTime, endTime, reason, adminNotes } = req.body;
+  if (!userId || !deviceId) {
+    return res.status(400).json({ error: 'userId and deviceId are required' });
+  }
+  try {
+    await db.execute(
+      'INSERT INTO reservations (userID, deviceID, locationID, startTime, endTime, reason, adminNotes) VALUES (?, ?, ?, ?, ?, ?, ?)',
+      [userId, deviceId, locationId, startTime, endTime, reason || null, adminNotes || null]
+    );
+    res.status(201).json({ message: 'Device usage logged' });
+  } catch (err) {
+    console.error('Manual checkout error:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// POST /admin/reservations - create reservation for user
+router.post('/admin/reservations', async (req, res) => {
+  const { userId, deviceId, locationId, startTime, endTime, reason } = req.body;
+  if (!userId || !deviceId || !startTime || !endTime) {
+    return res.status(400).json({ error: 'Missing required fields' });
+  }
+  try {
+    await db.execute(
+      'INSERT INTO reservations (userID, deviceID, locationID, startTime, endTime, reason) VALUES (?, ?, ?, ?, ?, ?)',
+      [userId, deviceId, locationId, startTime, endTime, reason || null]
+    );
+    res.status(201).json({ message: 'Reservation created' });
+  } catch (err) {
+    console.error('Manual reservation error:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// GET /admin/reservations - list current reservations
+router.get('/admin/reservations', async (req, res) => {
+  try {
+    const [rows] = await db.query('SELECT * FROM reservations');
+    res.json(rows);
+  } catch (err) {
+    console.error('Error fetching reservations:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
 
 module.exports = router;

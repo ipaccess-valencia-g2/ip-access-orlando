@@ -5,11 +5,13 @@ import {
   TouchableOpacity,
   StyleSheet,
   ScrollView,
-  Dimensions, 
+  //Dimensions, 
   Image
 } from 'react-native';
+import * as SecureStore from 'expo-secure-store';
 
-const screenWidth = Dimensions.get('window').width;
+
+//const screenWidth = Dimensions.get('window').width;
 //logo
 const logo = require('../assets/TabletLogoOfficial.png');
 
@@ -21,28 +23,37 @@ export default function HomeScreen({ navigation }) {
   const [userInfo, setUserInfo] = useState(null); // holds logged in user info
 
   useEffect(() => {
-    //fetch current user info - IP must match backend - update if needed
-    const fetchUser = async () => {
-      try {
-        const res = await fetch('http://18.223.161.174:3307/user/me', {
-          credentials: 'include', //pass cookie for session authorization 
-        });
+  const fetchUser = async () => {
+    try {
+      const token = await SecureStore.getItemAsync("jwt");
+      console.log("Verifying token used:", token);
 
-        if (!res.ok) {
-          throw new Error('Not logged in');
-        }
+      const res = await fetch('http://3.15.153.52:3307/user/me', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+      });
 
-        const data = await res.json();
-        console.log('Logged in user info:', data);
-        setUserInfo(data);
-      } catch (err) {
-        console.log('Failed to fetch user info:', err.message);
-        setUserInfo(null);
+      if (!res.ok) {
+        const text = await res.text(); // ← try to get raw response
+        console.log('Failed to fetch user info:', text); //unauthorized error is being thrown here
+        return;
       }
-    };
 
-    fetchUser();
-  }, []);
+      const data = await res.json(); //if response is ok
+      console.log("User data:", data);
+      setUserInfo(data);
+
+    } catch (err) {
+      console.log("Error during fetch:", err.message)
+      setUserInfo(null);
+    }
+  };
+
+  fetchUser();
+}, []);
 
   return (
     <ScrollView contentContainerStyle={styles.container}>

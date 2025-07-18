@@ -1,95 +1,79 @@
 import React, { useState } from 'react';
 import {
-  View, Text, TextInput, TouchableOpacity, StyleSheet,
-  KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard, Image
+   View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  KeyboardAvoidingView,
+  Platform,
+  TouchableWithoutFeedback,
+  Keyboard,
+  Image,
+  Alert,
 } from 'react-native';
 import * as SecureStore from 'expo-secure-store'; // use for storing tokens if needed
 
-// // test for jwt token
-// const token = retrieveToken();
-// if (token[2]) {
-//   console.log("Token retrieved, ", token);
-//   navigation.navigate('Home');
-// }
 
 export default function LoginScreen({ navigation }) {
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
   // Save token
   const saveToken = async (token) => {
-    await SecureStore.setItemAsync("key", token);
-    console.log("Token ", token, " saved!");
-  }
+    await SecureStore.setItemAsync("jwt", token);
+    console.log("Token saved: ", token);
+  };
 
   // Retrieve token from SecureStore
-    const retrieveToken = async () => {
-      let result = await SecureStore.getItemAsync("key");
-      return result;
-    }
+  const retrieveToken = async () => {
+    let result = await SecureStore.getItemAsync("jwt");
+    return result;
+  };
 
   // Delete token off of SecureStore
-  const deleteToken = async (token) => {
-    await SecureStore.deleteItemAsync(email);
-    console.log(email, " and ", token, " deleted!");
-  }
+  const deleteToken = async () => {
+    await SecureStore.deleteItemAsync('jwt');
+    console.log('Token deleted');
+  };
 
   const handleLogin = async () => {
-    if (!email || !password) {
-      Alert.alert('Please fill in all fields');
-      return;
+  if (!username || !password) {
+    Alert.alert('Please fill in all fields');
+    return;
+  }
+
+  try {
+    const response = await fetch('http://3.15.153.52:3307/login/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'User-Agent': 'Expo (Mobile)'
+      },
+      body: JSON.stringify({
+        username: username,
+        password: password
+      })
+    });
+
+    const data = await response.json();
+    console.log("Login response:", data);
+
+
+    if (!response.ok) {
+      throw new Error(data.error || 'Login failed');
     }
 
-    // Extra
-    try {
-      // Send POST request to backend login endpoint - check IP 
-      const response = await fetch(
-        `http://18.223.161.174:3307/login/`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-type': 'application/json',
-            'User-Agent': 'Expo (Mobile)'
-          },
-          //comment out credentials if testing live URL
-          //credentials: 'include',
-          body: JSON.stringify({
-            username: encodeURIComponent(email),
-            password: encodeURIComponent(password)
-          })
-        }
-      );
-
-      const data = await response.json();
-      console.log(data);
-      console.log(data.token);
-
-      //console message proving which user is logged in
-      console.log("Logged in userID ", data.userID);
-
-      // // Save token for a user
-      // await saveToken(data.token);
-      //
-      // // Retrieve the token - test
-      // const testToken = retrieveToken();
-      //
-      // // Delete the token - test
-      // await deleteToken(testToken);
-
-      // If response not OK, throw an error
-      if (!response.ok) {
-        throw new Error(data.error || 'Login failed');
-      }
-    } catch (err) {
-      // Show any errors that occurred
-      console.log(err.message);
-    }
-
-    // update backend ? 
-    console.log('Logging in with:', { email, password });
+    console.log("Token received:", data.token);
+    await SecureStore.setItemAsync("jwt", data.token);
+    console.log("Logged in userID", data.userID);
     
-    navigation.navigate('Home');
-  };
+    navigation.navigate('Home'); // ✅ confirm route name is 'Home'
+
+  } catch (err) {
+    console.log("Login error:", err.message);
+  }
+};
 
   return (
     <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={{ flex: 1 }}>
@@ -102,10 +86,9 @@ export default function LoginScreen({ navigation }) {
 
           <TextInput
             style={styles.input}
-            placeholder="Email"
-            value={email}
-            onChangeText={setEmail}
-            keyboardType="email-address"
+            placeholder="Username"
+            value={username}
+            onChangeText={setUsername}
           />
           <TextInput
             style={styles.input}

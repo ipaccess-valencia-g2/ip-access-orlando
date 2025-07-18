@@ -52,7 +52,7 @@ export default function CheckAvailabilityCheckoutScreen({ navigation }) {
 
 
   useEffect(() => {
-    fetch('http://18.223.161.174:3307/locations')
+    fetch('http://3.15.153.52:3307/locations')
       .then((res) => res.json())
       .then((data) => {
         setLocations(data.locations);
@@ -69,7 +69,7 @@ export default function CheckAvailabilityCheckoutScreen({ navigation }) {
 //update IP if needed
 
   useEffect(() => {
-    fetch('http://18.223.161.174:3307/reasons')
+    fetch('http://3.15.153.52:3307/reasons')
       .then((res) => res.json())
       .then((data) => {
         setReasons(data.reasons || []);
@@ -93,7 +93,7 @@ export default function CheckAvailabilityCheckoutScreen({ navigation }) {
     }
 
     try {
-      const response = await fetch('http://18.223.161.174:3307/reserve_mobile', {
+      const response = await fetch('http://3.15.153.52:3307/reserve_mobile', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

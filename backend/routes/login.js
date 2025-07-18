@@ -7,11 +7,11 @@ const { Verify } = require('../middleware/verify');
 
 //short-lived JWT
 function generateAccessJWT(userID) {
-  return jwt.sign(
-    { id: userID },
-    process.env.SECRET_ACCESS_TOKEN,
-    { expiresIn: '2m' }
-  );
+  const secret = process.env.SECRET_ACCESS_TOKEN;
+  if (!secret) {
+    throw new Error('SECRET_ACCESS_TOKEN not configured');
+  }
+  return jwt.sign({ id: userID }, secret, { expiresIn: '2m' });
 }
 
 // POST /login
@@ -41,6 +41,7 @@ router.post('/login', async (req, res) => {
 
     //issues a JWT
     const token = generateAccessJWT(user.userID);
+    console.log("Token sent to client:", token);
 
     if (isMobile) {
       // mobile client
@@ -49,15 +50,16 @@ router.post('/login', async (req, res) => {
         status: 'success',
         message: 'Login successful',
         userID: user.userID,
-        token
+        token: token
       });
+      
     } else {
       // web client
       // set HttpOnly cookie
       res.cookie('SessionID', token, {
         maxAge: 2 * 60 * 1000,   // 2 minutes
         httpOnly: true,
-        secure: false,           // set to `true` in production (HTTPS)
+        secure: process.env.NODE_ENV === 'production',           // set to `true` in production (HTTPS)
         sameSite: 'Lax'
       });
       return res.status(200).json({
@@ -79,7 +81,7 @@ router.get('/dashboard', Verify, (req, res) => {
   res.status(200).json({
     status: 'success',
     message: 'Welcome to your dashboard!',
-    user: req.user[0]
+    user: req.user
   });
 });
 

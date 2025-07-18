@@ -21,7 +21,7 @@ const ProfileEdit = ({ user, onClose, onSave }) => {
             for (const [column, value] of Object.entries(formData)) {
                 if (user[column] !== value) {
                     const response = await fetch(
-                        `http://18.223.161.174:3307/users/${user.userID}/${column}/${encodeURIComponent(value)}`,
+                        `http://3.15.153.52:3307/users/${user.userID}/${column}/${encodeURIComponent(value)}`,
                         {
                             method: 'PUT',
                         }

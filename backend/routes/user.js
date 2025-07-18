@@ -143,8 +143,16 @@ router.get('/devices/unavailable', async (req, res) =>
 
 router.get('/user/me', Verify, (req, res) => {
   //store user information for console messages, etc
-  const user = req.user[0];
-  res.status(200).json({ userID: user.userID, username: user.username, firstName: user.firstName });
+  try {
+    const user = {
+      userID: req.user.userID,
+      username: req.user.username,
+      firstName: req.user.firstName,
+    };
+    res.json(user);
+  } catch (err) {
+    res.status(500).json({ error: 'Something went wrong' });
+  }
 });
 
 module.exports = router;
