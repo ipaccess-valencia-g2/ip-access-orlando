@@ -52,10 +52,21 @@ const AboutPage = () => {
             ConnectOrlando was built by students enrolled in Software Development Project (CEN-4910C) as part of our senior capstone at Valencia College. This project was made possible through a partnership with the City of Orlando.
         </p>
         <ul className="list-disc list-inside text-gray-700 space-y-1">
-            <li>LaVonne Patoir (co-lead)</li>
             <li>
                 <a
                 href="https://www.linkedin.com/in/dangelo-t"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-600 hover:underline"
+                >
+                LaVonne Patoir
+                </a>
+            {" "}
+            (co-lead)
+            </li>
+            <li>
+                <a
+                href="https://github.com/d-angelotorres"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-blue-600 hover:underline"
@@ -65,15 +76,16 @@ const AboutPage = () => {
             {" "}
             (co-lead)
             </li>
-            <li>Adam Abukhdair</li>
-            <li>Braeden Carlise</li>
-            <li>Carlos Campos</li>
-            <li>Colin Passno</li>
-            <li>Hammad Udin</li>
-            <li>Jackson Martzahn</li>
-            <li>Kevin Bonifacio</li>
-            <li>McKenna Pasquale</li>
-            <li>Ryan Williams</li>
+            <li><a href="https://github.com/AAbukhdair" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Adam Abukhdair</a></li>
+            <li><a href="https://github.com/Braeden03" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Braeden Carlise</a></li>
+            <li><a href="http://github.com/ceccontreras" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Carlos Campos</a></li>
+            <li><a href="https://github.com/cPassno" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Colin Passno</a></li>
+            <li><a href="https://github.com/uddinhammad1" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Hammad Udin</a></li>
+            <li><a href="https://github.com/Rustly" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Jackson Martzahn</a></li>
+            <li><a href="https://github.com/kevinBonifacio" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Kevin Bonifacio</a></li>
+            <li><a href="https://github.com/mpasquale3" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">McKenna Pasquale</a></li>
+            <li><a href="https://github.com/RyanH3" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+        Ryan Williams</a></li>
         </ul>
 
         <div className="mt-6">
