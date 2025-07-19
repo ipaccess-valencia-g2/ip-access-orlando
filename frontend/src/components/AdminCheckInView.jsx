@@ -9,7 +9,7 @@ const AdminCheckInView = () => {
     const fetchData = async () => {
       try {
         const res = await fetch('http://3.15.153.52:3307/admin/reservations', {
-          credentials: 'include'
+          //credentials: 'include'
         });
         const data = await res.json();
         setCheckedOutDevices(data);
@@ -35,7 +35,7 @@ const AdminCheckInView = () => {
         {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
-          credentials: 'include',
+          //credentials: 'include',
           body: JSON.stringify({ condition: reservation.condition })
         }
       );

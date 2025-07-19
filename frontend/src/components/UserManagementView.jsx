@@ -16,7 +16,9 @@ const UserManagementView = () => {
     const fetchUsers = async () => {
       try {
         setLoading(true);
-        const res = await fetch('http://3.15.153.52:3307/admin/users', { credentials: 'include' });
+        const res = await fetch('http://3.15.153.52:3307/admin/users'
+           //,{ credentials: 'include' }
+          );
         if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
         const data = await res.json();
         setUsers(data);
@@ -51,7 +53,7 @@ const UserManagementView = () => {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(editData),
-        credentials: 'include',
+        //credentials: 'include',
       });
 
       if (!res.ok) throw new Error(`Failed to save user: ${res.status}`);
@@ -71,7 +73,7 @@ const UserManagementView = () => {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ isAdmin: true }),
-        credentials: 'include',
+        //credentials: 'include',
       });
 
       if (!res.ok) throw new Error(`Failed to promote user: ${res.status}`);
