@@ -31,7 +31,7 @@ const AdminCheckInView = () => {
   const handleCheckIn = async (reservation) => {
     try {
       const res = await fetch(
-        'http://3.15.153.52:3307/admin/reservations/${reservation.reservationID}/checkin',
+        `http://3.15.153.52:3307/admin/reservations/${reservation.reservationID}/checkin`,
         {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },

@@ -15,7 +15,7 @@ const db = require('../db/connection');
 const bcrypt = require('bcrypt');
 
 // POST /admin — admin login :)
-router.post('/admin', async (req, res) => {
+router.post('/login', async (req, res) => {
      const { identifier, password } = req.body;
   if (!identifier || !password) {
     return res.status(400).json({ error: 'Username/email and password are required.' });
@@ -45,7 +45,7 @@ router.post('/admin', async (req, res) => {
 
 
 // Dashboard summary stats
-router.get('/admin/dashboard', async(req, res) => {
+router.get('/dashboard', async(req, res) => {
     const today = new Date().toISOString().slice(0, 10);
   try {
     const [[{ total }]] = await db.query('SELECT COUNT(*) AS total FROM reservations');
@@ -60,7 +60,7 @@ router.get('/admin/dashboard', async(req, res) => {
 });
 
 // GET /admin/users - list users
-router.get('/admin/users', async (req, res) => {
+router.get('/users', async (req, res) => {
   try {
     const [rows] = await db.query('SELECT * FROM users');
     res.json(rows);
@@ -71,7 +71,7 @@ router.get('/admin/users', async (req, res) => {
 });
 
 // POST /admin/log-device - manual device checkout
-router.post('/admin/log-device', async (req, res) => {
+router.post('/log-device', async (req, res) => {
   const { userId, deviceId, locationId, startTime, endTime, reason, adminNotes } = req.body;
   if (!userId || !deviceId) {
     return res.status(400).json({ error: 'userId and deviceId are required' });
@@ -89,7 +89,7 @@ router.post('/admin/log-device', async (req, res) => {
 });
 
 // POST /admin/reservations - create reservation for user
-router.post('/admin/reservations', async (req, res) => {
+router.post('/reservations', async (req, res) => {
   const { userId, deviceId, locationId, startTime, endTime, reason } = req.body;
   if (!userId || !deviceId || !startTime || !endTime) {
     return res.status(400).json({ error: 'Missing required fields' });
@@ -107,7 +107,7 @@ router.post('/admin/reservations', async (req, res) => {
 });
 
 // GET /admin/reservations - list current reservations
-router.get('/admin/reservations', async (req, res) => {
+router.get('/reservations', async (req, res) => {
   try {
     const [rows] = await db.query('SELECT * FROM reservations');
     res.json(rows);
@@ -117,7 +117,7 @@ router.get('/admin/reservations', async (req, res) => {
   }
 });
 
-router.put('/admin/reservations/:id/checkin', async (req, res) => {
+router.put('/reservations/:id/checkin', async (req, res) => {
   const { id } = req.params;
   const { condition } = req.body;
   try {
