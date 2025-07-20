@@ -141,7 +141,7 @@ const UserManagementView = () => {
           </select>
           <button
             onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
-            className="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700 transition-colors"
+            className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition-colors"
           >
             {sortOrder === 'asc' ? '↑ Asc' : '↓ Desc'}
           </button>
@@ -149,7 +149,7 @@ const UserManagementView = () => {
 
         <button
           onClick={() => setShowAddForm(!showAddForm)}
-          className="bg-blue-700 text-white px-4 py-2 rounded hover:bg-blue-800 transition-colors"
+          className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition-colors"
         >
           {showAddForm ? 'Cancel Add' : 'Add New User'}
         </button>
@@ -171,7 +171,7 @@ const UserManagementView = () => {
       {loading ? (
         <p className="text-center text-lg mt-8">Loading users...</p>
       ) : (
-        <div className="overflow-x-auto rounded-lg shadow">
+        <div className="overflow-x-auto overflow-y-auto max-h-[60vh] rounded-lg shadow">
           <table className="min-w-full table-auto border-collapse border border-gray-200">
             <thead className="bg-gray-100 sticky top-0">
               <tr>
@@ -204,10 +204,10 @@ const UserManagementView = () => {
                           {user.isAdmin ? 'Admin' : 'User'}
                         </td>
                         <td className="border p-2 space-x-2 flex flex-wrap gap-2 justify-center">
-                          <button onClick={handleSave} className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 transition-colors">Save</button>
-                          <button onClick={handleCancelEdit} className="bg-gray-500 text-white px-3 py-1 rounded hover:bg-gray-600 transition-colors">Cancel</button>
+                          <button onClick={handleSave} className="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700 transition-colors">Save</button>
+                          <button onClick={handleCancelEdit} className="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700 transition-colors">Cancel</button>
                           {!user.isAdmin && (
-                            <button onClick={() => handlePromote(user.id)} className="bg-purple-600 text-white px-3 py-1 rounded hover:bg-purple-700 transition-colors">Promote to Admin</button>
+                            <button onClick={() => handlePromote(user.id)} className="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700 transition-colors">Promote to Admin</button>
                           )}
                         </td>
                       </>

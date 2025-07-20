@@ -32,8 +32,8 @@ const AdminPage = () => {
   }, []);
 
   const tabStyle = "px-4 py-2 font-semibold rounded-t-lg focus:outline-none";
-  const activeTabStyle = "bg-gray-800 text-white";
-  const inactiveTabStyle = "bg-gray-600 text-white hover:bg-gray-700";
+  const activeTabStyle = "bg-green-700 text-white";
+  const inactiveTabStyle = "bg-green-600 text-white hover:bg-green-700";
 
   return (
     <div className="container mx-auto p-4 md:p-8">

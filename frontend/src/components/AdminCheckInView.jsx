@@ -104,7 +104,7 @@ const AdminCheckInView = () => {
                 <td className="border p-2">
                   <button
                     onClick={() => handleCheckIn(device)}
-                    className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700"
+                    className="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700"
                   >
                     Check In
                   </button>

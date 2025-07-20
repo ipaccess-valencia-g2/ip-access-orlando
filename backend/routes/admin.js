@@ -70,6 +70,23 @@ router.get('/users', async (req, res) => {
   }
 });
 
+// PUT /admin/users/:id - update basic user fields
+router.put('/users/:id', async (req, res) => {
+  const { id } = req.params;
+  const { firstName, lastName, email } = req.body;
+  try {
+    await db.execute(
+      'UPDATE users SET firstName = ?, lastName = ?, email = ? WHERE userID = ?',
+      [firstName, lastName, email, id]
+    );
+    const [rows] = await db.query('SELECT * FROM users WHERE userID = ?', [id]);
+    res.json(rows[0]);
+  } catch (err) {
+    console.error('Admin user update error:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 // POST /admin/log-device - manual device checkout
 router.post('/log-device', async (req, res) => {
   const { userId, deviceId, locationId, startTime, endTime, reason, adminNotes } = req.body;
@@ -79,7 +96,7 @@ router.post('/log-device', async (req, res) => {
   try {
     await db.execute(
       'INSERT INTO reservations (userID, deviceID, locationID, startTime, endTime, reason, adminNotes) VALUES (?, ?, ?, ?, ?, ?, ?)',
-      [userId, deviceId, locationId, startTime, endTime, reason || null, adminNotes || null]
+      [userId, deviceId, locationId || null, startTime, endTime, reason || null, adminNotes || null]
     );
     res.status(201).json({ message: 'Device usage logged' });
   } catch (err) {
@@ -97,7 +114,7 @@ router.post('/reservations', async (req, res) => {
   try {
     await db.execute(
       'INSERT INTO reservations (userID, deviceID, locationID, startTime, endTime, reason) VALUES (?, ?, ?, ?, ?, ?)',
-      [userId, deviceId, locationId, startTime, endTime, reason || null]
+      [userId, deviceId, locationId || null, startTime, endTime, reason || null]
     );
     res.status(201).json({ message: 'Reservation created' });
   } catch (err) {
