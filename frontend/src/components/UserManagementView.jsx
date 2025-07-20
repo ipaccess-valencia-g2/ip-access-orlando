@@ -16,12 +16,12 @@ const UserManagementView = () => {
     const fetchUsers = async () => {
       try {
         setLoading(true);
-        const res = await fetch('http://3.15.153.52:3307/admin/users'
-           //,{ credentials: 'include' }
+        const res = await fetch('http://3.15.153.52:3307/admin/users',
+           { credentials: 'include' }
           );
         if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
         const data = await res.json();
-        setUsers(data);
+        setUsers(Array.isArray(data) ? data : []);
       } catch (err) {
         console.error('Failed to fetch users:', err);
       } finally {
@@ -38,7 +38,7 @@ const UserManagementView = () => {
 
   const handleCancelEdit = () => {
     setEditingUser(null);
-    setEditData({ name: '', email: '' });
+    setEditData({ firstName: '', lastName: '', email: '' });
   };
 
   const handleChange = (e) => {
@@ -59,7 +59,7 @@ const UserManagementView = () => {
       if (!res.ok) throw new Error(`Failed to save user: ${res.status}`);
 
       setUsers((prev) =>
-        prev.map((u) => (u.id === editingUser ? { ...u, ...editData } : u))
+        prev.map((u) => ((u.userID ?? u.id) === editingUser ? { ...u, ...editData } : u))
       );
       setEditingUser(null);
     } catch (err) {
@@ -80,7 +80,7 @@ const UserManagementView = () => {
 
       setUsers((prev) =>
         prev.map((user) =>
-          user.id === id ? { ...user, isAdmin: true } : user
+          (user.userID ?? user.id) === id ? { ...user, isAdmin: true } : user
         )
       );
     } catch (err) {
@@ -96,7 +96,7 @@ const UserManagementView = () => {
   const handleAddUser = async () => {
     const newId = users.length ? Math.max(...users.map(u => u.userID ?? u.id)) + 1 : 1;
     setUsers([...users, { userID: newId, ...newUser }]);
-    setNewUser({ firstName: '', lastName: '', email: '', isAdmin: false });
+    setNewUser({ firstName: '', lastName: '', username: '', email: '', isAdmin: false });
     setShowAddForm(false);
   };
 
@@ -207,7 +207,7 @@ const UserManagementView = () => {
                           <button onClick={handleSave} className="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700 transition-colors">Save</button>
                           <button onClick={handleCancelEdit} className="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700 transition-colors">Cancel</button>
                           {!user.isAdmin && (
-                            <button onClick={() => handlePromote(user.id)} className="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700 transition-colors">Promote to Admin</button>
+                            <button onClick={() => handlePromote(user.userID ?? user.id)} className="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700 transition-colors">Promote to Admin</button>
                           )}
                         </td>
                       </>

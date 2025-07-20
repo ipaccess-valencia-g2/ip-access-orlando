@@ -12,7 +12,7 @@ const AdminCheckInView = () => {
         const res = await fetch('http://3.15.153.52:3307/admin/devices'); 
         //{credentials: 'include'});
         const data = await res.json();
-        setDevices(data);
+        setDevices(Array.isArray(data) ? data : []);
       } catch (err) {
         console.error('Failed to load devices:', err);
       }

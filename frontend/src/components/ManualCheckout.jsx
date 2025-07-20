@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 const ManualCheckout = () => {
   const [userId, setUserId] = useState('');
   const [deviceId, setDeviceId] = useState('');
+  const [locationID, setLocationID] = useState('');
   const [returnDate, setReturnDate] = useState('');
   const [reason, setReason] = useState('');
 
@@ -17,6 +18,7 @@ const ManualCheckout = () => {
         body: JSON.stringify({
           userId,
           deviceId,
+          locationID,
           startTime: new Date().toISOString(),
           endTime: returnDate,
           reason
@@ -28,6 +30,7 @@ const ManualCheckout = () => {
       } else {
         setUserId('');
         setDeviceId('');
+        setLocationID('');
         setReturnDate('');
         setReason('');
         alert('Checkout logged.');
@@ -62,6 +65,18 @@ const ManualCheckout = () => {
               value={deviceId}
               onChange={(e) => setDeviceId(e.target.value)}
               placeholder="Enter Device ID"
+              className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+              required
+            />
+          </div>
+          <div>
+            <label htmlFor="locationID" className="block text-sm font-medium text-gray-700">Location ID</label>
+            <input
+              type="text"
+              id="locationID"
+              value={locationID}
+              onChange={(e) => setLocationID(e.target.value)}
+              placeholder="Enter Location ID"
               className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
               required
             />
