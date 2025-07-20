@@ -59,21 +59,21 @@ export default function LoginScreen({ navigation }) {
     const data = await response.json();
     console.log("Login response:", data);
 
-
-    if (!response.ok) {
-      throw new Error(data.error || 'Login failed');
+    if (!response.ok || !data.token || typeof data.token !== 'string') {
+      throw new Error(data.message || 'Login failed');
     }
 
-    console.log("Token received:", data.token);
     await SecureStore.setItemAsync("jwt", data.token);
-    console.log("Logged in userID", data.userID);
-    
-    navigation.navigate('Home'); // ✅ confirm route name is 'Home'
+    console.log("✅ Token saved to SecureStore:", data.token);
 
+    navigation.navigate('Home');
   } catch (err) {
     console.log("Login error:", err.message);
+    Alert.alert("Login Failed", err.message);
+    await SecureStore.deleteItemAsync("jwt"); // remove bad token just in case
   }
 };
+
 
   return (
     <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={{ flex: 1 }}>

@@ -1,3 +1,4 @@
+import * as SecureStore from 'expo-secure-store';
 import React, { useState, useEffect } from 'react';
 import {
   View,
@@ -8,7 +9,7 @@ import {
   //Dimensions, 
   Image
 } from 'react-native';
-import * as SecureStore from 'expo-secure-store';
+
 
 
 //const screenWidth = Dimensions.get('window').width;
@@ -22,38 +23,52 @@ export default function HomeScreen({ navigation }) {
 
   const [userInfo, setUserInfo] = useState(null); // holds logged in user info
 
-  useEffect(() => {
+useEffect(() => {
   const fetchUser = async () => {
     try {
       const token = await SecureStore.getItemAsync("jwt");
-      console.log("Verifying token used:", token);
+
+      if (typeof token !== 'string' || !token.trim()) {
+        console.warn("⛔ Token is missing or invalid:", token);
+        setUserInfo(null);
+        return;
+      }
+
+      console.log("✅ Verifying token:", token);
 
       const res = await fetch('http://3.15.153.52:3307/user/me', {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
       });
 
+      const responseText = await res.text();
+
       if (!res.ok) {
-        const text = await res.text(); // ← try to get raw response
-        console.log('Failed to fetch user info:', text); //unauthorized error is being thrown here
+        console.warn("⛔ Failed /user/me response:", responseText);
+        setUserInfo(null);
         return;
       }
 
-      const data = await res.json(); //if response is ok
-      console.log("User data:", data);
+      const data = JSON.parse(responseText); // manually parse since we pre-read the text
+      console.log("✅ User data:", data);
       setUserInfo(data);
-
     } catch (err) {
-      console.log("Error during fetch:", err.message)
+      console.error("🔥 fetchUser error:", err.message);
       setUserInfo(null);
     }
   };
 
+
+ 
   fetchUser();
 }, []);
+
+
+
+
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
