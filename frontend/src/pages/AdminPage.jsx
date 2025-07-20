@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
+
 // Import all the components for the dashboard
 import AdminCheckInView from '../components/AdminCheckInView.jsx';
 import ManualCheckout from '../components/ManualCheckout.jsx';
@@ -10,18 +11,23 @@ const AdminPage = () => {
   const [activeTab, setActiveTab] = useState('devices'); // 'devices', 'users', or 'howto'
   const [firstName, setFirstName] = useState('');
 
-  useEffect(() => {
+ useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await fetch('http://3.15.153.52:3307/user/me', { credentials: 'include' });
-        if (res.ok) {
-          const data = await res.json();
-          setFirstName(data.firstName);
-        }
+        const res = await fetch('http://3.15.153.52:3307/user/me', {
+          credentials: 'include',
+        });
+
+        if (!res.ok) throw new Error('Session expired or not logged in.');
+
+        const data = await res.json();
+        console.log("User is logged in! userID:", data.firstName);
+        setFirstName(data.firstName);
       } catch (err) {
-        console.error('Failed to fetch user info:', err);
+        console.error('Failed to fetch user info:', err.message);
       }
     };
+
     fetchUser();
   }, []);
 
