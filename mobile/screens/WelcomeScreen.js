@@ -15,7 +15,7 @@ export default function WelcomeScreen({ navigation }) {
       try {
         const token = await SecureStore.getItemAsync("jwt");
         if (!token || typeof token !== "string") {
-          console.log("⛔ No token or invalid format");
+          console.log("No token or invalid format");
           setLoading(false);
           return;
         }
@@ -23,15 +23,15 @@ export default function WelcomeScreen({ navigation }) {
         const decoded = jwtDecode(token);
         const now = Math.floor(Date.now() / 1000);
         if (decoded.exp > now) {
-          console.log("✅ Token valid. Navigating to Home.");
+          console.log(" Token valid. Navigating to Home.");
           navigation.navigate("Home");
         } else {
-          console.log("⏳ Token expired. Deleting...");
+          console.log(" Token expired. Deleting...");
           await SecureStore.deleteItemAsync("jwt");
           setLoading(false);
         }
       } catch (err) {
-        console.error("❌ Error decoding token:", err);
+        console.error(" Error decoding token:", err);
         setLoading(false);
       }
     };

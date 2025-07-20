@@ -64,7 +64,7 @@ export default function LoginScreen({ navigation }) {
     }
 
     await SecureStore.setItemAsync("jwt", data.token);
-    console.log("✅ Token saved to SecureStore:", data.token);
+    console.log("Token saved to SecureStore:", data.token);
 
     navigation.navigate('Home');
   } catch (err) {

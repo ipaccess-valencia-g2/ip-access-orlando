@@ -29,12 +29,12 @@ useEffect(() => {
       const token = await SecureStore.getItemAsync("jwt");
 
       if (typeof token !== 'string' || !token.trim()) {
-        console.warn("⛔ Token is missing or invalid:", token);
+        console.warn("Token is missing or invalid:", token);
         setUserInfo(null);
         return;
       }
 
-      console.log("✅ Verifying token:", token);
+      console.log("Verifying token:", token);
 
       const res = await fetch('http://3.15.153.52:3307/user/me', {
         method: 'GET',
@@ -47,16 +47,16 @@ useEffect(() => {
       const responseText = await res.text();
 
       if (!res.ok) {
-        console.warn("⛔ Failed /user/me response:", responseText);
+        console.warn("Failed /user/me response:", responseText);
         setUserInfo(null);
         return;
       }
 
-      const data = JSON.parse(responseText); // manually parse since we pre-read the text
-      console.log("✅ User data:", data);
+      const data = JSON.parse(responseText); // manually parse 
+      console.log("User data:", data);
       setUserInfo(data);
     } catch (err) {
-      console.error("🔥 fetchUser error:", err.message);
+      console.error(" fetchUser error:", err.message);
       setUserInfo(null);
     }
   };
