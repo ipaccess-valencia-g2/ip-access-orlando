@@ -92,10 +92,16 @@ router.put('/users/:id', async (req, res) => {
 router.get('/devices', async (req, res) => {
   try {
     const [rows] = await db.query(
-      `SELECT d.*, l.name AS locationName, r.reservationID
+      `SELECT d.deviceID, d.locationID, d.isAvailable,
+              l.name AS locationName,
+              (
+                SELECT r.reservationID
+                FROM reservations r
+                WHERE r.deviceID = d.deviceID AND r.checkedInAt IS NULL
+                LIMIT 1
+              ) AS reservationID
        FROM devices d
-       LEFT JOIN locations l ON d.locationID = l.locationID
-       LEFT JOIN reservations r ON d.deviceID = r.deviceID AND r.checkedInAt IS NULL`
+       LEFT JOIN locations l ON d.locationID = l.locationID`
     );
     res.json(rows);
   } catch (err) {
@@ -106,14 +112,14 @@ router.get('/devices', async (req, res) => {
 
 // POST /admin/log-device - manual device checkout
 router.post('/log-device', async (req, res) => {
-  const { userId, deviceId, locationID, startTime, endTime, reason, adminNotes } = req.body;
-  if (!userId || !deviceId || !locationID) {
-    return res.status(400).json({ error: 'userId, deviceId and locationID are required' });
+  const { userId, deviceId, locationId, startTime, endTime, reason, adminNotes } = req.body;
+  if (!userId || !deviceId || !locationId) {
+    return res.status(400).json({ error: 'userId, deviceId and locationId are required' });
   }
   try {
     await db.execute(
-      'INSERT INTO reservations (userID, deviceID, locationID, startTime, endTime, reason, adminNotes) VALUES (?, ?, ?, ?, ?, ?, ?)',
-      [userId, deviceId, locationID, startTime, endTime, reason || null, adminNotes || null]
+      'INSERT INTO reservations (userID, deviceID, locationId, startTime, endTime, reason, adminNotes) VALUES (?, ?, ?, ?, ?, ?, ?)',
+      [userId, deviceId, locationId, startTime, endTime, reason || null, adminNotes || null]
     );
     res.status(201).json({ message: 'Device usage logged' });
   } catch (err) {
@@ -124,14 +130,14 @@ router.post('/log-device', async (req, res) => {
 
 // POST /admin/reservations - create reservation for user
 router.post('/reservations', async (req, res) => {
-  const { userId, deviceId, locationID, startTime, endTime, reason } = req.body;
-  if (!userId || !deviceId || !locationID || !startTime || !endTime) {
+  const { userId, deviceId, locationId, startTime, endTime, reason } = req.body;
+  if (!userId || !deviceId || !locationId || !startTime || !endTime) {
     return res.status(400).json({ error: 'Missing required fields' });
   }
   try {
     await db.execute(
-      'INSERT INTO reservations (userID, deviceID, locationID, startTime, endTime, reason) VALUES (?, ?, ?, ?, ?, ?)',
-      [userId, deviceId, locationID, startTime, endTime, reason || null]
+      'INSERT INTO reservations (userID, deviceID, locationId, startTime, endTime, reason) VALUES (?, ?, ?, ?, ?, ?)',
+      [userId, deviceId, locationId, startTime, endTime, reason || null]
     );
     res.status(201).json({ message: 'Reservation created' });
   } catch (err) {

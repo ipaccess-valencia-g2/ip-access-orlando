@@ -10,6 +10,7 @@ import ManualReservationForm from '../components/ManualReservationForm.jsx';
 const AdminPage = () => {
   const [activeTab, setActiveTab] = useState('devices'); // 'devices', 'users', or 'howto'
   const [firstName, setFirstName] = useState('');
+  const [authError, setAuthError] = useState(false);
 
  useEffect(() => {
     const fetchUser = async () => {
@@ -25,6 +26,7 @@ const AdminPage = () => {
         setFirstName(data.firstName);
       } catch (err) {
         console.error('Failed to fetch user info:', err.message);
+        setAuthError(true);
       }
     };
 
@@ -34,6 +36,14 @@ const AdminPage = () => {
   const tabStyle = "px-4 py-2 font-semibold rounded-t-lg focus:outline-none";
   const activeTabStyle = "bg-green-700 text-white";
   const inactiveTabStyle = "bg-green-600 text-white hover:bg-green-700";
+
+  if (authError) {
+    return (
+      <div className="container mx-auto p-8 text-center">
+        <p className="text-lg">Please log in as an admin to view this page.</p>
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto p-4 md:p-8">
