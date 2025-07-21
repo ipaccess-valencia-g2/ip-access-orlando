@@ -83,7 +83,7 @@ const AboutPage = () => {
             <li><a href="https://github.com/uddinhammad1" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Hammad Udin</a></li>
             <li><a href="https://github.com/Rustly" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Jackson Martzahn</a></li>
             <li><a href="https://github.com/kevinBonifacio" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Kevin Bonifacio</a></li>
-            <li><a href="https://github.com/mpasquale3" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">McKenna Pasquale</a></li>
+            <li><a href="https://mpasquale.com/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">McKenna Pasquale</a></li>
             <li><a href="https://github.com/RyanH3" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
         Ryan Williams</a></li>
         </ul>
