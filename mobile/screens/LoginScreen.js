@@ -19,24 +19,6 @@ export default function LoginScreen({ navigation }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  // Save token
-  const saveToken = async (token) => {
-    await SecureStore.setItemAsync("jwt", token);
-    console.log("Token saved: ", token);
-  };
-
-  // Retrieve token from SecureStore
-  const retrieveToken = async () => {
-    let result = await SecureStore.getItemAsync("jwt");
-    return result;
-  };
-
-  // Delete token off of SecureStore
-  const deleteToken = async () => {
-    await SecureStore.deleteItemAsync('jwt');
-    console.log('Token deleted');
-  };
-
   const handleLogin = async () => {
   if (!username || !password) {
     Alert.alert('Please fill in all fields');
