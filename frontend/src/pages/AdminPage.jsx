@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
+
 // Import all the components for the dashboard
 import AdminCheckInView from '../components/AdminCheckInView.jsx';
 import ManualCheckout from '../components/ManualCheckout.jsx';
@@ -9,25 +10,40 @@ import ManualReservationForm from '../components/ManualReservationForm.jsx';
 const AdminPage = () => {
   const [activeTab, setActiveTab] = useState('devices'); // 'devices', 'users', or 'howto'
   const [firstName, setFirstName] = useState('');
+  const [authError, setAuthError] = useState(false);
 
-  useEffect(() => {
+ useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await fetch('http://3.15.153.52:3307/user/me', { credentials: 'include' });
-        if (res.ok) {
-          const data = await res.json();
-          setFirstName(data.firstName);
-        }
+        const res = await fetch('http://3.15.153.52:3307/user/me', {
+          credentials: 'include',
+        });
+
+        if (!res.ok) throw new Error('Session expired or not logged in.');
+
+        const data = await res.json();
+        console.log("User is logged in! userID:", data.firstName);
+        setFirstName(data.firstName);
       } catch (err) {
-        console.error('Failed to fetch user info:', err);
+        console.error('Failed to fetch user info:', err.message);
+        setAuthError(true);
       }
     };
+
     fetchUser();
   }, []);
 
   const tabStyle = "px-4 py-2 font-semibold rounded-t-lg focus:outline-none";
-  const activeTabStyle = "bg-gray-800 text-white";
-  const inactiveTabStyle = "bg-gray-600 text-white hover:bg-gray-700";
+  const activeTabStyle = "bg-green-700 text-white";
+  const inactiveTabStyle = "bg-green-600 text-white hover:bg-green-700";
+
+  if (authError) {
+    return (
+      <div className="container mx-auto p-8 text-center">
+        <p className="text-lg">Please log in as an admin to view this page.</p>
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto p-4 md:p-8">

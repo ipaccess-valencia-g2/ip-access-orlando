@@ -158,4 +158,26 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     marginTop: 16,
   },
+  dateField: {
+  borderWidth: 1,
+  borderColor: '#ccc',
+  paddingVertical: 12,
+  paddingHorizontal: 14,
+  borderRadius: 8,
+  marginBottom: 16,
+  backgroundColor: '#F3F2EF',
+},
+
+dateLabel: {
+  fontSize: 12,
+  color: '#0B3D20',
+  marginBottom: 4,
+  fontWeight: '500',
+},
+
+dateValue: {
+  fontSize: 16,
+  color: '#0B3D20',
+}
+
 });

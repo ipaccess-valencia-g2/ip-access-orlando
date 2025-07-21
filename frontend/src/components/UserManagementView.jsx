@@ -16,10 +16,12 @@ const UserManagementView = () => {
     const fetchUsers = async () => {
       try {
         setLoading(true);
-        const res = await fetch('http://3.15.153.52:3307/admin/users', { credentials: 'include' });
+        const res = await fetch('http://3.15.153.52:3307/admin/users',
+           { credentials: 'include' }
+          );
         if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
         const data = await res.json();
-        setUsers(data);
+        setUsers(Array.isArray(data) ? data : []);
       } catch (err) {
         console.error('Failed to fetch users:', err);
       } finally {
@@ -36,7 +38,7 @@ const UserManagementView = () => {
 
   const handleCancelEdit = () => {
     setEditingUser(null);
-    setEditData({ name: '', email: '' });
+    setEditData({ firstName: '', lastName: '', email: '' });
   };
 
   const handleChange = (e) => {
@@ -51,13 +53,13 @@ const UserManagementView = () => {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(editData),
-        credentials: 'include',
+        //credentials: 'include',
       });
 
       if (!res.ok) throw new Error(`Failed to save user: ${res.status}`);
 
       setUsers((prev) =>
-        prev.map((u) => (u.id === editingUser ? { ...u, ...editData } : u))
+        prev.map((u) => ((u.userID ?? u.id) === editingUser ? { ...u, ...editData } : u))
       );
       setEditingUser(null);
     } catch (err) {
@@ -71,14 +73,14 @@ const UserManagementView = () => {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ isAdmin: true }),
-        credentials: 'include',
+        //credentials: 'include',
       });
 
       if (!res.ok) throw new Error(`Failed to promote user: ${res.status}`);
 
       setUsers((prev) =>
         prev.map((user) =>
-          user.id === id ? { ...user, isAdmin: true } : user
+          (user.userID ?? user.id) === id ? { ...user, isAdmin: true } : user
         )
       );
     } catch (err) {
@@ -94,7 +96,7 @@ const UserManagementView = () => {
   const handleAddUser = async () => {
     const newId = users.length ? Math.max(...users.map(u => u.userID ?? u.id)) + 1 : 1;
     setUsers([...users, { userID: newId, ...newUser }]);
-    setNewUser({ firstName: '', lastName: '', email: '', isAdmin: false });
+    setNewUser({ firstName: '', lastName: '', username: '', email: '', isAdmin: false });
     setShowAddForm(false);
   };
 
@@ -139,7 +141,7 @@ const UserManagementView = () => {
           </select>
           <button
             onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
-            className="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700 transition-colors"
+            className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition-colors"
           >
             {sortOrder === 'asc' ? '↑ Asc' : '↓ Desc'}
           </button>
@@ -147,7 +149,7 @@ const UserManagementView = () => {
 
         <button
           onClick={() => setShowAddForm(!showAddForm)}
-          className="bg-blue-700 text-white px-4 py-2 rounded hover:bg-blue-800 transition-colors"
+          className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition-colors"
         >
           {showAddForm ? 'Cancel Add' : 'Add New User'}
         </button>
@@ -169,7 +171,7 @@ const UserManagementView = () => {
       {loading ? (
         <p className="text-center text-lg mt-8">Loading users...</p>
       ) : (
-        <div className="overflow-x-auto rounded-lg shadow">
+        <div className="overflow-x-auto overflow-y-auto max-h-[60vh] rounded-lg shadow">
           <table className="min-w-full table-auto border-collapse border border-gray-200">
             <thead className="bg-gray-100 sticky top-0">
               <tr>
@@ -202,10 +204,10 @@ const UserManagementView = () => {
                           {user.isAdmin ? 'Admin' : 'User'}
                         </td>
                         <td className="border p-2 space-x-2 flex flex-wrap gap-2 justify-center">
-                          <button onClick={handleSave} className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 transition-colors">Save</button>
-                          <button onClick={handleCancelEdit} className="bg-gray-500 text-white px-3 py-1 rounded hover:bg-gray-600 transition-colors">Cancel</button>
+                          <button onClick={handleSave} className="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700 transition-colors">Save</button>
+                          <button onClick={handleCancelEdit} className="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700 transition-colors">Cancel</button>
                           {!user.isAdmin && (
-                            <button onClick={() => handlePromote(user.id)} className="bg-purple-600 text-white px-3 py-1 rounded hover:bg-purple-700 transition-colors">Promote to Admin</button>
+                            <button onClick={() => handlePromote(user.userID ?? user.id)} className="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700 transition-colors">Promote to Admin</button>
                           )}
                         </td>
                       </>

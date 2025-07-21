@@ -1,47 +1,49 @@
 import React, { useState, useEffect } from 'react';
 
 const AdminCheckInView = () => {
-  const [checkedOutDevices, setCheckedOutDevices] = useState([]);
+  const [devices, setDevices] = useState([]);
 
   const [searchTerm, setSearchTerm] = useState('');
+  
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetch('http://3.15.153.52:3307/admin/reservations', {
-          credentials: 'include'
-        });
+        const res = await fetch('http://3.15.153.52:3307/admin/devices'); 
+        //{credentials: 'include'});
         const data = await res.json();
-        setCheckedOutDevices(data);
+        setDevices(Array.isArray(data) ? data : []);
       } catch (err) {
-        console.error('Failed to load reservations:', err);
+        console.error('Failed to load devices:', err);
       }
     };
     fetchData();
   }, []);
 
-  const handleConditionChange = (reservationId, newCondition) => {
-    setCheckedOutDevices(prev =>
-      prev.map(r =>
-        r.reservationID === reservationId ? { ...r, condition: newCondition } : r
+  const handleConditionChange = (deviceId, newCondition) => {
+    setDevices(prev =>
+      prev.map(d =>
+        d.deviceID === deviceId ? { ...d, condition: newCondition } : d
       )
     );
   };
 
-  const handleCheckIn = async (reservation) => {
+  const handleCheckIn = async (device) => {
     try {
       const res = await fetch(
-        'http://3.15.153.52:3307/admin/reservations/${reservation.reservationID}/checkin',
+        `http://3.15.153.52:3307/admin/reservations/${device.reservationID}/checkin`,
         {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
-          credentials: 'include',
-          body: JSON.stringify({ condition: reservation.condition })
+          //credentials: 'include',
+          body: JSON.stringify({ condition: device.condition })
         }
       );
       if (res.ok) {
-        setCheckedOutDevices(prev =>
-          prev.filter(r => r.reservationID !== reservation.reservationID)
+        setDevices(prev =>
+          prev.map(d =>
+            d.deviceID === device.deviceID ? { ...d, reservationID: null } : d
+          )
         );
       } else {
         console.error('Check-in failed', await res.text());
@@ -52,10 +54,11 @@ const AdminCheckInView = () => {
   };
 
 
-  const filteredDevices = checkedOutDevices.filter(
-    (r) =>
-      String(r.userID).toLowerCase().includes(searchTerm.toLowerCase()) ||
-      String(r.deviceID).toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredDevices = devices.filter(
+    (d) =>
+      String(d.deviceID).toLowerCase().includes(searchTerm.toLowerCase()) ||
+      String(d.locationID).toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (d.locationName || '').toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -65,7 +68,7 @@ const AdminCheckInView = () => {
       <div className="mb-4">
         <input
           type="text"
-          placeholder="Search by user or device..."
+          placeholder="Search by device or location..."
           className="w-full p-2 border border-gray-300 rounded-md"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
@@ -79,35 +82,45 @@ const AdminCheckInView = () => {
         <table className="w-full border-collapse border border-gray-300">
           <thead className="bg-gray-100">
             <tr>
-              <th className="border p-2">User ID</th>
+              {/*<th className="border p-2">User ID</th>*/}
               <th className="border p-2">Device ID</th>
-              <th className="border p-2">Condition</th>
+              {/*
+               <th className="border p-2">Condition</th>
               <th className="border p-2">Action</th>
+              */}
+              <th className="border p-2">Location ID</th>
+              <th className="border p-2">Location Name</th>
+              <th className="border p-2">Status</th>
             </tr>
           </thead>
           <tbody>
             {filteredDevices.map((device) => (
-              <tr key={device.reservationID}>
-                <td className="border p-2">{device.userID}</td>
+              <tr key={device.deviceID}>
                 <td className="border p-2">{device.deviceID}</td>
+                <td className="border p-2">{device.locationID}</td>
+                <td className="border p-2">{device.locationName || '-'}</td>
                 <td className="border p-2">
-                  <select
-                     value={device.condition || 'Good'}
-                    onChange={(e) => handleConditionChange(device.reservationID, e.target.value)}
-                    className="p-1 border rounded"
-                  >
-                    <option>Good</option>
-                    <option>Damaged</option>
-                    <option>Needs Maintenance</option>
-                  </select>
-                </td>
-                <td className="border p-2">
-                  <button
-                    onClick={() => handleCheckIn(device)}
-                    className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700"
-                  >
-                    Check In
-                  </button>
+                  {device.reservationID ? (
+                    <div className="flex items-center gap-2">
+                      <select
+                        value={device.condition || 'Good'}
+                        onChange={(e) => handleConditionChange(device.deviceID, e.target.value)}
+                        className="p-1 border rounded"
+                      >
+                        <option>Good</option>
+                        <option>Damaged</option>
+                        <option>Needs Maintenance</option>
+                      </select>
+                      <button
+                        onClick={() => handleCheckIn(device)}
+                        className="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700"
+                      >
+                        Check In
+                      </button>
+                    </div>
+                  ) : (
+                    'Available for Check Out'
+                  )}
                 </td>
               </tr>
             ))}

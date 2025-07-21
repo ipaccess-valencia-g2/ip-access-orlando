@@ -4,6 +4,7 @@ const ManualReservationForm = () => {
   const [formData, setFormData] = useState({
     userId: '',
     deviceId: '',
+    locationId: '',
     startTime: '',
     endTime: '',
     reason: '',
@@ -29,7 +30,7 @@ const ManualReservationForm = () => {
         console.error('Manual reservation failed', await res.text());
       } else {
         alert('Reservation manually added.');
-        setFormData({ userId: '', deviceId: '', startTime: '', endTime: '', reason: '' });
+        setFormData({ userId: '', deviceId: '', locationId: '', startTime: '', endTime: '', reason: '' });
       }
     } catch (err) {
       console.error('Manual reservation error:', err);
@@ -55,6 +56,16 @@ const ManualReservationForm = () => {
         name="deviceId"
         placeholder="Device ID"
         value={formData.deviceId}
+        onChange={handleChange}
+        className="w-full p-2 border rounded"
+        required
+      />
+
+      <input
+        type="text"
+        name="locationId"
+        placeholder="Location ID"
+        value={formData.locationId}
         onChange={handleChange}
         className="w-full p-2 border rounded"
         required
@@ -90,7 +101,7 @@ const ManualReservationForm = () => {
 
       <button
         type="submit"
-        className="bg-blue-600 text-white px-4 py-2 rounded"
+       className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
       >
         Add Reservation
       </button>

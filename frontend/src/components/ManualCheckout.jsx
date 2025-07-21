@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 const ManualCheckout = () => {
   const [userId, setUserId] = useState('');
   const [deviceId, setDeviceId] = useState('');
+  const [locationId, setLocationId] = useState('');
   const [returnDate, setReturnDate] = useState('');
   const [reason, setReason] = useState('');
 
@@ -17,6 +18,7 @@ const ManualCheckout = () => {
         body: JSON.stringify({
           userId,
           deviceId,
+          locationId,
           startTime: new Date().toISOString(),
           endTime: returnDate,
           reason
@@ -28,6 +30,7 @@ const ManualCheckout = () => {
       } else {
         setUserId('');
         setDeviceId('');
+        setLocationId('');
         setReturnDate('');
         setReason('');
         alert('Checkout logged.');
@@ -67,6 +70,18 @@ const ManualCheckout = () => {
             />
           </div>
           <div>
+            <label htmlFor="locationId" className="block text-sm font-medium text-gray-700">Location ID</label>
+            <input
+              type="text"
+              id="locationId"
+              value={locationId}
+              onChange={(e) => setLocationId(e.target.value)}
+              placeholder="Enter Location ID"
+              className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+              required
+            />
+          </div>
+          <div>
             <label htmlFor="returnDate" className="block text-sm font-medium text-gray-700">Return Date</label>
             <input
               type="date"
@@ -92,7 +107,7 @@ const ManualCheckout = () => {
         <div className="flex justify-end">
           <button
             type="submit"
-            className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
+            cclassName="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700"
           >
             Submit
           </button>

@@ -1,13 +1,14 @@
 // Admin Routes Information
-// (requires logged-in user with isStaff=true)
-// POST /admin                         - admin login (optional)            ✓
-// GET  /admin/users                   - list all users                    ✓
-// GET  /admin/users/:userId           - view a single user                ✓
-// PUT  /admin/users/:userId/:column/:value - update a user field          ✓
-// GET  /admin/reservations            - list all reservations             !
-// GET  /admin/reservations/:reservationID - list all reservations         !
-// DELETE /admin/reservations/:id      - delete a reservation              ?
-// POST /admin/log-device              - record a manual device checkout   !
+// (does not require logged-in user with isStaff=true)
+// POST /login                         - admin login (optional)            ✓
+// GET  /users                         - list all users                    ✓
+// GET  /users/:userId                 - view a single user                ✓
+// PUT  /users/:userId/:column/:value  - update a user field               ✓
+// GET  /reservations                  - list all reservations             !
+// GET  /reservations/:reservationID   - list a reservation                !
+// DELETE /reservations/:id            - delete a reservation              ?
+// POST /log-device                    - record a manual device checkout   !
+// GET  /devices                       - list all devices with status      !
 
 const express = require('express');
 const router = express.Router();
@@ -15,7 +16,7 @@ const db = require('../db/connection');
 const bcrypt = require('bcrypt');
 
 // POST /admin — admin login :)
-router.post('/admin', async (req, res) => {
+router.post('/login', async (req, res) => {
      const { identifier, password } = req.body;
   if (!identifier || !password) {
     return res.status(400).json({ error: 'Username/email and password are required.' });
@@ -45,7 +46,7 @@ router.post('/admin', async (req, res) => {
 
 
 // Dashboard summary stats
-router.get('/admin/dashboard', async(req, res) => {
+router.get('/dashboard', async(req, res) => {
     const today = new Date().toISOString().slice(0, 10);
   try {
     const [[{ total }]] = await db.query('SELECT COUNT(*) AS total FROM reservations');
@@ -60,7 +61,7 @@ router.get('/admin/dashboard', async(req, res) => {
 });
 
 // GET /admin/users - list users
-router.get('/admin/users', async (req, res) => {
+router.get('/users', async (req, res) => {
   try {
     const [rows] = await db.query('SELECT * FROM users');
     res.json(rows);
@@ -70,15 +71,54 @@ router.get('/admin/users', async (req, res) => {
   }
 });
 
+// PUT /admin/users/:id - update basic user fields
+router.put('/users/:id', async (req, res) => {
+  const { id } = req.params;
+  const { firstName, lastName, email } = req.body;
+  try {
+    await db.execute(
+      'UPDATE users SET firstName = ?, lastName = ?, email = ? WHERE userID = ?',
+      [firstName, lastName, email, id]
+    );
+    const [rows] = await db.query('SELECT * FROM users WHERE userID = ?', [id]);
+    res.json(rows[0]);
+  } catch (err) {
+    console.error('Admin user update error:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// GET /admin/devices - list all devices with location info and active status
+router.get('/devices', async (req, res) => {
+  try {
+    const [rows] = await db.query(
+      `SELECT d.deviceID, d.locationID, d.isAvailable,
+              l.name AS locationName,
+              (
+                SELECT r.reservationID
+                FROM reservations r
+                WHERE r.deviceID = d.deviceID AND r.checkedInAt IS NULL
+                LIMIT 1
+              ) AS reservationID
+       FROM devices d
+       LEFT JOIN locations l ON d.locationID = l.locationID`
+    );
+    res.json(rows);
+  } catch (err) {
+    console.error('Error fetching devices:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 // POST /admin/log-device - manual device checkout
-router.post('/admin/log-device', async (req, res) => {
+router.post('/log-device', async (req, res) => {
   const { userId, deviceId, locationId, startTime, endTime, reason, adminNotes } = req.body;
-  if (!userId || !deviceId) {
-    return res.status(400).json({ error: 'userId and deviceId are required' });
+  if (!userId || !deviceId || !locationId) {
+    return res.status(400).json({ error: 'userId, deviceId and locationId are required' });
   }
   try {
     await db.execute(
-      'INSERT INTO reservations (userID, deviceID, locationID, startTime, endTime, reason, adminNotes) VALUES (?, ?, ?, ?, ?, ?, ?)',
+      'INSERT INTO reservations (userID, deviceID, locationId, startTime, endTime, reason, adminNotes) VALUES (?, ?, ?, ?, ?, ?, ?)',
       [userId, deviceId, locationId, startTime, endTime, reason || null, adminNotes || null]
     );
     res.status(201).json({ message: 'Device usage logged' });
@@ -89,14 +129,14 @@ router.post('/admin/log-device', async (req, res) => {
 });
 
 // POST /admin/reservations - create reservation for user
-router.post('/admin/reservations', async (req, res) => {
+router.post('/reservations', async (req, res) => {
   const { userId, deviceId, locationId, startTime, endTime, reason } = req.body;
-  if (!userId || !deviceId || !startTime || !endTime) {
+  if (!userId || !deviceId || !locationId || !startTime || !endTime) {
     return res.status(400).json({ error: 'Missing required fields' });
   }
   try {
     await db.execute(
-      'INSERT INTO reservations (userID, deviceID, locationID, startTime, endTime, reason) VALUES (?, ?, ?, ?, ?, ?)',
+      'INSERT INTO reservations (userID, deviceID, locationId, startTime, endTime, reason) VALUES (?, ?, ?, ?, ?, ?)',
       [userId, deviceId, locationId, startTime, endTime, reason || null]
     );
     res.status(201).json({ message: 'Reservation created' });
@@ -107,7 +147,7 @@ router.post('/admin/reservations', async (req, res) => {
 });
 
 // GET /admin/reservations - list current reservations
-router.get('/admin/reservations', async (req, res) => {
+router.get('/reservations', async (req, res) => {
   try {
     const [rows] = await db.query('SELECT * FROM reservations');
     res.json(rows);
@@ -117,13 +157,17 @@ router.get('/admin/reservations', async (req, res) => {
   }
 });
 
-router.put('/admin/reservations/:id/checkin', async (req, res) => {
+router.put('/reservations/:id/checkin', async (req, res) => {
   const { id } = req.params;
   const { condition } = req.body;
   try {
     await db.execute(
       'UPDATE reservations SET checkedInAt = NOW(), condition = ? WHERE reservationID = ?',
       [condition || null, id]
+    );
+    await db.execute(
+      'UPDATE devices SET isAvailable = 1 WHERE deviceID = (SELECT deviceID FROM reservations WHERE reservationID = ?)',
+      [id]
     );
     res.json({ message: 'Reservation checked in' });
   } catch (err) {

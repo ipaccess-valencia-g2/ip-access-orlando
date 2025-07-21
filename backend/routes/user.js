@@ -141,7 +141,7 @@ router.get('/devices/unavailable', async (req, res) =>
     }
 });
 
-router.get('/user/me', Verify, (req, res) => {
+router.get('/me', Verify, (req, res) => {
   //store user information for console messages, etc
   try {
     const user = {
