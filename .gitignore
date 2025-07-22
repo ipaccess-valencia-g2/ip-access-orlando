@@ -38,3 +38,5 @@ yarn-error.*
 
 # typescript
 *.tsbuildinfo
+backend/.idea/.name
+backend/.idea/workspace.xml
