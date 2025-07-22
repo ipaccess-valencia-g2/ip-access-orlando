@@ -42,7 +42,9 @@ const AdminCheckInView = () => {
       if (res.ok) {
         setDevices(prev =>
           prev.map(d =>
-            d.deviceID === device.deviceID ? { ...d, reservationID: null } : d
+            d.deviceID === device.deviceID
+              ? { ...d, reservationID: null, isAvailable: 1 }
+              : d
           )
         );
       } else {
@@ -104,7 +106,9 @@ const AdminCheckInView = () => {
                     <div className="flex items-center gap-2">
                       <select
                         value={device.condition || 'Good'}
-                        onChange={(e) => handleConditionChange(device.deviceID, e.target.value)}
+                        onChange={(e) =>
+                          handleConditionChange(device.deviceID, e.target.value)
+                        }
                         className="p-1 border rounded"
                       >
                         <option>Good</option>
@@ -118,8 +122,10 @@ const AdminCheckInView = () => {
                         Check In
                       </button>
                     </div>
-                  ) : (
+                  ) : device.isAvailable === 1 ? (
                     'Available for Check Out'
+                  ) : (
+                    'Not Available'
                   )}
                 </td>
               </tr>
