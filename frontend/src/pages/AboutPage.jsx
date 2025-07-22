@@ -47,6 +47,21 @@ const AboutPage = () => {
         </section>
 
       <section className="mb-8">
+        <h2 className="text-2xl font-semibold mb-2">Find A Community Center Near You</h2>
+        <div className="w-full" style={{ height: '600px', borderRadius: '0.5rem', overflow: 'hidden', boxShadow: '0 4px 6px rgba(0,0,0,0.1)' }}>
+          <iframe
+            src="https://www.google.com/maps/d/u/0/embed?mid=1JvP_hYiEtf_Y0KSGCZwYFBpvvdvhwR4&ehbc=2E312F"
+            width="100%"
+            height="100%"
+            frameBorder="0"
+            allowFullScreen
+            title="Find A Community Center Near You"
+            style={{ border: 0 }}
+          />
+        </div>
+      </section>
+
+      <section className="mb-8">
         <h2 className="text-2xl font-semibold mb-2">Our Team</h2>
         <p className="text-gray-700 mb-4">
             ConnectOrlando was built by students enrolled in Software Development Project (CEN-4910C) as part of our senior capstone at Valencia College. This project was made possible through a partnership with the City of Orlando.
