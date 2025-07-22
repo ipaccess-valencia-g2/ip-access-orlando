@@ -87,16 +87,13 @@ router.patch('/users/:id/promote', async (req, res) => {
   }
 });
 
-// GET /admin/devices - list all devices with location info and active status
+// GET /admin/devices - list all devices and their location information
 router.get('/devices', async (req, res) => {
   try {
     const [rows] = await db.query(
-      `SELECT d.deviceID, d.locationId, d.isAvailable, l.name AS locationName,
-              r.reservationID
+      `SELECT d.deviceID, d.locationId, d.isAvailable, l.name AS locationName
        FROM devices d
-       LEFT JOIN locations l ON d.locationId = l.locationId
-       LEFT JOIN reservations r
-         ON r.deviceID = d.deviceID AND r.checkedInAt IS NULL`
+       LEFT JOIN locations l ON d.locationId = l.locationId`
     );
     res.json(rows);
   } catch (err) {
