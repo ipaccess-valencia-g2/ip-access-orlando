@@ -30,7 +30,7 @@ const UserDashboard = () => {
             setUser(userData.userInfo[0]);
 
             // Fetch reservations for this user
-            const resRes = await fetch(`http://3.15.153.52:3307/reservations/${userID}`);
+            const resRes = await fetch(`http://3.15.153.52:3307/user/reservations/${userID}`);
             if (!resRes.ok) throw new Error('Failed to fetch reservations');
             const resData = await resRes.json();
             setReservations(resData.rows || []);
