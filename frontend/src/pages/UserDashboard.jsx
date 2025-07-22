@@ -22,7 +22,7 @@ const UserDashboard = () => {
     const fetchUserData = async () => {
         try {
             // Fetch user info
-            const userRes = await fetch(`http://3.15.153.52:3307/user/${userID}`);
+            const userRes = await fetch(`http://3.15.153.52:3307/users/user/${userID}`);
             if (!userRes.ok) throw new Error('Failed to fetch user');
             const userData = await userRes.json();
 
