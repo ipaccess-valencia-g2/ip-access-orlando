@@ -66,35 +66,44 @@ const ReservationForm = () => {
     fetchUser();
   }, []);
 
-  const handleSubmit = async (e) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+const handleSubmit = async (e) => {
   e.preventDefault();
+  if (isSubmitting) return;
+  setIsSubmitting(true);
   setMessage('');
 
   const finalReason = reason === 'Other' ? customReason : reason;
-
-  console.log('Selected location name:', location);
-  console.log('Centers list:', centers);
 
   const selectedCenter = centers.find(center => center.name === location);
   if (!selectedCenter) {
     setMessage(`Invalid location selected: ${location}`);
     console.error('Selected location not found in centers.');
+    setIsSubmitting(false);
     return;
   }
 
   const locationID = selectedCenter.locationID;
-  console.log('Resolved locationID:', locationID);
 
-  if (!locationID) {
-    setMessage('Location ID not found for selected center.');
-    return;
-  }
 
-  const startTime = new Date(startDate).toISOString();
-  const endTime = new Date(endDate).toISOString();
+const toESTMidnightISO = (dateStr) => {
+  const date = new Date(dateStr + 'T00:00:00-05:00');
+  return date.toISOString();
+};
 
-  // Search for available devices
+const startTime = toESTMidnightISO(startDate);
+const endTime = toESTMidnightISO(endDate);
+
+  console.log('Searching for devices with:', {
+    type: deviceType,
+    locationID,
+    startTime,
+    endTime,
+  });
+
   let chosenDeviceID;
+
   try {
     const searchResponse = await fetch('http://3.15.153.52:3307/reserve/search', {
       method: 'POST',
@@ -107,26 +116,31 @@ const ReservationForm = () => {
       }),
     });
 
-    if (!searchResponse.ok) {
-      const err = await searchResponse.json();
-      setMessage(`Device search failed: ${err.error}`);
-      return;
-    }
+    const resJson = await searchResponse.json();
+    console.log("Device search response:", resJson);
 
-    const deviceIDs = await searchResponse.json();
-    if (!deviceIDs.length) {
+    const deviceIDs = Array.isArray(resJson)
+      ? resJson
+      : Array.isArray(resJson.deviceIDs)
+      ? resJson.deviceIDs
+      : [];
+
+    if (deviceIDs.length === 0) {
       setMessage('No devices available for the selected criteria.');
+      setIsSubmitting(false);
       return;
     }
 
     chosenDeviceID = deviceIDs[Math.floor(Math.random() * deviceIDs.length)];
+    console.log('Chosen device ID:', chosenDeviceID);
+
   } catch (err) {
     console.error('Device search error:', err);
     setMessage('Error during device search.');
+    setIsSubmitting(false);
     return;
   }
 
-  // Submit reservation
   try {
     const reservationResponse = await fetch('http://3.15.153.52:3307/reserve', {
       method: 'POST',
@@ -147,15 +161,29 @@ const ReservationForm = () => {
     if (!reservationResponse.ok) {
       console.error('Reservation failed:', result);
       setMessage(`Error: ${result.error}`);
-    } else {
-      setMessage('Reservation submitted successfully!');
-      navigate('/confirmation');
+      setIsSubmitting(false);
+      return;
     }
+
+    console.log('Reservation submitted successfully:', result);
+    setMessage('Reservation submitted successfully!');
+    navigate('/confirmation', {state: {
+		deviceID: chosenDeviceID,
+		deviceType,
+		startTime,
+		endTime,
+		locationID,
+	},
+});
+
   } catch (err) {
     console.error('Reservation error:', err);
     setMessage('Error submitting reservation.');
+  } finally {
+    setIsSubmitting(false);
   }
 };
+
 
 
 
