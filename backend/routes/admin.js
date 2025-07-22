@@ -1,21 +1,11 @@
-// Admin Routes Information
-// (does not require logged-in user with isStaff=true)
-// POST /login                         - admin login (optional)            ✓
-// GET  /users                         - list all users                    ✓
-// GET  /users/:userId                 - view a single user                ✓
-// PUT  /users/:userId/:column/:value  - update a user field               ✓
-// GET  /reservations                  - list all reservations             !
-// GET  /reservations/:reservationID   - list a reservation                !
-// DELETE /reservations/:id            - delete a reservation              ?
-// POST /log-device                    - record a manual device checkout   !
-// GET  /devices                       - list all devices with status      !
+// Admin Routes
 
 const express = require('express');
 const router = express.Router();
 const db = require('../db/connection');
 const bcrypt = require('bcrypt');
 
-// POST /admin — admin login :)
+// POST /admin — admin login
 router.post('/login', async (req, res) => {
      const { identifier, password } = req.body;
   if (!identifier || !password) {
@@ -41,9 +31,6 @@ router.post('/login', async (req, res) => {
     res.status(500).json({ error: 'Internal server error.' });
   }
 });
-
-// GET /admin
-
 
 // Dashboard summary stats
 router.get('/dashboard', async(req, res) => {
@@ -88,20 +75,28 @@ router.put('/users/:id', async (req, res) => {
   }
 });
 
+// PATCH /admin/users/:id/promote - promote to admin
+router.patch('/users/:id/promote', async (req, res) => {
+  const { id } = req.params;
+  try {
+    await db.execute('UPDATE users SET isStaff = 1 WHERE userID = ?', [id]);
+    res.json({ message: 'User promoted to admin' });
+  } catch (err) {
+    console.error('Admin promote error:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 // GET /admin/devices - list all devices with location info and active status
 router.get('/devices', async (req, res) => {
   try {
     const [rows] = await db.query(
-      `SELECT d.deviceID, d.locationID, d.isAvailable,
-              l.name AS locationName,
-              (
-                SELECT r.reservationID
-                FROM reservations r
-                WHERE r.deviceID = d.deviceID AND r.checkedInAt IS NULL
-                LIMIT 1
-              ) AS reservationID
+      `SELECT d.deviceID, d.locationID, d.isAvailable, l.name AS locationName,
+              r.reservationID
        FROM devices d
-       LEFT JOIN locations l ON d.locationID = l.locationID`
+       LEFT JOIN locations l ON d.locationID = l.locationID
+       LEFT JOIN reservations r
+         ON r.deviceID = d.deviceID AND r.checkedInAt IS NULL`
     );
     res.json(rows);
   } catch (err) {
