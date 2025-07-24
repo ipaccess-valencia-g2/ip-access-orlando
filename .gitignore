@@ -41,3 +41,6 @@ yarn-error.*
 /backend/.idea
 /backend/.idea
 backend/.idea/workspace.xml
+
+# IDE / Editor settings
+.idea/
