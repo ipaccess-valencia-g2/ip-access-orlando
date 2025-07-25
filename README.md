@@ -177,7 +177,7 @@ Course: Software Development Project (CEN-4910C)
 
 ### 👨‍💻 Developers
 
-- [LaVonne Patoir](https://www.linkedin.com/in/dangelo-t) _(Co-Lead)_
+- [LaVonne Patoir](https://github.com/lavonnepatoir) _(Co-Lead)_
 - [D’Angelo Torres](https://github.com/d-angelotorres) _(Co-Lead)_
 - [Adam Abukhdair](https://github.com/AAbukhdair)
 - [Braeden Carlise](https://github.com/Braeden03)
